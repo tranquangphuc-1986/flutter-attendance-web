@@ -30,4 +30,4 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_TOKEN }}"
           channelId: live
-          projectId: quankien-ede9b  # Sửa theo Project ID của bạn
+          projectId: quankien-ede9b # Sửa theo Project ID của bạn
