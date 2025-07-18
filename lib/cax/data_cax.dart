@@ -3,7 +3,7 @@ import 'package:app_02/cax/model_cax.dart';
 final List<Unit> units = [
   Unit(
     name: 'Công an xã Bình Sơn',
-    imagePath: 'img/BANNER.png',
+    imagePath: 'img/ban_ner_CA.PNG',
     info: '''
 - Đơn vị: Công an xã Bình Sơn.
 - Sáp nhập từ: thị trấn Châu Ổ, xã Bình Trung, xã Bình Thạnh, xã Bình Chánh.
