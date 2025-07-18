@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "209172920439",
+    "project_id": "quankien-ede9b",
+    "storage_bucket": "quankien-ede9b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209172920439:android:7b4b1edf72c5ea5cc8ae72",
+        "android_client_info": {
+          "package_name": "com.example.app_02"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLJzCQ8xYeOtGCBuvMO2DhE1cF4SI3D6w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
