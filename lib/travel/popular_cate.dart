@@ -7,7 +7,6 @@ import 'package:app_02/student_screens/students_summary_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 class PopularCategories extends StatefulWidget {
   const PopularCategories({super.key});
   @override

@@ -3,7 +3,6 @@ import 'package:app_02/travel/more_detail.dart';
 import 'package:app_02/travel/popular_cate.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 class PageFirst extends StatefulWidget {
   const PageFirst({super.key});
   @override

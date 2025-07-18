@@ -1,9 +1,8 @@
-import 'package:app_02/Service/students_firebase_service.dart';
+import 'package:app_02/service/students_firebase_service.dart';
 import 'package:app_02/check/attendance_screen1.dart';
 import 'package:app_02/student_screens/students_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
-
 
 class SummaryScreen1 extends StatelessWidget {
    const SummaryScreen1({super.key});

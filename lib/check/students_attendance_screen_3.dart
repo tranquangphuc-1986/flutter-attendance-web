@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
 import 'package:app_02/service/students_firebase.dart';
-
 class AttendancePScreen_3 extends StatefulWidget {
   @override
   _AttendancePScreenState3 createState() => _AttendancePScreenState3();

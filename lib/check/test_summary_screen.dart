@@ -1,8 +1,6 @@
-import 'package:app_02/Service/students_firebase_service.dart';
-import 'package:app_02/student_screens/students_attendance_screen_2.dart';
+import 'package:app_02/service/students_firebase_service.dart';
 import 'package:app_02/student_screens/students_attendance_screen_1.dart';
 import 'package:app_02/student_screens/students_statistics_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
 

@@ -1,7 +1,6 @@
 import 'package:app_02/Widgets/snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 class EmailForgotPasswordScreen extends StatefulWidget {
   const EmailForgotPasswordScreen({super.key});
 

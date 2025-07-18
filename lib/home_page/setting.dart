@@ -1,7 +1,5 @@
-import 'package:app_02/Service/email_auth_service.dart';
-import 'package:app_02/check/phone_login_screen.dart';
+import 'package:app_02/service/email_auth_service.dart';
 import 'package:app_02/email/email_login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 //class SettingsScreen extends StatelessWidget {

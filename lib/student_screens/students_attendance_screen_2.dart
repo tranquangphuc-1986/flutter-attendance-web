@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
 import 'package:app_02/service/students_firebase_service.dart';
-
 class AttendancePScreen extends StatefulWidget {
   @override
   _AttendancePScreenState createState() => _AttendancePScreenState();

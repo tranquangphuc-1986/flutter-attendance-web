@@ -1,5 +1,3 @@
-import 'package:app_02/email/email_login_screen.dart';
-import 'package:app_02/email/email_change_password_login.dart';
 import 'package:app_02/home_page/page_first.dart';
 import 'package:app_02/home_page/setting.dart';
 import 'package:app_02/travel/myhome_page.dart';

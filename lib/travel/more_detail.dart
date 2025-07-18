@@ -2,7 +2,6 @@ import 'package:app_02/models/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-
 class MoreDetail extends StatelessWidget {
   const MoreDetail({super.key, required this.location});
   final LocationDetail location;

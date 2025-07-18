@@ -1,4 +1,4 @@
-import 'package:app_02/Service/students_firebase_service.dart';
+import 'package:app_02/service/students_firebase_service.dart';
 import 'package:app_02/check/summary_screen1.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';

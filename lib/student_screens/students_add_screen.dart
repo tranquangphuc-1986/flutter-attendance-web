@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:app_02/Service/students_firebase_service.dart';
+import 'package:app_02/service/students_firebase_service.dart';
 import 'package:app_02/student_screens/students_list_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
 import 'package:image_picker/image_picker.dart';
-
-import '../Widgets/my_button.dart';
+import 'package:app_02/Widgets/my_button.dart';
 
 class AddNewstudens extends StatefulWidget {
   const AddNewstudens({super.key});

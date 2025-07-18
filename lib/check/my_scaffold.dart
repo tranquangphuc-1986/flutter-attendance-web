@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class Myscaffold extends StatelessWidget{
   const Myscaffold({super.key});
 

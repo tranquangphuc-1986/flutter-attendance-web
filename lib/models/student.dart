@@ -3,7 +3,6 @@ class Student {
   final String name;
   final String phone;
   final String className;
-
   Student({
     required this.id,
     required this.name,

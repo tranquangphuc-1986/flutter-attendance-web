@@ -2,7 +2,6 @@ import 'package:app_02/student_screens/students_summary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
 import 'package:app_02/service/students_firebase_service.dart';
-
 class AttendanceScreen3 extends StatefulWidget {
   final String currentRole;
   final String currentClass;

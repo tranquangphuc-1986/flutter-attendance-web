@@ -1,6 +1,5 @@
-import 'package:app_02/Service/students_firebase_service.dart';
+import 'package:app_02/service/students_firebase_service.dart';
 import 'package:app_02/student_screens/students_add_screen.dart';
-import 'package:app_02/student_screens/students_attendance_screen_2.dart';
 import 'package:app_02/student_screens/students_attendance_screen_3.dart';
 import 'package:app_02/student_screens/students_edit_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'students_attendance_screen_1.dart';
 
 class StudentsListScreen extends StatefulWidget {
   const StudentsListScreen({super.key});

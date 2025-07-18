@@ -1,5 +1,3 @@
-
-
 import 'package:app_02/cax/model_cax.dart';
 
 final List<Unit> units = [

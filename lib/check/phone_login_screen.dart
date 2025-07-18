@@ -4,8 +4,7 @@ import 'package:app_02/email/email_signup_screen.dart';
 import 'package:app_02/email/email_forgot_password_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:app_02/Service/email_auth_service.dart';
-import 'package:app_02/Widgets/snackbar.dart';
+import 'package:app_02/service/email_auth_service.dart';
 
 class PhoneLoginScreen extends StatefulWidget {
   const PhoneLoginScreen({super.key});

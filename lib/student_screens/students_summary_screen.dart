@@ -1,5 +1,4 @@
-import 'package:app_02/Service/students_firebase_service.dart';
-import 'package:app_02/student_screens/students_attendance_screen_2.dart';
+import 'package:app_02/service/students_firebase_service.dart';
 import 'package:app_02/student_screens/students_attendance_screen_3.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

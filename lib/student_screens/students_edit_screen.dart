@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
-import 'package:app_02/Service/students_firebase_service.dart';
-
+import 'package:app_02/service/students_firebase_service.dart';
 class EditDataScreen extends StatefulWidget {
   final Student student;
   const EditDataScreen({super.key, required this.student});

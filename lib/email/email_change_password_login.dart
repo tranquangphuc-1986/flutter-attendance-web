@@ -1,5 +1,4 @@
 import 'package:app_02/email/email_login_screen.dart';
-import 'package:app_02/home_page/my_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

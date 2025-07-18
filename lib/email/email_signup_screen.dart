@@ -1,4 +1,4 @@
-import 'package:app_02/Service/email_auth_service.dart';
+import 'package:app_02/service/email_auth_service.dart';
 import 'package:app_02/Widgets/my_button.dart';
 import 'package:app_02/Widgets/snackbar.dart';
 import 'package:app_02/email/email_login_screen.dart';

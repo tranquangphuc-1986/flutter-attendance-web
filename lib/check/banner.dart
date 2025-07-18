@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 class PoliceBanner extends StatelessWidget {
   final String url = 'https://www.mps.gov.vn'; // Trang web Bộ Công an
 

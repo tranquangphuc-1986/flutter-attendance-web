@@ -1,8 +1,4 @@
-import 'package:app_02/check/phone_login_screen.dart';
 import 'package:app_02/email/email_signup_screen.dart';
-import 'package:app_02/home_page/my_home_screen.dart';
-import 'package:app_02/home_page/page_first.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:app_02/email/email_login_screen.dart';
 import 'package:flutter/material.dart';
