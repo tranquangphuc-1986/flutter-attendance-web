@@ -1,31 +1,4 @@
 {
-  "flutter": {
-    "platforms": {
-      "android": {
-        "default": {
-          "projectId": "quankien-ede9b",
-          "appId": "1:209172920439:android:7b4b1edf72c5ea5cc8ae72",
-          "fileOutput": "android/app/google-services.json"
-        }
-      },
-      "dart": {
-        "lib/firebase_options.dart": {
-          "projectId": "quankien-ede9b",
-          "configurations": {
-            "android": "1:209172920439:android:7b4b1edf72c5ea5cc8ae72",
-            "ios": "1:209172920439:ios:3ebe58536bb6edaac8ae72",
-            "macos": "1:209172920439:ios:3ebe58536bb6edaac8ae72",
-            "web": "1:209172920439:web:3d40ed02ba3606c9c8ae72",
-            "windows": "1:209172920439:web:f61dea62093cf238c8ae72"
-          }
-        }
-      }
-    }
-  },
-  "database": {
-    "rules": "database.rules.json"
-  },
-
   "hosting": {
     "public": "build/web",
     "ignore": [
