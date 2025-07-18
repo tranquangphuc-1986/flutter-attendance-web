@@ -3,7 +3,7 @@ import 'package:app_02/Widgets/my_button.dart';
 import 'package:app_02/email/email_signup_screen.dart';
 import 'package:app_02/email/email_forgot_password_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:app_02/Service/email_auth_service.dart';
+import 'package:app_02/service/email_auth_service.dart';
 
 class EmailLoginScreen extends StatefulWidget {
   const EmailLoginScreen({super.key});

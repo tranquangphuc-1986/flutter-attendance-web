@@ -3,7 +3,6 @@ import 'package:app_02/Widgets/my_button.dart';
 import 'package:app_02/Widgets/snackbar.dart';
 import 'package:app_02/email/email_login_screen.dart';
 import 'package:flutter/material.dart';
-
 class EmailSignupScreen extends StatefulWidget {
   const EmailSignupScreen({super.key});
 
