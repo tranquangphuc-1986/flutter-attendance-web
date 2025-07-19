@@ -165,11 +165,11 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                  const SizedBox(width: 10,),
                  ElevatedButton.icon(
                    onPressed: (){
-                     fromDate==null;
-                     toDate==null;
                      nameController.clear();
                      setState(() {
                        selectedClass = null;
+                       fromDate==null;
+                       toDate==null;
                      });
                    },
                    icon: const Icon(Icons.refresh),
