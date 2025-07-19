@@ -168,8 +168,8 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                      nameController.clear();
                      setState(() {
                        selectedClass = null;
-                       fromDate==null;
-                       toDate==null;
+                       fromDate=null;
+                       toDate=null;
                      });
                    },
                    icon: const Icon(Icons.refresh),
