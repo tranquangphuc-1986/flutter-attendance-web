@@ -63,14 +63,6 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
       });
     }
   }
-  void clear (){
-    fromDate==null;
-    toDate==null;
-    nameController.clear();
-    setState(() {
-      selectedClass == null;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,13 +164,20 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                 ),
                  const SizedBox(width: 10,),
                  ElevatedButton.icon(
-                   onPressed: clear,
+                   onPressed: (){
+                     fromDate=null;
+                     toDate=null;
+                     nameController.clear();
+                     setState(() {
+                       selectedClass == null;
+                     });
+                   },
                    icon: const Icon(Icons.refresh),
                    label: const Text('Làm mới'),
                  ),
                  const SizedBox(width: 10,),
                  ElevatedButton.icon(
-                   onPressed: clear,
+                   onPressed: fetchFilteredData,
                    icon: const Icon(Icons.download_outlined),
                    label: const Text('Xuất excel'),
                  ),
