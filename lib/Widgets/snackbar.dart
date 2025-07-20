@@ -4,7 +4,7 @@ void showSnackBAR(BuildContext context, String message){
       SnackBar(
           content: Text(message, style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.green,
-        duration: const Duration(seconds: 3),
+        duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.fixed,
           ),
   );

@@ -157,28 +157,28 @@ class MoreDetail extends StatelessWidget {
                         height: 10,
                       ),
 // For last ,bottom parts
-                      Row(
-                        children: [
-                          // Text(
-                          //   "\$ ${location.price}",
-                          //   style: const TextStyle(
-                          //       fontSize: 20, fontWeight: FontWeight.bold),
-                          // ),
-                          const Spacer(),
-                          Container(
-                            height: 60,
-                            width: 150,
-                            decoration: BoxDecoration(
-                                color: const Color(0xFFD38CAB),
-                                borderRadius: BorderRadius.circular(50)),
-                            child: const Padding(
-                              padding: EdgeInsets.only(left: 33, top: 19),
-                              child: Text("Xem tiếp",  style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold,),),
-                            ),
-                          )
-                        ],
-                      )
+//                       Row(
+//                         children: [
+//                           // Text(
+//                           //   "\$ ${location.price}",
+//                           //   style: const TextStyle(
+//                           //       fontSize: 20, fontWeight: FontWeight.bold),
+//                           // ),
+//                           const Spacer(),
+//                           Container(
+//                             height: 60,
+//                             width: 150,
+//                             decoration: BoxDecoration(
+//                                 color: const Color(0xFFD38CAB),
+//                                 borderRadius: BorderRadius.circular(50)),
+//                             child: const Padding(
+//                               padding: EdgeInsets.only(left: 33, top: 19),
+//                               child: Text("Xem tiếp",  style: TextStyle(
+//                                 fontSize: 20, fontWeight: FontWeight.bold,),),
+//                             ),
+//                           )
+//                         ],
+//                       )
                     ],
                   ),
                 ),

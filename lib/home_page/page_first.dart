@@ -1,8 +1,11 @@
 import 'package:app_02/models/model.dart';
 import 'package:app_02/travel/more_detail.dart';
 import 'package:app_02/travel/popular_cate.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 class PageFirst extends StatefulWidget {
   const PageFirst({super.key});
   @override
@@ -10,14 +13,7 @@ class PageFirst extends StatefulWidget {
 }
 
 int selectedIndex = 0;
-List<String> categoryList = [
-  "Lời dặn",
-  "Lịch sử",
-  "Di tích",
-  "Kiến thức",
-  "Hoạt động",
-];
-
+// List<String> categoryList = ["Lời dặn", "Lịch sử", "Di tích","Kiến thức","Hoạt động",];
 Future<void> _launchURL() async {
   final url = Uri.parse('https://congan.quangngai.gov.vn');
   if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
@@ -30,7 +26,35 @@ Future<void> _launchFb() async {
     throw 'Không thể mở URL: $url';
   }
 }
+
 class _MyPageFirstState extends State<PageFirst> {
+  String currentName = '';
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    fetchUserInfo();
+  }
+  Future<void> fetchUserInfo() async {
+    try {
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final doc =
+      await FirebaseFirestore.instance
+          .collection('userLogin')
+          .doc(uid)
+          .get();
+      setState(() {
+        currentName = doc['name'];
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Lỗi khi lấy dữ liệu: $e");
+      setState(() {
+        isLoading = false;
+      }); // Cập nhật giao diện
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,24 +71,27 @@ class _MyPageFirstState extends State<PageFirst> {
                 child: Stack(
                   children: [
                     Container(
-                      height: MediaQuery.of(context).size.height/2.4,
+                      height: MediaQuery.of(context).size.height / 2.5,
                       width: MediaQuery.of(context).size.width,
-                      color: Colors.red,
+                      color: Colors.yellowAccent,
                     ),
-
-                    Container(//chứa phần lời dặn, ảnh, tìm kiếm
-                      height: MediaQuery.of(context).size.height/2.44,
+                    Container(
+                      //chứa phần lời dặn, ảnh, tìm kiếm
+                      height: MediaQuery.of(context).size.height / 2.52,
                       width: MediaQuery.of(context).size.width,
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [Colors.blue, Colors.blue],//[Color(0xFFFFFBFB), Color(0XFFF3ECEE)],
+                          colors: [
+                            Colors.blue,
+                            Colors.blue,
+                          ], //[Color(0xFFFFFBFB), Color(0XFFF3ECEE)],
                         ),
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(00),
                           bottomRight: Radius.circular(00),
-                        ), //Bo góc
+                        ), //Bo góc phần container màu xanh chứa hình ảnh, chuông..
                       ),
                       child: Stack(
                         children: [
@@ -74,7 +101,7 @@ class _MyPageFirstState extends State<PageFirst> {
                             width: double.infinity,
                             child: SafeArea(
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 20),
+                                padding: const EdgeInsets.only(top:10, left: 20),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -84,20 +111,29 @@ class _MyPageFirstState extends State<PageFirst> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                         // Image.asset(
-                                           // "img/grid.png",
-                                           // height: 25,
-                                         // ),
-                                          Image.asset(
-                                            "img/search.png",
-                                            height: 24,
+                                            const Icon(
+                                            Icons.person,
+                                            color: Colors.yellowAccent,
+                                            size: 30,
+                                          ),
+                                          Text(
+                                            "Xin chào! ${currentName.isNotEmpty ? currentName: "..."}",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.yellowAccent),
+                                          ),
+                                          const Icon(
+                                            Icons.add_alert_outlined,
+                                            color: Colors.yellowAccent,
+                                            size: 30,
                                           ),
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(height: 20,),
+                                    //const SizedBox(height: 20,),
                                     // nature selection parts
-                                    natureSelection(),
+                                    //natureSelection(),
                                   ],
                                 ),
                               ),
@@ -105,12 +141,12 @@ class _MyPageFirstState extends State<PageFirst> {
                           ),
 
                           Positioned(
-                            top: MediaQuery.of(context).size.height*0.16,
-                                //150, //khoảng cách giữa dòng các ảnh và với dòng Lời dặn, di tích
+                            top: MediaQuery.of(context).size.height * 0.14,
+                            //150, //khoảng cách giữa dòng các ảnh và với dòng Lời dặn, di tích
                             child: SizedBox(
                               height:
                                   MediaQuery.of(context).size.height *
-                                  0.24, //220, //chiều cao của sizedBox chứa các ảnh
+                                  0.25, //220, //chiều cao của sizedBox chứa các ảnh
                               width: MediaQuery.of(context).size.width,
                               child: ListView.builder(
                                 itemCount: locationItems.length,
@@ -137,22 +173,21 @@ class _MyPageFirstState extends State<PageFirst> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.only(
-                                            top: 20,
-                                            left: 20,
+                                            top: 10,
+                                            left: 8,
                                           ), // khoảng cách giữa các ảnh
                                           child: Hero(
                                             tag: location.image,
                                             child: Container(
-                                              height:
-                                                  MediaQuery.of(
-                                                    context,
-                                                  ).size.height *
-                                                  0.22, //200, //chiều cao của ảnh, không được cao hơn SizedBox 0.2
-                                              width:
-                                                  MediaQuery.of(
-                                                    context,
-                                                  ).size.width *
-                                                  0.36, //150, //chiều rộng từng dòng ảnh
+                                              height: 170,
+                                              // MediaQuery.of(
+                                              //   context,
+                                              // ).size.height * 0.25, //chiều cao của ảnh, không được cao hơn SizedBox 0.25
+                                              width: 120,
+                                              // MediaQuery.of(
+                                              //   context,
+                                              // ).size.width *
+                                              // 0.40,  //chiều rộng từng dòng ảnh
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(30),
@@ -171,7 +206,7 @@ class _MyPageFirstState extends State<PageFirst> {
                                         //Vị trí, kích thước Hình ảnh lá cờ trắng trong ảnh
                                         Positioned(
                                           top: 30,
-                                          left: 100,
+                                          left: 70,
                                           child: Container(
                                             height: 50,
                                             width: 50,
@@ -201,37 +236,14 @@ class _MyPageFirstState extends State<PageFirst> {
                 ),
               ),
               //..........Kết thúc phần hình ảnh
-              // //Gọi phần tiện ích
-              // Align(
-              //   alignment: Alignment.bottomCenter,
-              //   //alignment: Alignment.topCenter,
-              //   child: Container(
-              //     //Kích thước của Container
-              //     height:
-              //     MediaQuery.of(context).size.height /2.33,   //kéo lên, xuống container chứa Tiện ích
-              //     width: MediaQuery.of(context).size.width,
-              //     decoration: const BoxDecoration(
-              //       //Độ trog suốt màu nền
-              //       gradient: LinearGradient(
-              //         begin: Alignment.topCenter,
-              //         end: Alignment.bottomCenter,
-              //         //colors: [Colors.yellow, Colors.red, Colors.blue]
-              //         colors: [Color(0XFFF3ECEE), Color(0xFFFFFBFB)],
-              //       ),
-              //     ),
-              //     child:
-              //     const PopularCategories(), //gọi icon phần Tiện ích từ popular_cate.dart
-              //   ),
-              // ),
-              //..........................
-              //2. Phần Banner
+              // 2. Phần Banner
               SizedBox(height: 2),
               GestureDetector(
                 onTap: _launchFb,
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.066, //60,
+                  height: MediaQuery.of(context).size.height * 0.07, //70,
                   margin: EdgeInsets.all(10),
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                  padding: EdgeInsets.symmetric(vertical: 14, horizontal: 14),
                   decoration: BoxDecoration(
                     color: Colors.yellow[700], // Màu vàng đặc trưng
                     borderRadius: BorderRadius.circular(10),
@@ -289,8 +301,8 @@ class _MyPageFirstState extends State<PageFirst> {
 
   Positioned bestNatureSlider(LocationDetail location) {
     return Positioned(
-      top: 128, //vị trí chữ trong dòng hình
-      left: 68,
+      top: 120, //vị trí chữ trong dòng hình
+      left: 30,
       child: Column(
         children: [
           Text(
@@ -319,47 +331,48 @@ class _MyPageFirstState extends State<PageFirst> {
     );
   }
 
-  Stack natureSelection() {
-    return Stack(
-      children: [
-        const Positioned(
-          bottom: -6, //vị trí dấu '-' dưới lời dặn
-          left: 45,
-          child: Text(
-            "_",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 40,
-              color: Color(0xFFA36C88),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 40, //lên, xuống dấu '-' dưới Lời dặn
-          child: ListView.builder(
-            itemCount: categoryList.length,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Text(
-                  categoryList[index],
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color:
-                        selectedIndex == index
-                            ? const Color(0xFFA36C88)
-                            : const Color(0xFFE2CBD4),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
+  // Stack natureSelection() {
+  //   return Stack(
+  //     children: [
+  //       const Positioned(
+  //         bottom: -6, //vị trí dấu '-' dưới lời dặn
+  //         left: 45,
+  //         child: Text(
+  //           "_",
+  //           style: TextStyle(
+  //             fontWeight: FontWeight.bold,
+  //             fontSize: 40,
+  //             color: Color(0xFFA36C88),
+  //           ),
+  //         ),
+  //       ),
+  //       SizedBox(
+  //         height: 40, //lên, xuống dấu '-' dưới Lời dặn
+  //         child: ListView.builder(
+  //           itemCount: categoryList.length,
+  //           shrinkWrap: true,
+  //           physics: const BouncingScrollPhysics(),
+  //           scrollDirection: Axis.horizontal,
+  //           itemBuilder: (context, index) {
+  //             return Padding(
+  //               padding: const EdgeInsets.only(right: 20),
+  //               child: Text(
+  //                 categoryList[index],
+  //                 style: TextStyle(
+  //                   fontWeight: FontWeight.bold,
+  //                   fontSize: 20,
+  //                   color:
+  //                       selectedIndex == index
+  //                           ? const Color(0xFFA36C88)
+  //                           : const Color(0xFFE2CBD4),
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 }
+

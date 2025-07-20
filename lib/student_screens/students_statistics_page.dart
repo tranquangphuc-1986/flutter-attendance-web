@@ -4,8 +4,7 @@ import 'package:app_02/service/students_firebase_service.dart';
 
 class StudentsStatisticsPage extends StatefulWidget {
   @override
-  _StudentsStatisticsPageState createState() =>
-      _StudentsStatisticsPageState();
+  _StudentsStatisticsPageState createState() => _StudentsStatisticsPageState();
 }
 
 class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
@@ -68,8 +67,9 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.cyan,
-          title: const Text('Tổng hợp điểm danh')),
+        backgroundColor: Colors.blue,
+        title: const Text('Tổng hợp điểm danh'),
+      ),
       backgroundColor: Colors.white,
       body: Column(
         children: [
@@ -156,34 +156,62 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                   ],
                 ),
                 const SizedBox(height: 10),
-               Row(children: [
-                ElevatedButton.icon(
-                  onPressed: fetchFilteredData,
-                  icon: const Icon(Icons.filter_alt),
-                  label: const Text('Lọc'),
-                ),
-                 const SizedBox(width: 10,),
-                 ElevatedButton.icon(
-                   onPressed: (){
-                     nameController.clear();
-                     setState(() {
-                       selectedClass = null;
-                       fromDate=null;
-                       toDate=null;
-                     });
-                   },
-                   icon: const Icon(Icons.refresh),
-                   label: const Text('Làm mới'),
-                 ),
-                 const SizedBox(width: 10,),
-                 ElevatedButton.icon(
-                   onPressed: fetchFilteredData,
-                   icon: const Icon(Icons.download_outlined),
-                   label: const Text('Xuất excel'),
-                 ),
-               ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: fetchFilteredData,
+                      icon: const Icon(Icons.filter_alt, color: Colors.blue,),
+                      label: const Text(
+                        'Lọc',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow,
+                      ),
 
-    ),
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        nameController.clear();
+                        setState(() {
+                          selectedClass = null;
+                          fromDate = null;
+                          toDate = null;
+                        });
+                      },
+                      icon: const Icon(Icons.refresh, color: Colors.white,),
+                      label: const Text('Làm mới',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                      ),
+
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton.icon(
+                      onPressed: fetchFilteredData,
+                      icon: const Icon(Icons.download_outlined, color: Colors.white,),
+                      label: const Text('Xuất excel',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

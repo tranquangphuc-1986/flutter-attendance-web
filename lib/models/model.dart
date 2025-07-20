@@ -30,11 +30,7 @@ List<LocationDetail> locationItems = [
     temperature: 19,
     time:5 ,
     description:
-        """
-        - The Way typically refers to the Camino de Santiago,
-        - a network of pilgrimage routes leading to the shrine 
-        - of the apostle Saint James the Great in the Cathedral 
-        - of Santiago de Compostela in Galicia, northwest Spain.""",
+        "The Way typically refers to the Camino de Santiago, a network of pilgrimage routes leading to the shrine of the apostle Saint James the Great in the Cathedral of Santiago de Compostela in Galicia, northwest Spain.",
   ),
   LocationDetail(
     image: "img/thebridge.png",
@@ -74,7 +70,7 @@ List<LocationDetail> locationItems = [
     name: 'Effiel Tower',
     address: 'Paris France',
     price: 3350,
-      rating: 4.5,
+    rating: 4.5,
     temperature: 19,
     time:2 ,
     description:
