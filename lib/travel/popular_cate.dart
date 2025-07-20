@@ -242,11 +242,11 @@ class _PopularCategoriesState extends State<PopularCategories> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Cán bộ",
+                      "Công an xã",
                       style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
                     ),
                     Text(
-                      "Điểm danh",
+                      "Dữ liệu",
                       style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
                     ),
                     Text(
