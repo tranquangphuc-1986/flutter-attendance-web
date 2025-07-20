@@ -29,7 +29,7 @@ class UnitCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(unit.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+              child: Text(unit.name, style: const TextStyle(fontSize:12, fontWeight: FontWeight.bold, color: Colors.blue)),
             ),
           ],
         ),
@@ -41,7 +41,7 @@ class UnitCard extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text(unit.name),
+        title: Text(unit.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue)),
         content: Text(unit.info),
         actions: [
           TextButton(

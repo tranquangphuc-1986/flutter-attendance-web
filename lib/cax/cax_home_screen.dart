@@ -12,13 +12,13 @@ class HomeScreenCAX extends StatefulWidget {
 }
 
 class _HomeScreenCAXState extends State<HomeScreenCAX> {
-  List<Map<String, String>> filteredList = [];
+  List<DonVi> filteredList = donViList;
   final TextEditingController searchController = TextEditingController();
 
   void _search(String query) {
     setState(() {
       filteredList = donViList
-          .where((dv) => dv['ten']!.toLowerCase().contains(query.toLowerCase()))
+          .where((dv) => dv.ten.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -32,8 +32,10 @@ class _HomeScreenCAXState extends State<HomeScreenCAX> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Công an xã, phường, đặc khu')),
-      backgroundColor: Colors.blue,
+      appBar: AppBar(
+          title: const Text('Công an xã, phường, đặc khu'),
+          backgroundColor: Colors.blue,),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Padding(
@@ -61,12 +63,12 @@ class _HomeScreenCAXState extends State<HomeScreenCAX> {
               itemBuilder: (context, index) {
                 final dv = filteredList[index];
                 return DonViCard(
-                  donVi: DonVi.fromMap(dv),
+                  donVi: dv,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => DetailScreen(donVi: dv, cax: DonVi.fromMap(dv),),
+                        builder: (_) => DetailScreen(cax: dv,),
                       ),
                     );
                   },

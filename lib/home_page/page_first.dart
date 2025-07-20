@@ -187,7 +187,7 @@ class _MyPageFirstState extends State<PageFirst> {
                                               // 0.40,  //chiều rộng từng dòng ảnh
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(30),
+                                                    BorderRadius.circular(20),
                                                 image: DecorationImage(
                                                   image: AssetImage(
                                                     location.image,

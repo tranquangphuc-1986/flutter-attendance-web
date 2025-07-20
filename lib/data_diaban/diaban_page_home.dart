@@ -26,6 +26,7 @@ class _CAXScreenState extends State<CAXScreen> {
       appBar: AppBar(
         title: const Text('Danh sách đơn vị'),
         centerTitle: true,
+        backgroundColor: Colors.green,
       ),
       body: Column(
         children: [

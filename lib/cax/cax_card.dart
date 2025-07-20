@@ -29,7 +29,7 @@ class DonViCard extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 donVi.ten,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
                 textAlign: TextAlign.center,
               ),
             ),

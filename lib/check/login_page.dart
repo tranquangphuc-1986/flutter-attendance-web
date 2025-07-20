@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage(
-                              "img/login.jpg"
+                              "img/anlystatis.png"
                           ),
                           fit: BoxFit.cover
                       )

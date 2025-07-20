@@ -99,7 +99,7 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
         title: Text('Điểm danh hôm nay'),
         backgroundColor: Colors.cyanAccent,
       ),
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.white70,
       body: Column(
         children: [
           Padding(
@@ -122,7 +122,7 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
               },
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           Expanded(
             child: StreamBuilder<List<Student>>(
               stream: _firebaseService.getStudents(),

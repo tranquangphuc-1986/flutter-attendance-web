@@ -2,7 +2,7 @@ import 'package:app_02/data_diaban/diaban_model.dart';
 
 final List<Unit> units = [
   Unit(
-    name: 'Công an xã Bình Sơn',
+    name: 'xã Bình Sơn',
     imagePath: 'img/ban_ner_CA.PNG',
     info: '''
 - Đơn vị: xã Bình Sơn.
@@ -19,7 +19,7 @@ final List<Unit> units = [
   ),
 
   Unit(
-    name: 'Công an xã Vạn Tường',
+    name: 'xã Vạn Tường',
     imagePath: 'img/ban_ner_CA.PNG',
     info: '''
 - Đơn vị: xã Bình Sơn.
@@ -36,7 +36,7 @@ final List<Unit> units = [
   ),
 
   Unit(
-    name: 'Công an xã Bình Chương',
+    name: 'xã Bình Chương',
     imagePath: 'img/ban_ner_CA.PNG',
     info: '''
 - Đơn vị: xã Bình Sơn.
@@ -53,7 +53,7 @@ final List<Unit> units = [
   ),
 
   Unit(
-    name: 'Công an xã Đông Bình Sơn',
+    name: 'xã Đông Bình Sơn',
     imagePath: 'img/ban_ner_CA.PNG',
     info: '''
 - Đơn vị: xã Bình Sơn.
@@ -70,7 +70,7 @@ final List<Unit> units = [
   ),
 
   Unit(
-    name: 'Công an xã Bình Minh',
+    name: 'xã Bình Minh',
     imagePath: 'img/ban_ner_CA.PNG',
     info: '''
 - Đơn vị: xã Bình Sơn.
@@ -87,7 +87,7 @@ final List<Unit> units = [
   ),
 
   Unit(
-    name: 'Công an xã Trà Bồng',
+    name: 'xã Trà Bồng',
     imagePath: 'img/ban_ner_CA.PNG',
     info: '''
 - Đơn vị: xã Bình Sơn.
@@ -104,7 +104,7 @@ final List<Unit> units = [
   ),
 
   Unit(
-    name: 'Công an xã Đông Trà Bồng',
+    name: 'xã Đông Trà Bồng',
     imagePath: 'img/ban_ner_CA.PNG',
     info: '''
 - Đơn vị: xã Bình Sơn.
@@ -121,7 +121,7 @@ final List<Unit> units = [
   ),
 
   Unit(
-    name: 'Công an xã Thanh Bồng',
+    name: 'xã Thanh Bồng',
     imagePath: 'img/ban_ner_CA.PNG',
     info: '''
 - Đơn vị: xã Bình Sơn.
@@ -138,7 +138,7 @@ final List<Unit> units = [
   ),
 
   Unit(
-    name: 'Công an xã Tây Trà Bồng',
+    name: 'xã Tây Trà Bồng',
     imagePath: 'img/ban_ner_CA.PNG',
     info: '''
 - Đơn vị: xã Bình Sơn.
@@ -155,7 +155,7 @@ final List<Unit> units = [
   ),
 
   Unit(
-    name: 'Công an xã Tây Trà',
+    name: 'xã Tây Trà',
     imagePath: 'img/ban_ner_CA.PNG',
     info: '''
 - Đơn vị: xã Bình Sơn.

@@ -81,11 +81,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Image.asset(
-                                            "img/grid.png",
+                                            "img/anlystatis.png",
                                             height: 30,
                                           ),
                                           Image.asset(
-                                            "img/search.png",
+                                            "img/anlystatis.png",
                                             height: 30,
                                           ),
                                         ],
