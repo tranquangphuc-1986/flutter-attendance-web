@@ -28,6 +28,6 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_TOKEN_PHUC }}"
           channelId: live
           projectId: quankien-ede9b # Sửa theo Project ID của bạn
