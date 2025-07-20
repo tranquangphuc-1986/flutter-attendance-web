@@ -97,6 +97,7 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
         title: Text('Điểm danh hôm nay'),
         backgroundColor: Colors.cyanAccent,
       ),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Padding(

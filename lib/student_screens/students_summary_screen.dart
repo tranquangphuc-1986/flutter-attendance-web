@@ -117,6 +117,7 @@ class _SummaryScreenResultState extends State<SummaryScreenResult> {
         title: const Text("Kết quả điểm danh hôm nay"),
         automaticallyImplyLeading: true,
       ),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
