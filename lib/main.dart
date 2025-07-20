@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => EmailSignupScreen(),
         //'/myhome':(context)=>MyPage(),
       },
-
       // giữ đăng nhập cho đến khi đăng xuất
       //  home: StreamBuilder<User?>(
       //      stream: FirebaseAuth.instance.authStateChanges(),

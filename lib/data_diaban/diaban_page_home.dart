@@ -1,5 +1,5 @@
-import 'package:app_02/data_diaban/card_cax.dart';
-import 'package:app_02/data_diaban/data_cax.dart';
+import 'package:app_02/data_diaban/diaban_card.dart';
+import 'package:app_02/data_diaban/diaban_dulieu.dart';
 import 'package:flutter/material.dart';
 
 class CAXScreen extends StatefulWidget {

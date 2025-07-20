@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app_02/cax/cax_model.dart';
 import 'package:app_02/cax/cax_data.dart';
-import 'package:app_02/Widgets/cax_card.dart';
+import 'package:app_02/cax/cax_card.dart';
 import 'package:app_02/cax/cax_detail_screen.dart';
 
 class HomeScreenCAX extends StatefulWidget {
@@ -12,13 +12,13 @@ class HomeScreenCAX extends StatefulWidget {
 }
 
 class _HomeScreenCAXState extends State<HomeScreenCAX> {
-  List<DonVi> filteredList = donViList;
+  List<Map<String, String>> filteredList = [];
   final TextEditingController searchController = TextEditingController();
 
   void _search(String query) {
     setState(() {
       filteredList = donViList
-          .where((dv) => dv.ten.toLowerCase().contains(query.toLowerCase()))
+          .where((dv) => dv['ten']!.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -33,6 +33,7 @@ class _HomeScreenCAXState extends State<HomeScreenCAX> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Công an xã, phường, đặc khu')),
+      backgroundColor: Colors.blue,
       body: Column(
         children: [
           Padding(
@@ -55,17 +56,17 @@ class _HomeScreenCAXState extends State<HomeScreenCAX> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
-                childAspectRatio: 3 / 4,
+                childAspectRatio: 3/4,
               ),
               itemBuilder: (context, index) {
                 final dv = filteredList[index];
                 return DonViCard(
-                  donVi: dv,
+                  donVi: DonVi.fromMap(dv),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => DetailScreen(donVi: dv),
+                        builder: (_) => DetailScreen(donVi: dv, cax: DonVi.fromMap(dv),),
                       ),
                     );
                   },

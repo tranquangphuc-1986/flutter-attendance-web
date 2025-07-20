@@ -1,4 +1,4 @@
-import 'package:app_02/data_diaban/model_cax.dart';
+import 'package:app_02/data_diaban/diaban_model.dart';
 import 'package:flutter/material.dart';
 class UnitCard extends StatelessWidget {
   final Unit unit;

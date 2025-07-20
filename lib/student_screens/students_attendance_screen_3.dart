@@ -2,6 +2,7 @@ import 'package:app_02/student_screens/students_summary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
 import 'package:app_02/service/students_firebase_service.dart';
+
 class AttendanceScreen3 extends StatefulWidget {
   final String currentRole;
   final String currentClass;
@@ -32,6 +33,7 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
     _loadDataStudents();
     // _loadStudents();
   }
+
   // void _loadStudents() {
   //   _firebaseService.getStudents().listen((studentList) {
   //     setState(() {
@@ -97,7 +99,7 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
         title: Text('Điểm danh hôm nay'),
         backgroundColor: Colors.cyanAccent,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey,
       body: Column(
         children: [
           Padding(
