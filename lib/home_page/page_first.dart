@@ -140,7 +140,7 @@ class _MyPageFirstState extends State<PageFirst> {
                           ),
 
                           Positioned(
-                            top: MediaQuery.of(context).size.height * 0.12,
+                            top: MediaQuery.of(context).size.height * 0.11,
                             //150, //khoảng cách giữa dòng các ảnh và với dòng Lời dặn, di tích
                             child: SizedBox(
                               height: MediaQuery.of(context).size.height * 0.25, //220, //chiều cao của sizedBox chứa các ảnh
@@ -176,10 +176,10 @@ class _MyPageFirstState extends State<PageFirst> {
                                           child: Hero(
                                             tag: location.image,
                                             child: Container(
-                                              height: 170,
-                                              // MediaQuery.of(
-                                              //   context,
-                                              // ).size.height * 0.25, //chiều cao của ảnh, không được cao hơn SizedBox 0.25
+                                              height: //170,
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.height * 0.25, //chiều cao của ảnh, không được cao hơn SizedBox 0.25
                                               width: 120,
                                               // MediaQuery.of(
                                               //   context,
