@@ -32,7 +32,6 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
     _loadDataStudents();
     // _loadStudents();
   }
-
   // void _loadStudents() {
   //   _firebaseService.getStudents().listen((studentList) {
   //     setState(() {

@@ -12,16 +12,15 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner:
           false, //là một thuộc tính được sử dụng để ẩn biểu ngữ “DEBUG” màu đỏ ở góc trên bên phải của ứng dụng khi chạy ở chế độ debug.
-      title: 'Flutter Demo',
+      title: 'Ứng dụng điểm danh',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         //textTheme: GoogleFonts.playfairDisplayTextTheme(),
         fontFamily: 'Roboto',
         snackBarTheme: const SnackBarThemeData(

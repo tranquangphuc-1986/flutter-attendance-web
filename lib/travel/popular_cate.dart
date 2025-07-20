@@ -1,5 +1,5 @@
-import 'package:app_02/cax/cax_page_home.dart';
-import 'package:app_02/cax_screens/home_screenCAX.dart';
+import 'package:app_02/cax/cax_home_screen.dart';
+import 'package:app_02/data_diaban/cax_page_home.dart';
 import 'package:app_02/student_screens/students_attendance_screen_3.dart';
 import 'package:app_02/student_screens/students_statistics_page.dart';
 import 'package:app_02/student_screens/students_list_screen.dart';

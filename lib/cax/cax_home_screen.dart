@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:app_02/models/cax_model.dart';
-import 'package:app_02/data/cax_data.dart';
+import 'package:app_02/cax/cax_model.dart';
+import 'package:app_02/cax/cax_data.dart';
 import 'package:app_02/Widgets/cax_card.dart';
-import 'detail_screen.dart';
+import 'package:app_02/cax/cax_detail_screen.dart';
 
 class HomeScreenCAX extends StatefulWidget {
   const HomeScreenCAX({super.key});

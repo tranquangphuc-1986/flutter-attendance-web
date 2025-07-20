@@ -1,4 +1,4 @@
-import 'package:app_02/models/cax_model.dart';
+import 'package:app_02/cax/cax_model.dart';
 
 List<DonVi> donViList = [
   DonVi(

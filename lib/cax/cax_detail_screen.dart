@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:app_02/models/cax_model.dart';
+import 'package:app_02/cax/cax_model.dart';
 
 class DetailScreen extends StatelessWidget {
   final DonVi donVi;

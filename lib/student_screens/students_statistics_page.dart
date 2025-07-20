@@ -66,6 +66,7 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text('Tổng hợp điểm danh'),

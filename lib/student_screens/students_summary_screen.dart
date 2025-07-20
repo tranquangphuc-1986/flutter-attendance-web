@@ -114,7 +114,7 @@ class _SummaryScreenResultState extends State<SummaryScreenResult> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text("Tổng hợp điểm danh hôm nay"),
+        title: const Text("Kết quả điểm danh hôm nay"),
         automaticallyImplyLeading: true,
       ),
       body: Column(
@@ -127,7 +127,6 @@ class _SummaryScreenResultState extends State<SummaryScreenResult> {
                 if (!snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());
                 }
-
                 final students = snapshot.data!;
 
                 return StreamBuilder<Map<String, String>>(

@@ -1,4 +1,4 @@
-import 'package:app_02/cax/model_cax.dart';
+import 'package:app_02/data_diaban/model_cax.dart';
 
 final List<Unit> units = [
   Unit(
