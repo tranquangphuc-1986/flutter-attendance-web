@@ -60,11 +60,11 @@ class _PopularCategoriesState extends State<PopularCategories> {
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Tiện ích", style: TextStyle(fontSize: 22)),
-                  Text(
-                    "Mở rộng",
-                    style: TextStyle(fontSize: 14, color: Color(0xFFA36C88)),
-                  ),
+                  Text("Tiện ích", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blueAccent)),
+                  // Text(
+                  //   "Mở rộng",
+                  //   style: TextStyle(fontSize: 14, color: Color(0xFFA36C88)),
+                  // ),
                 ],
               ),
               const SizedBox(height: 16),

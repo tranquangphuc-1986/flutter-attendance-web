@@ -71,13 +71,13 @@ class _MyPageFirstState extends State<PageFirst> {
                 child: Stack(
                   children: [
                     Container(
-                      height: MediaQuery.of(context).size.height / 2.5,
+                      height: MediaQuery.of(context).size.height / 2.7,
                       width: MediaQuery.of(context).size.width,
                       color: Colors.yellowAccent,
                     ),
                     Container(
                       //chứa phần lời dặn, ảnh, tìm kiếm
-                      height: MediaQuery.of(context).size.height / 2.52,
+                      height: MediaQuery.of(context).size.height / 2.72,
                       width: MediaQuery.of(context).size.width,
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
@@ -96,8 +96,7 @@ class _MyPageFirstState extends State<PageFirst> {
                       child: Stack(
                         children: [
                           Container(
-                            height:
-                                MediaQuery.of(context).size.height * 0.2, //260,
+                            height: MediaQuery.of(context).size.height * 0.2, //260,
                             width: double.infinity,
                             child: SafeArea(
                               child: Padding(
@@ -141,12 +140,10 @@ class _MyPageFirstState extends State<PageFirst> {
                           ),
 
                           Positioned(
-                            top: MediaQuery.of(context).size.height * 0.14,
+                            top: MediaQuery.of(context).size.height * 0.12,
                             //150, //khoảng cách giữa dòng các ảnh và với dòng Lời dặn, di tích
                             child: SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height *
-                                  0.25, //220, //chiều cao của sizedBox chứa các ảnh
+                              height: MediaQuery.of(context).size.height * 0.25, //220, //chiều cao của sizedBox chứa các ảnh
                               width: MediaQuery.of(context).size.width,
                               child: ListView.builder(
                                 itemCount: locationItems.length,
