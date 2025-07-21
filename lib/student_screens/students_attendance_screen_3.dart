@@ -190,8 +190,9 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
                                 ),
                               );
                               return;
-                            }
+                            } else{
                             _markAttendance(student.id, value);
+                            }
                           },
                           itemBuilder:
                               (context) => [
