@@ -36,6 +36,14 @@ class FirebaseService {
           .toList();
     });
   }
+//Lấy danh sách dưới dạng List
+  Future<List<Student>> fetchStudents() async {
+    QuerySnapshot snapshot = await studentCollection.get();
+    return snapshot.docs
+        .map((doc) => Student.fromFirestore(doc as DocumentSnapshot<Map<String, dynamic>>))
+        .toList();
+  }
+
   Future<void> markAttendance(String studentId, String status) async {
    // final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
     DateTime now = DateTime.now();
@@ -68,7 +76,6 @@ class FirebaseService {
   }
 
   //thống kê theo thời gian và tên và đơn vị
-
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<List<Map<String, dynamic>>> getStudentStatisticsFiltered({
     required DateTime fromDate,

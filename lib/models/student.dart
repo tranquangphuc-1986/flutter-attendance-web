@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Student {
   final String id;
   final String name;
@@ -24,6 +26,16 @@ class Student {
       name: map['name'],
       phone: map['phone'],
       className: map['className'],
+    );
+  }
+//lấy toàn bộ danh sách sinh viêm từ collection ('student') tròng firestore - dạng list
+  factory Student.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final data = doc.data()!;
+    return Student(
+      id: doc.id,
+      name: data['name'],
+      phone: data['phone'],
+      className: data['className'],
     );
   }
 }

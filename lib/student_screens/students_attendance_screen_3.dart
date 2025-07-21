@@ -23,7 +23,7 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
   List<Student> _studentList = [];
   Map<String, String> attendanceMap =
       {}; //lưu kq chọn trên lisview theo từng sinh viên theo ID
-  String filterClass = '';
+  String search = '';
   bool isLoading = true;
   late String currentRole = '';
   late String currentClass = '';
@@ -36,19 +36,20 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
     //_loadDataStudents();
     // _loadStudents();
   }
+
   Future<void> loadDataRole() async {
     try {
       final uid = FirebaseAuth.instance.currentUser!.uid;
       final doc =
-      await FirebaseFirestore.instance
-          .collection('userLogin')
-          .doc(uid)
-          .get();
+          await FirebaseFirestore.instance
+              .collection('userLogin')
+              .doc(uid)
+              .get();
       final doc_student =
-      await FirebaseFirestore.instance
-          .collection('students')
-          .doc(uid)
-          .get();
+          await FirebaseFirestore.instance
+              .collection('students')
+              .doc(uid)
+              .get();
       setState(() {
         currentRole = doc['role'];
         currentClass = doc_student['className'];
@@ -63,17 +64,18 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
     filteredStudents();
   }
   Future<void> filteredStudents() async {
-     _firebaseService.getStudents().listen((allStudentList) {
+    _firebaseService.getStudents().listen((allStudentList) {
       setState(() {
         if (currentRole == 'Lãnh đạo') {
-          _studentList = allStudentList.where((s) => s.className == 'Lãnh đạo').toList();
+          _studentList =
+              allStudentList.where((s) => s.className == 'Lãnh đạo').toList();
         } else if (currentRole.startsWith('Chỉ huy')) {
-          final clas =
-          currentRole
-              .replaceFirst('Chỉ huy ', '')
-              .trim();
-       _studentList = allStudentList.where((s)=> s.className.toLowerCase() == clas.toLowerCase()).toList();
-            }else{
+          final clas = currentRole.replaceFirst('Chỉ huy ', '').trim();
+          _studentList =
+              allStudentList
+                  .where((s) => s.className.toLowerCase() == clas.toLowerCase())
+                  .toList();
+        } else {
           //_studentList = []; //không có quyền
           _studentList = allStudentList;
         }
@@ -81,6 +83,7 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
       });
     });
   }
+
   // void _loadStudents() {
   //   _firebaseService.getStudents().listen((allstudentList) {
   //     setState(() {
@@ -137,6 +140,9 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
 
   void _markAttendance(String studentId, String status) async {
     await _firebaseService.markAttendance(studentId, status);
+    setState(() {
+      attendanceMap[studentId]=status;
+    });
   }
 
   @override
@@ -147,7 +153,9 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
         backgroundColor: Colors.yellowAccent,
       ),
       backgroundColor: Colors.white70,
-      body: Column(
+      body: isLoading
+        ? const Center(child: CircularProgressIndicator(),)
+        : Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(12),
@@ -164,112 +172,85 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  filterClass = value.trim();
+                  search = value.trim();
                 });
               },
             ),
           ),
           const SizedBox(height: 16),
           Expanded(
-            // child: StreamBuilder<List<Student>>(
-            //   stream: _firebaseService.getStudents(),
-            //   builder: (context, snapshot) {
-            //     if (!snapshot.hasData) {
-            //       return Center(child: CircularProgressIndicator());
-            //     }
-            //     final allStudents = snapshot.data!;
-            //     // //lọc sinh viên theo phân quyền
-            //     final filteredStudents =
-            //         allStudents.where((s) {
-            //           // Nếu là chỉ huy, chỉ hiển thị lớp của họ
-            //           if (currentRole.startsWith('Chỉ huy')) {
-            //             final clas =
-            //                 currentRole
-            //                     .replaceFirst('Chỉ huy ', '')
-            //                     .trim();
-            //             return s.className.toLowerCase() == clas.toLowerCase();
-            //           }
-            //           // Nếu là cán bộ thì hiển thị all
-            //           else if (currentRole == 'Cán bộ') {
-            //             return true;
-            //           } else {
-            //             // Admin hoặc các vai trò khác xem tất cả
-            //             return true;
-            //           }
-            //         }).toList();
-
-                child:  ListView.builder(
-                  itemCount: _studentList.length,
-                  itemBuilder: (context, index) {
-                    final student = _studentList[index];
-                    final status =
-                        attendanceMap[student.id] ?? 'Chưa điểm danh';
-                    return Card(
-                      color: getDropdownColor(status),
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      child: ListTile(
-                        title: Text(student.name),
-                        subtitle: Text(
-                          'Đơn vị:${student.className} | Trạng thái: ${status}',
-                        ),
-                        trailing: currentRole=='Cán bộ'
-                        ? null
-                        :PopupMenuButton<String>(
-                          icon: Icon(
-                            Icons.check_circle_outline,
-                            color: getIconColor(status),
-                          ),
-                          onSelected: (value) {
-                            setState(() {
-                              attendanceMap[student.id] == value;
-                              _markAttendance(student.id, value);
-                            });
-                            //_markAttendance(student.id, value);
-                          },
-                          itemBuilder:
-                              (context) => [
-                                PopupMenuItem(
-                                  value: 'Có mặt',
-                                  child: Text('Có mặt'),
-                                ),
-                                PopupMenuItem(
-                                  value: 'Vắng do công tác',
-                                  child: Text('Công tác'),
-                                ),
-                                PopupMenuItem(
-                                  value: 'Vắng do ốm',
-                                  child: Text('Bị ốm'),
-                                ),
-                                PopupMenuItem(
-                                  value: 'Vắng do đi học',
-                                  child: Text('Đi học'),
-                                ),
-                                PopupMenuItem(
-                                  value: 'Vắng do nghỉ phép',
-                                  child: Text('Nghỉ phép'),
-                                ),
-                                PopupMenuItem(
-                                  value: 'Vắng việc cá nhân',
-                                  child: Text('Việc riêng'),
-                                ),
-                                PopupMenuItem(
-                                  value: 'Vắng không lý do',
-                                  child: Text('Không lý do'),
-                                ),
-                                PopupMenuItem(
-                                  value: 'Đi trễ',
-                                  child: Text('Đi trễ'),
-                                ),
-                              ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-             // },
+            child: ListView.builder(
+              itemCount: _studentList.length,
+              itemBuilder: (context, index) {
+                final student = _studentList[index];
+                final status = attendanceMap[student.id] ?? 'Chưa điểm danh';
+                return Card(
+                  color: getDropdownColor(status),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: ListTile(
+                    leading: const Icon(Icons.person),
+                    title: Text(student.name),
+                    subtitle: Text(
+                      'Đơn vị:${student.className} | Trạng thái: ${status}',
+                    ),
+                    trailing:
+                        currentRole == 'Cán bộ'
+                            ? null
+                            : PopupMenuButton<String>(
+                              icon: Icon(
+                                Icons.check_circle_outline,
+                                color: getIconColor(status),
+                              ),
+                              onSelected: (value) {
+                                _markAttendance(student.id, value);
+                                setState(() {
+                                  attendanceMap[student.id] == value;
+                                });
+                              },
+                              itemBuilder:
+                                  (context) => [
+                                    PopupMenuItem(
+                                      value: 'Có mặt',
+                                      child: Text('Có mặt'),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'Vắng do công tác',
+                                      child: Text('Công tác'),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'Vắng do ốm',
+                                      child: Text('Bị ốm'),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'Vắng do đi học',
+                                      child: Text('Đi học'),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'Vắng do nghỉ phép',
+                                      child: Text('Nghỉ phép'),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'Vắng việc cá nhân',
+                                      child: Text('Việc riêng'),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'Vắng không lý do',
+                                      child: Text('Không lý do'),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'Đi trễ',
+                                      child: Text('Đi trễ'),
+                                    ),
+                                  ],
+                            ),
+                  ),
+                );
+              },
+            ),
+            // },
             //),
           ),
         ],
