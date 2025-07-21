@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
 import 'package:app_02/service/students_firebase_service.dart';
 
-class AttendanceScreen_3 extends StatefulWidget {
+class AttendanceScreen3_2 extends StatefulWidget {
   final String currentRole;
   final String currentClass;
-  const AttendanceScreen_3({
+  const AttendanceScreen3_2({
     super.key,
     required this.currentRole,
     required this.currentClass,
   });
   @override
-  _AttendanceScreenState_3 createState() => _AttendanceScreenState_3();
+  _AttendanceScreenState3_2 createState() => _AttendanceScreenState3_2();
 }
 
-class _AttendanceScreenState_3 extends State<AttendanceScreen_3> {
+class _AttendanceScreenState3_2 extends State<AttendanceScreen3_2> {
   final FirebaseService _firebaseService = FirebaseService();
   final TextEditingController searchCtrl = TextEditingController();
   List<Student> _studentList = [];
@@ -94,7 +94,6 @@ class _AttendanceScreenState_3 extends State<AttendanceScreen_3> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Điểm danh hôm nay'),
@@ -108,7 +107,7 @@ class _AttendanceScreenState_3 extends State<AttendanceScreen_3> {
             child: TextField(
               controller: searchCtrl,
               decoration: InputDecoration(
-                labelText: "Tìm kiếm theo đơn vị",
+                labelText: "Tìm kiếm theo tên...",
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16), //Bo viền textfield

@@ -1,3 +1,4 @@
+import 'package:app_02/Widgets/snackbar.dart';
 import 'package:app_02/home_page/my_home_screen.dart';
 import 'package:app_02/Widgets/my_button.dart';
 import 'package:app_02/email/email_signup_screen.dart';
@@ -31,6 +32,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       setState(() {
         isLoading = false;
       });
+      showSnackBAR(context, "Đăng nhập thành công!");
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -41,12 +43,11 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       setState(() {
         isLoading=false;
       });
-     // Thông báo đăng nhập thất bại hoặc thành công
-      //showSnackBAR(context, "Đăng nhập $result");
-      //hoặc cách 2
-     ScaffoldMessenger.of(context).showSnackBar(
+     // Thông báo đăng nhập thất bại
+         ScaffoldMessenger.of(context).showSnackBar(
          SnackBar(content: Text("Đăng nhập $result"),
-         duration: const Duration(seconds: 2),)
+         duration: const Duration(seconds: 2),
+         backgroundColor: Colors.red,)
      );
     }
   }
@@ -75,7 +76,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                     ),
                   ],
                 ),
-                  const SizedBox(height: 80,),
+                  const SizedBox(height: 70,),
                   //Tạo hàng đăng nhập email
                   Form(
                     key: _formKey,

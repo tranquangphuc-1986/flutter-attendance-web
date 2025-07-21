@@ -49,7 +49,12 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
         setState(() {
           isLoading = false;
         });
-        showSnackBAR(context, "Đăng ký $result");
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Đăng nhập $result"),
+              duration: const Duration(seconds: 2),
+              backgroundColor: Colors.red,)
+        );
+        //showSnackBAR(context, "Đăng ký $result");
       }
     }
   }

@@ -179,7 +179,7 @@ class _MyPageFirstState extends State<PageFirst> {
                                               height: //170,
                                               MediaQuery.of(
                                                 context,
-                                              ).size.height * 0.25, //chiều cao của ảnh, không được cao hơn SizedBox 0.25
+                                              ).size.height * 0.24, //chiều cao của ảnh, không được cao hơn SizedBox 0.25
                                               width: 120,
                                               // MediaQuery.of(
                                               //   context,
@@ -205,8 +205,8 @@ class _MyPageFirstState extends State<PageFirst> {
                                           top: 30,
                                           left: 70,
                                           child: Container(
-                                            height: 50,
-                                            width: 50,
+                                            height: 45,
+                                            width: 45,
                                             decoration: BoxDecoration(
                                               color: Colors.white38,
                                               borderRadius:
@@ -214,7 +214,7 @@ class _MyPageFirstState extends State<PageFirst> {
                                             ),
                                             child: const Icon(
                                               Icons.bookmark,
-                                              size: 30,
+                                              size: 28,
                                               color: Colors.white,
                                             ),
                                           ),
@@ -238,9 +238,9 @@ class _MyPageFirstState extends State<PageFirst> {
               GestureDetector(
                 onTap: _launchFb,
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.07, //70,
-                  margin: EdgeInsets.all(10),
-                  padding: EdgeInsets.symmetric(vertical: 14, horizontal: 14),
+                  height: MediaQuery.of(context).size.height * 0.072, //70,
+                  margin: EdgeInsets.all(12),
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   decoration: BoxDecoration(
                     color: Colors.yellow[700], // Màu vàng đặc trưng
                     borderRadius: BorderRadius.circular(10),

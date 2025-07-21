@@ -3,7 +3,7 @@ import 'package:app_02/student_screens/students_edit_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import '../student_screens/students_attendance_screen_1.dart';
+import 'students_attendance_screen_1.dart';
 
 class HomeScreen2 extends StatefulWidget {
   const HomeScreen2({super.key});

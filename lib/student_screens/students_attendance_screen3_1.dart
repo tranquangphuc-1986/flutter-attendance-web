@@ -89,15 +89,6 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
       attendanceMap[studentId] = status;
     });
   }
-
-  // void _loadStudents() {
-  //   _firebaseService.getStudents().listen((allstudentList) {
-  //     setState(() {
-  //       _studentList = allstudentList;
-  //       isLoading = false;
-  //     });
-  //   });
-  // }
   void _loadDataStudents() {
     _firebaseService.getTodayAttendance().listen((result) {
       setState(() {
@@ -106,6 +97,14 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
       });
     });
   }
+  // void _loadStudents() {
+  //   _firebaseService.getStudents().listen((allstudentList) {
+  //     setState(() {
+  //       _studentList = allstudentList;
+  //       isLoading = false;
+  //     });
+  //   });
+  // }
 
   Color getIconColor(String? selected) {
     switch (selected) {
@@ -163,7 +162,7 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
             child: TextField(
               controller: searchCtrl,
               decoration: InputDecoration(
-                labelText: "Tìm kiếm theo đơn vị",
+                labelText: "Tìm kiếm theo tên...",
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16), //Bo viền textfield
@@ -193,6 +192,7 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
                         vertical: 8,
                       ),
                       child: ListTile(
+                        leading: Icon(Icons.person, color: Colors.blue,),
                         title: Text(student.name),
                         subtitle: Text(
                           'Đơn vị:${student.className} | Trạng thái: ${status}',
@@ -271,7 +271,7 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
                 ),
             child: const Icon(Icons.summarize_outlined),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
         ],
       ),
     );

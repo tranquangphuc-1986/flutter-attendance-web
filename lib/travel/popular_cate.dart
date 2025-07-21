@@ -2,8 +2,6 @@ import 'package:app_02/cax/cax_home_screen.dart';
 import 'package:app_02/data_diaban/diaban_page_home.dart';
 import 'package:app_02/student_screens/students_attendance_screen3_1.dart';
 import 'package:app_02/student_screens/students_attendance_screen3_2.dart';
-import 'package:app_02/student_screens/students_attendance_screen_3.dart';
-import 'package:app_02/student_screens/students_attendance_screen_4.dart';
 import 'package:app_02/student_screens/students_statistics_page.dart';
 import 'package:app_02/student_screens/students_list_screen.dart';
 import 'package:app_02/student_screens/students_summary_screen.dart';
@@ -97,7 +95,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (context) => AttendanceScreen3(
+                              (context) => AttendanceScreen3_1(
                             currentRole: currentRole,
                             currentClass: currentClass,
                           ),
@@ -185,7 +183,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFFF8CDEC),
-                      child: Image.asset("img/person.png", height: 40),
+                      child: Image.asset("img/logocand.png", height: 40),
                     ),
                   ),
 
@@ -203,7 +201,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFF9ED2F7),
-                      child: Image.asset("img/word.png", height: 40),
+                      child: Image.asset("img/statistical.png", height: 40),
                     ),
                   ),
 
@@ -212,7 +210,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AttendanceScreen4(
+                          builder: (context) => AttendanceScreen3_2(
                               currentRole: currentRole,
                               currentClass: currentClass),
                         ),
@@ -230,7 +228,9 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AttendanceScreen_3(currentRole: currentRole, currentClass: currentClass),
+                          builder: (context) => AttendanceScreen3_2(
+                              currentRole: currentRole,
+                              currentClass: currentClass),
                         ),
                       );
                     },

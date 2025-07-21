@@ -2,7 +2,7 @@ import 'package:app_02/service/students_firebase_service.dart';
 import 'package:app_02/student_screens/students_edit_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
-import 'package:app_02/student_screens/students_attendance_screen_1.dart';
+import 'package:app_02/check/students_attendance_screen_1.dart';
 
 class HomeScreen1 extends StatefulWidget {
   const HomeScreen1({super.key});
