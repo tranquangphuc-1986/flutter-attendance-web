@@ -137,7 +137,7 @@ class _AttendanceScreen4State extends State<AttendanceScreen4> {
 
   @override
   Widget build(BuildContext context) {
-    final filteredStudents = _studentList.where((st){
+    final filteredStudent = _studentList.where((st){
       final name = st.name.toLowerCase();
       return name.contains(search.toLowerCase());
     }).toList();
@@ -178,9 +178,9 @@ class _AttendanceScreen4State extends State<AttendanceScreen4> {
                   const SizedBox(height: 16),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: filteredStudents.length,
+                      itemCount: filteredStudent.length,
                       itemBuilder: (context, index) {
-                        final student = filteredStudents[index];
+                        final student = filteredStudent[index];
                         final status =
                             attendanceMap[student.id] ?? 'Chưa điểm danh';
                         return Card(

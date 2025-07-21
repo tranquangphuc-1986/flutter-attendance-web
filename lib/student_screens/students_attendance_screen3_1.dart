@@ -34,7 +34,7 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
     currentClass = widget.currentClass;
     loadDataRole();
     filteredStudents();
-    //_loadDataStudents();
+    _loadDataStudents();
     // _loadStudents();
   }
   Future<void> loadDataRole() async {
@@ -98,14 +98,14 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
   //     });
   //   });
   // }
-  // void _loadDataStudents() {
-  //   _firebaseService.getTodayAttendance().listen((result) {
-  //     setState(() {
-  //       attendanceMap = result;
-  //       isLoading = false;
-  //     });
-  //   });
-  // }
+  void _loadDataStudents() {
+    _firebaseService.getTodayAttendance().listen((result) {
+      setState(() {
+        attendanceMap = result;
+        isLoading = false;
+      });
+    });
+  }
 
   Color getIconColor(String? selected) {
     switch (selected) {

@@ -94,6 +94,7 @@ class _AttendanceScreenState_3 extends State<AttendanceScreen_3> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Điểm danh hôm nay'),
@@ -150,7 +151,9 @@ class _AttendanceScreenState_3 extends State<AttendanceScreen_3> {
                         return true;
                       }
                     }).toList();
-
+                setState(() {
+                  _studentList=filteredStudents;
+                });
                 final filtered = _studentList.where((st){
                   final name = st.name.toLowerCase();
                   return name.contains(searchName.toLowerCase());
