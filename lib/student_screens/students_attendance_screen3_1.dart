@@ -85,6 +85,9 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
 
   void _markAttendance(String studentId, String status) async {
     await _firebaseService.markAttendance(studentId, status);
+    setState(() {
+      attendanceMap[studentId] = status;
+    });
   }
 
   // void _loadStudents() {

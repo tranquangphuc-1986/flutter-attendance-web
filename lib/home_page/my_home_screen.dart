@@ -14,7 +14,8 @@ class MyPage extends StatefulWidget {
 int selectedIndex = 1;
 final List screens = [
   SettingsScreen(),
-  PageFirst(key: UniqueKey(),),
+ // PageFirst(key: UniqueKey(),),
+  PageFirst(),
   const MyHomePage(),
   //const SignupScreen(),
   //const EmailChangePasswordScreen(),
