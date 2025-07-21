@@ -18,10 +18,10 @@ class AttendanceScreen_3 extends StatefulWidget {
 class _AttendanceScreenState_3 extends State<AttendanceScreen_3> {
   final FirebaseService _firebaseService = FirebaseService();
   final TextEditingController searchCtrl = TextEditingController();
-  List<Student> _students = [];
+  List<Student> _studentList = [];
   Map<String, String> attendanceMap =
       {}; //lưu kq chọn trên lisview theo từng sinh viên theo ID
-  String filterClass = '';
+  String searchName = '';
   bool isLoading = true;
   late String currentRole = '';
   late String currentClass = '';
@@ -117,7 +117,7 @@ class _AttendanceScreenState_3 extends State<AttendanceScreen_3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  filterClass = value.trim();
+                  searchName = value.trim();
                 });
               },
             ),
@@ -151,10 +151,15 @@ class _AttendanceScreenState_3 extends State<AttendanceScreen_3> {
                       }
                     }).toList();
 
+                final filtered = _studentList.where((st){
+                  final name = st.name.toLowerCase();
+                  return name.contains(searchName.toLowerCase());
+                }).toList();
+
                 return ListView.builder(
-                  itemCount: filteredStudents.length,
+                  itemCount: filtered.length,
                   itemBuilder: (context, index) {
-                    final student = filteredStudents[index];
+                    final student = filtered[index];
                     final status =
                         attendanceMap[student.id] ?? 'Chưa điểm danh';
                     return Card(
