@@ -135,15 +135,15 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
                 final filteredStudents =
                     allStudents.where((s) {
                       // Nếu là chỉ huy, chỉ hiển thị lớp của họ
-                      if (widget.currentRole.startsWith('Chỉ huy')) {
+                      if (currentRole.startsWith('Chỉ huy')) {
                         final clas =
-                            widget.currentRole
+                            currentRole
                                 .replaceFirst('Chỉ huy ', '')
                                 .trim();
                         return s.className.toLowerCase() == clas.toLowerCase();
                       }
                       // Nếu là cán bộ thì hiển thị all
-                      else if (widget.currentRole == 'Cán bộ') {
+                      else if (currentRole == 'Cán bộ') {
                         return true;
                       } else {
                         // Admin hoặc các vai trò khác xem tất cả
@@ -168,7 +168,9 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
                         subtitle: Text(
                           'Đơn vị:${student.className} | Trạng thái: ${status}',
                         ),
-                        trailing: PopupMenuButton<String>(
+                        trailing: currentRole=='Cán bộ'
+                        ? null
+                        :PopupMenuButton<String>(
                           icon: Icon(
                             Icons.check_circle_outline,
                             color: getIconColor(status),
