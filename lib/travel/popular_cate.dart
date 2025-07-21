@@ -1,5 +1,7 @@
 import 'package:app_02/cax/cax_home_screen.dart';
 import 'package:app_02/data_diaban/diaban_page_home.dart';
+import 'package:app_02/student_screens/students_attendance_screen3_1.dart';
+import 'package:app_02/student_screens/students_attendance_screen3_2.dart';
 import 'package:app_02/student_screens/students_attendance_screen_3.dart';
 import 'package:app_02/student_screens/students_attendance_screen_4.dart';
 import 'package:app_02/student_screens/students_statistics_page.dart';
@@ -193,7 +195,8 @@ class _PopularCategoriesState extends State<PopularCategories> {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (context) => CAXScreen(),
+                              //(context) => CAXScreen(),
+                              (context) => AttendanceScreen3_1(currentRole: currentRole, currentClass: currentClass)
                         ),
                       );
                     },
@@ -227,7 +230,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => StudentsStatisticsPage(),
+                          builder: (context) => AttendanceScreen_3(currentRole: currentRole, currentClass: currentClass),
                         ),
                       );
                     },
