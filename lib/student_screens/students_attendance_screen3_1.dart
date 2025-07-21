@@ -23,7 +23,7 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
   List<Student> _studentList = [];
   Map<String, String> attendanceMap =
       {}; //lưu kq chọn trên lisview theo từng sinh viên theo ID
-  String filterClass = '';
+  String searchName = '';
   bool isLoading = true;
   late String currentRole = '';
   late String currentClass = '';
@@ -146,6 +146,10 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
 
   @override
   Widget build(BuildContext context) {
+    final filteredStudent = _studentList.where((st){
+      final name = st.name.toLowerCase();
+      return name.contains(searchName.toLowerCase());
+    }).toList();
     return Scaffold(
       appBar: AppBar(
         title: Text('Điểm danh hôm nay'),
@@ -169,7 +173,7 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
               ),
               onChanged: (value) {
                 setState(() {
-                  filterClass = value.trim();
+                  searchName = value.trim();
                 });
               },
             ),
@@ -177,9 +181,9 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
           const SizedBox(height: 16),
           Expanded(
                   child:  ListView.builder(
-                  itemCount: _studentList.length,
+                  itemCount: filteredStudent.length,
                   itemBuilder: (context, index) {
-                    final student = _studentList[index];
+                    final student = filteredStudent[index];
                     final status =
                         attendanceMap[student.id] ?? 'Chưa điểm danh';
                     return Card(

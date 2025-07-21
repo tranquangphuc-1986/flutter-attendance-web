@@ -151,10 +151,8 @@ class _AttendanceScreenState_3 extends State<AttendanceScreen_3> {
                         return true;
                       }
                     }).toList();
-                setState(() {
-                  _studentList=filteredStudents;
-                });
-                final filtered = _studentList.where((st){
+
+                final filtered = filteredStudents.where((st){
                   final name = st.name.toLowerCase();
                   return name.contains(searchName.toLowerCase());
                 }).toList();
