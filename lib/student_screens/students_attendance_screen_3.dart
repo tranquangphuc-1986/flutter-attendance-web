@@ -21,8 +21,7 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
   final FirebaseService _firebaseService = FirebaseService();
   final TextEditingController searchCtrl = TextEditingController();
   List<Student> _studentList = [];
-  Map<String, String> attendanceMap =
-      {}; //lưu kq chọn trên lisview theo từng sinh viên theo ID
+  Map<String, String> attendanceMap = {}; //lưu kq chọn trên lisview theo từng sinh viên theo ID
   String search = '';
   bool isLoading = true;
   late String currentRole = '';
@@ -33,8 +32,6 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
     currentRole = widget.currentRole;
     currentClass = widget.currentClass;
     loadDataRole();
-    //_loadDataStudents();
-    // _loadStudents();
   }
 
   Future<void> loadDataRole() async {
@@ -84,23 +81,6 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
     });
   }
 
-  // void _loadStudents() {
-  //   _firebaseService.getStudents().listen((allstudentList) {
-  //     setState(() {
-  //       _studentList = allstudentList;
-  //       isLoading = false;
-  //     });
-  //   });
-  // }
-  // void _loadDataStudents() {
-  //   _firebaseService.getTodayAttendance().listen((result) {
-  //     setState(() {
-  //       attendanceMap = result;
-  //       isLoading = false;
-  //     });
-  //   });
-  // }
-
   Color getIconColor(String? selected) {
     switch (selected) {
       case "Có mặt" ||
@@ -115,7 +95,7 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
       default:
         return Colors.redAccent;
     }
-  }
+  } //đổi màu icon chọn điểm danh
 
   Color getDropdownColor(String? status) {
     switch (status) {
@@ -136,7 +116,7 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
       default:
         return Colors.white;
     }
-  }
+  } //đổi màu card khi điểm danh
 
   void _markAttendance(String studentId, String status) async {
     await _firebaseService.markAttendance(studentId, status);

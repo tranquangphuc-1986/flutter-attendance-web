@@ -60,6 +60,7 @@ class FirebaseService {
     //     (now.hour>13||(now.hour==13&&now.hour>15)));
     //   return;
   }
+
   Stream<Map<String, String>> getTodayAttendance() {
    DateTime now = DateTime.now();
    DateTime today = DateTime(now.year, now.month, now.day);
@@ -73,6 +74,23 @@ class FirebaseService {
               doc['studentId']: doc['status'] as String,
           },
         );
+  }
+
+  Future<String?> getTodayAttendanceFuture (String studentId) async {
+     DateTime now = DateTime.now();
+     DateTime today = DateTime(now.year, now.month, now.day);
+     Timestamp timestampToday = Timestamp.fromDate(today);
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('attendance')
+        .where('studentId', isEqualTo: studentId)
+        .where('date', isEqualTo: timestampToday)
+        .limit(1)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      return querySnapshot.docs.first['status'];
+    } else {
+      return null;
+    }
   }
 
   //thống kê theo thời gian và tên và đơn vị
