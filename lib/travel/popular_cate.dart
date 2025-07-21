@@ -193,8 +193,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                         context,
                         MaterialPageRoute(
                           builder:
-                              //(context) => CAXScreen(),
-                              (context) => AttendanceScreen3_1(currentRole: currentRole, currentClass: currentClass)
+                              (context) => CAXScreen(),
                         ),
                       );
                     },

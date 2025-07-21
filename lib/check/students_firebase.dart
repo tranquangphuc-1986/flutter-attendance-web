@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_02/models/student.dart';
 
 
-class FirebaseService {
+class FirebaseServic {
   final CollectionReference studentCollection = FirebaseFirestore.instance
       .collection('students');
   final CollectionReference attendanceCollection = FirebaseFirestore.instance

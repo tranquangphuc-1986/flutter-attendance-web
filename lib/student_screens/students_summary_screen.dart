@@ -1,4 +1,5 @@
 import 'package:app_02/service/students_firebase_service.dart';
+import 'package:app_02/student_screens/students_attendance_screen3_1.dart';
 import 'package:app_02/student_screens/students_attendance_screen3_3dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -277,14 +278,14 @@ class _SummaryScreenResultState extends State<SummaryScreenResult> {
             onPressed:
                 () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => AttendanceScreen3(
+                  MaterialPageRoute(builder: (_) => AttendanceScreen3_1(
                     currentRole: currentRole,
                     currentClass: currentClass,
                   )),
                 ),
             child: const Icon(Icons.how_to_reg),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
         ],
       ),
     );

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
-import 'package:app_02/service/students_firebase.dart';
+import 'package:app_02/check/students_firebase.dart';
 class AttendancePScreen_3 extends StatefulWidget {
   @override
   _AttendancePScreenState3 createState() => _AttendancePScreenState3();
 }
 
 class _AttendancePScreenState3 extends State<AttendancePScreen_3> {
-  final FirebaseService _firebaseService = FirebaseService();
+  final FirebaseServic _firebaseService = FirebaseServic();
   final TextEditingController searchCtrl = TextEditingController();
   List<Student> _students = [];
   Map<String, String> _attendanceStatus ={};

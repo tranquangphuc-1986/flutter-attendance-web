@@ -1,6 +1,6 @@
 import 'package:app_02/service/students_firebase_service.dart';
 import 'package:app_02/student_screens/students_add_screen.dart';
-import 'package:app_02/student_screens/students_attendance_screen3_3dart';
+import 'package:app_02/student_screens/students_attendance_screen3_1.dart';
 import 'package:app_02/student_screens/students_edit_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -227,7 +227,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                   context,
                   MaterialPageRoute(
                     builder:
-                        (context) => AttendanceScreen3(
+                        (context) => AttendanceScreen3_1(
                           currentRole: currentRole,
                           currentClass: currentClass,
                         ),
