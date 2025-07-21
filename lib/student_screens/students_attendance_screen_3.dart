@@ -140,9 +140,9 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
 
   void _markAttendance(String studentId, String status) async {
     await _firebaseService.markAttendance(studentId, status);
-    // setState(() {
-    //   attendanceMap[studentId]=status;
-    // });
+    setState(() {
+      attendanceMap[studentId]=status;
+    });
   }
 
   @override
@@ -205,8 +205,8 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
                                 color: getIconColor(status),
                               ),
                               onSelected: (value) {
-                                _markAttendance(student.id, value);
                                 setState(() {
+                                  _markAttendance(student.id, value);
                                   attendanceMap[student.id] == value;
                                 });
                               },
