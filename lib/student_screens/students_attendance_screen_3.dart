@@ -1,4 +1,6 @@
 import 'package:app_02/student_screens/students_summary_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
 import 'package:app_02/service/students_firebase_service.dart';
@@ -18,7 +20,7 @@ class AttendanceScreen3 extends StatefulWidget {
 class _AttendanceScreen3State extends State<AttendanceScreen3> {
   final FirebaseService _firebaseService = FirebaseService();
   final TextEditingController searchCtrl = TextEditingController();
-  List<Student> _students = [];
+  List<Student> _studentList = [];
   Map<String, String> attendanceMap =
       {}; //lưu kq chọn trên lisview theo từng sinh viên theo ID
   String filterClass = '';
@@ -30,26 +32,103 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
     super.initState();
     currentRole = widget.currentRole;
     currentClass = widget.currentClass;
-    _loadDataStudents();
+    loadDataRole();
+    //_loadDataStudents();
     // _loadStudents();
   }
+  Future<void> loadDataRole() async {
+    try {
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final doc =
+      await FirebaseFirestore.instance
+          .collection('userLogin')
+          .doc(uid)
+          .get();
+      final doc_student =
+      await FirebaseFirestore.instance
+          .collection('students')
+          .doc(uid)
+          .get();
+      setState(() {
+        currentRole = doc['role'];
+        currentClass = doc_student['className'];
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Lỗi khi lấy dữ liệu: $e");
+      setState(() {
+        isLoading = false;
+      }); // Cập nhật giao diện
+    }
+    filteredStudents();
+  }
 
-  // void _loadStudents() {
-  //   _firebaseService.getStudents().listen((studentList) {
-  //     setState(() {
-  //       _students = studentList;
-  //       isLoading = false;
-  //     });
+  // Future<void> filteredStudents() async {
+  //   final snapshot = await FirebaseFirestore.instance.collection('students').get();
+  //   final allStudents = snapshot.docs.map((doc) => Student.fromDocument(doc)).toList();
+  //   if (currentRole == 'admin') {
+  //     _studentList = allStudents; // admin xem tất cả
+  //   } else if (currentRole == 'Chỉ huy TMCS') {
+  //     _studentList = allStudents.where((s) => s.className == 'TMCS').toList();
+  //   } else {
+  //     _studentList = [];//không có quyền
+  //   }
+  //   setState(() {
   //   });
   // }
-  void _loadDataStudents() {
-    _firebaseService.getTodayAttendance().listen((result) {
+  Future<void> filteredStudents() async {
+    _firebaseService.getStudents().listen((allStudentList) {
       setState(() {
-        attendanceMap = result;
+        if (currentRole == 'admin') {
+          _studentList = allStudentList;
+        } else if (currentRole.startsWith('Chỉ huy')) {
+          final clas =
+          currentRole
+              .replaceFirst('Chỉ huy ', '')
+              .trim();
+       _studentList = allStudentList.where((s)=> s.className.toLowerCase() == clas.toLowerCase()).toList();
+            }else{
+          _studentList = []; //không có quyền
+        }
+
+        // _studentList = allStudentList.where((s) {
+        //   // Nếu là chỉ huy, chỉ hiển thị lớp của họ
+        //   if (currentRole.startsWith('Chỉ huy')) {
+        //     final clas =
+        //     currentRole
+        //         .replaceFirst('Chỉ huy ', '')
+        //         .trim();
+        //     return s.className.toLowerCase() == clas.toLowerCase();
+        //   }
+        //   // Nếu là cán bộ thì hiển thị all
+        //   else if (currentRole == 'Cán bộ') {
+        //     return true;
+        //   } else {
+        //     // Admin hoặc các vai trò khác xem tất cả
+        //     return true;
+        //   }
+        // }).toList();
+      //  _studentList = allstudentList;
         isLoading = false;
       });
     });
   }
+  // void _loadStudents() {
+  //   _firebaseService.getStudents().listen((allstudentList) {
+  //     setState(() {
+  //       _studentList = allstudentList;
+  //       isLoading = false;
+  //     });
+  //   });
+  // }
+  // void _loadDataStudents() {
+  //   _firebaseService.getTodayAttendance().listen((result) {
+  //     setState(() {
+  //       attendanceMap = result;
+  //       isLoading = false;
+  //     });
+  //   });
+  // }
 
   Color getIconColor(String? selected) {
     switch (selected) {
@@ -97,7 +176,7 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Điểm danh hôm nay'),
-        backgroundColor: Colors.cyanAccent,
+        backgroundColor: Colors.red,
       ),
       backgroundColor: Colors.white70,
       body: Column(
@@ -124,37 +203,37 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
           ),
           const SizedBox(height: 16),
           Expanded(
-            child: StreamBuilder<List<Student>>(
-              stream: _firebaseService.getStudents(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                final allStudents = snapshot.data!;
-                // //lọc sinh viên theo phân quyền
-                final filteredStudents =
-                    allStudents.where((s) {
-                      // Nếu là chỉ huy, chỉ hiển thị lớp của họ
-                      if (currentRole.startsWith('Chỉ huy')) {
-                        final clas =
-                            currentRole
-                                .replaceFirst('Chỉ huy ', '')
-                                .trim();
-                        return s.className.toLowerCase() == clas.toLowerCase();
-                      }
-                      // Nếu là cán bộ thì hiển thị all
-                      else if (currentRole == 'Cán bộ') {
-                        return true;
-                      } else {
-                        // Admin hoặc các vai trò khác xem tất cả
-                        return true;
-                      }
-                    }).toList();
+            // child: StreamBuilder<List<Student>>(
+            //   stream: _firebaseService.getStudents(),
+            //   builder: (context, snapshot) {
+            //     if (!snapshot.hasData) {
+            //       return Center(child: CircularProgressIndicator());
+            //     }
+            //     final allStudents = snapshot.data!;
+            //     // //lọc sinh viên theo phân quyền
+            //     final filteredStudents =
+            //         allStudents.where((s) {
+            //           // Nếu là chỉ huy, chỉ hiển thị lớp của họ
+            //           if (currentRole.startsWith('Chỉ huy')) {
+            //             final clas =
+            //                 currentRole
+            //                     .replaceFirst('Chỉ huy ', '')
+            //                     .trim();
+            //             return s.className.toLowerCase() == clas.toLowerCase();
+            //           }
+            //           // Nếu là cán bộ thì hiển thị all
+            //           else if (currentRole == 'Cán bộ') {
+            //             return true;
+            //           } else {
+            //             // Admin hoặc các vai trò khác xem tất cả
+            //             return true;
+            //           }
+            //         }).toList();
 
-                return ListView.builder(
-                  itemCount: filteredStudents.length,
+                child:  ListView.builder(
+                  itemCount: _studentList.length,
                   itemBuilder: (context, index) {
-                    final student = filteredStudents[index];
+                    final student = _studentList[index];
                     final status =
                         attendanceMap[student.id] ?? 'Chưa điểm danh';
                     return Card(
@@ -180,7 +259,7 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
                               attendanceMap[student.id] == value;
                             });
                             //Phân quyền điểm danh
-                            if (widget.currentRole == 'Cán bộ') {
+                            if (currentRole == 'Cán bộ') {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
@@ -233,9 +312,9 @@ class _AttendanceScreen3State extends State<AttendanceScreen3> {
                       ),
                     );
                   },
-                );
-              },
-            ),
+                ),
+             // },
+            //),
           ),
         ],
       ),
