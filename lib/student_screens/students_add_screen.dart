@@ -134,12 +134,12 @@ class _AddNewstudensState extends State<AddNewstudens> {
                   children: [
                     //chọn ảnh đại diện
                     FormField<File>(
-                      validator: (v) {
-                        if (v == null) {
-                          return "Chọn ảnh đại diện";
-                        }
-                        return null;
-                      },
+                      // validator: (v) {
+                      //   if (v == null) {
+                      //     return "Chọn ảnh đại diện";
+                      //   }
+                      //   return null;
+                      // },
                       builder: (FormFieldState<File> state) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
