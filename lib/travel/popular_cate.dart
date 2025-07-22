@@ -8,6 +8,8 @@ import 'package:app_02/student_screens/students_summary_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:app_02/student_screens/students_statistics_page_2.dart';
 class PopularCategories extends StatefulWidget {
   const PopularCategories({super.key});
   @override
@@ -209,9 +211,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AttendanceScreen3_2(
-                              currentRole: currentRole,
-                              currentClass: currentClass),
+                          builder: (context) => StudentsStatisticsPage2(),
                         ),
                       );
                     },

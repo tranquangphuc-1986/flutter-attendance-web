@@ -152,9 +152,9 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Điểm danh hôm nay'),
-        backgroundColor: Colors.yellowAccent,
+        backgroundColor: Colors.cyan,
       ),
-      backgroundColor: Colors.white70,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Padding(

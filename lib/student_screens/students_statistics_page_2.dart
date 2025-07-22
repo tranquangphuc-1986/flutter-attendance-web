@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:app_02/models/student.dart';
 import 'package:app_02/student_screens/StatisticsExcel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:excel/excel.dart' as excel;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -8,12 +9,13 @@ import 'package:intl/intl.dart';
 import 'package:app_02/service/students_firebase_service.dart';
 import 'package:path_provider/path_provider.dart';
 
-class StudentsStatisticsPage extends StatefulWidget {
+class StudentsStatisticsPage2 extends StatefulWidget {
   @override
-  _StudentsStatisticsPageState createState() => _StudentsStatisticsPageState();
+  _StudentsStatisticsPage2State createState() =>
+      _StudentsStatisticsPage2State();
 }
 
-class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
+class _StudentsStatisticsPage2State extends State<StudentsStatisticsPage2> {
   DateTime? fromDate;
   DateTime? toDate;
   String? selectedClass;
@@ -33,20 +35,39 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
     'TTCH',
   ];
 
-  Future<void> fetchFilteredData() async {
-    if (fromDate == null || toDate == null) return;
-    setState(() => isLoading = true);
-    final data = await FirebaseService().getStudentStatisticsFiltered(
-      fromDate: fromDate!,
-      toDate: toDate!,
-      className: selectedClass,
-      nameKeyword: nameController.text.trim(),
-    );
+  Future<void> fetchFilteredStudentsData(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    final snapshot =
+        await FirebaseFirestore.instance
+            .collection('attendance')
+            .where(
+              'date',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+            )
+            .where('date', isLessThanOrEqualTo: Timestamp.fromDate(endDate))
+            .get();
+    final data = snapshot.docs.map((doc) => doc.data()).toList();
     setState(() {
       studentsData = data;
-      isLoading = false;
     });
   }
+
+  // Future<void> fetchFilteredData() async {
+  //   if (fromDate == null || toDate == null) return;
+  //   setState(() => isLoading = true);
+  //   final data = await FirebaseService().getStudentStatisticsFiltered(
+  //     fromDate: fromDate!,
+  //     toDate: toDate!,
+  //     className: selectedClass,
+  //     nameKeyword: nameController.text.trim(),
+  //   );
+  //   setState(() {
+  //     studentsData = data;
+  //     isLoading = false;
+  //   });
+  // }
 
   Future<void> pickDate(BuildContext context, bool isFrom) async {
     DateTime initialDate =
@@ -68,9 +89,9 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
     }
   }
 
-//Hàm xuất Excel
- //Future<void> exportToExcel(List<StatisticsExcel> data) async {
-   Future<void> exportToExcel(List<Map<String, dynamic>> studentsData) async {
+  //Hàm xuất Excel
+  //Future<void> exportToExcel(List<StatisticsExcel> data) async {
+  Future<void> exportToExcel(List<Map<String, dynamic>> studentsData) async {
     final excell = excel.Excel.createExcel();
     final excel.Sheet sheet = excell['Tổng hợp điểm danh'];
 
@@ -80,39 +101,38 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
       'Đơn vị',
       'Có mặt',
       'Công tác',
-      'Bị ốm',
+      'Do ốm',
       'Nghỉ phép',
-      'Việc riêng',
       'Đi học',
-      'Đi trễ',
+      'Việc riêng',
       'Không lý do',
+      'Đi trễ',
     ]);
 
     // Dữ liệu
     for (var student in studentsData) {
       sheet.appendRow([
-        student['name'] ?? '',
-        student['className'] ?? '',
-        student['present'] ?? 0,
-        student['work'] ?? 0,
-        student['sick'] ?? 0,
-        student['np'] ?? 0,
-        student['vcn'] ?? 0,
-        student['dh'] ?? 0,
-        student['dt'] ?? 0,
-        student['kld'] ?? 0,
+        student['ten'],
+        student['donVi'],
+        student['co_Mat'],
+        student['cong_Tac'],
+        student['bi_Om'],
+        student['nghi_Phep'],
+        student['di_Hoc'],
+        student['viec_Rieng'],
+        student['khong_Lydo'],
+        student['di_Tre'],
       ]);
     }
+
     // Lưu file
     final directory = await getApplicationDocumentsDirectory();
     final filePath = '${directory.path}/THỐNG_KÊ_ĐIỂM_DANH.xlsx';
-    final fileBytes = excell.save();
-    final file = File(filePath);
-    await file.writeAsBytes(fileBytes!);
-    // final fileBytes = excell.encode();
-    // final file = File(filePath)
-    //   ..createSync(recursive: true)
-    //   ..writeAsBytesSync(fileBytes!);
+    final fileBytes = excell.encode();
+    final file =
+        File(filePath)
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(fileBytes!);
     print('✅ File lưu tại: $filePath');
   }
 
@@ -178,45 +198,49 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        value: selectedClass,
-                        hint: const Text('Chọn đơn vị'),
-                        items:
-                            classList.map((String className) {
-                              return DropdownMenuItem<String>(
-                                value: className,
-                                child: Text(className),
-                              );
-                            }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedClass = value;
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        controller: nameController,
-                        decoration: const InputDecoration(
-                          hintText: 'Tìm theo tên',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: DropdownButtonFormField<String>(
+                //         value: selectedClass,
+                //         hint: const Text('Chọn đơn vị'),
+                //         items:
+                //             classList.map((String className) {
+                //               return DropdownMenuItem<String>(
+                //                 value: className,
+                //                 child: Text(className),
+                //               );
+                //             }).toList(),
+                //         onChanged: (value) {
+                //           setState(() {
+                //             selectedClass = value;
+                //           });
+                //         },
+                //       ),
+                //     ),
+                //     const SizedBox(width: 10),
+                //     Expanded(
+                //       child: TextField(
+                //         controller: nameController,
+                //         decoration: const InputDecoration(
+                //           hintText: 'Tìm theo tên',
+                //           border: OutlineInputBorder(),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton.icon(
-                      onPressed: fetchFilteredData,
-                      icon: const Icon(Icons.filter_alt, color: Colors.blue,),
+                      onPressed: () {
+                        if (fromDate != null && toDate != null) {
+                          fetchFilteredStudentsData(fromDate!, toDate!);
+                        }
+                      },
+                      icon: const Icon(Icons.filter_alt, color: Colors.blue),
                       label: const Text(
                         'Lọc',
                         style: TextStyle(
@@ -227,7 +251,6 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.yellow,
                       ),
-
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton.icon(
@@ -239,8 +262,9 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                           toDate = null;
                         });
                       },
-                      icon: const Icon(Icons.refresh, color: Colors.white,),
-                      label: const Text('Làm mới',
+                      icon: const Icon(Icons.refresh, color: Colors.white),
+                      label: const Text(
+                        'Làm mới',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -249,21 +273,24 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
                       ),
-
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton.icon(
                       onPressed: () => exportToExcel(studentsData),
-                      icon: const Icon(Icons.download_outlined, color: Colors.white,),
-                      label: const Text('Xuất excel',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                      icon: const Icon(
+                        Icons.download_outlined,
                         color: Colors.white,
-                      ),),
+                      ),
+                      label: const Text(
+                        'Xuất excel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                       ),
-
                     ),
                   ],
                 ),
@@ -287,6 +314,7 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                             title: Text(
                               '${student['name']} (${student['className']})',
                             ),
+                           // subtitle: Text('Trạng thái: ${student['Có mặt']}'),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -295,9 +323,9 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                                 Text('Vắng do ốm: ${student['sick']}'),
                                 Text('Vắng do nghỉ phép: ${student['np']}'),
                                 Text('Vắng việc cá nhân: ${student['vcn']}'),
+                                Text('Vắng không lý do: ${student['kld']}'),
                                 Text('Vắng do đi học: ${student['dh']}'),
                                 Text('Đi trễ: ${student['dt']}'),
-                                Text('Vắng không lý do: ${student['kld']}'),
                               ],
                             ),
                           ),
