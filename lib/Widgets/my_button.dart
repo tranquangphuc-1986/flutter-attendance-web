@@ -30,7 +30,6 @@ class MyButton extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
-              backgroundColor: Colors.blue,
             ),
         ),
     );

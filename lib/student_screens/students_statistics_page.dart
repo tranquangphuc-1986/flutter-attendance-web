@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:app_02/service/students_firebase_service.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class StudentsStatisticsPage extends StatefulWidget {
   @override
@@ -69,10 +70,11 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
   }
 
 //Hàm xuất Excel
- //Future<void> exportToExcel(List<StatisticsExcel> data) async {
-   Future<void> exportToExcel(List<Map<String, dynamic>> studentsData) async {
-    final excell = excel.Excel.createExcel();
-    final excel.Sheet sheet = excell['Tổng hợp điểm danh'];
+   Future<void> exportToExcel(BuildContext context, List<Map<String, dynamic>> studentsData) async {
+    try {
+    // Tạo workbook Excel
+    final ex= excel.Excel.createExcel();
+    final excel.Sheet sheet = ex['Tổng hợp điểm danh'];
 
     // Tiêu đề
     sheet.appendRow([
@@ -86,35 +88,47 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
       'Đi học',
       'Đi trễ',
       'Không lý do',
+      'Tổng số vắng'
     ]);
 
-    // Dữ liệu
+    // Ghi dữ liệu từng cán bộ
     for (var student in studentsData) {
-      sheet.appendRow([
-        student['name'] ?? '',
-        student['className'] ?? '',
-        student['present'] ?? 0,
-        student['work'] ?? 0,
-        student['sick'] ?? 0,
-        student['np'] ?? 0,
-        student['vcn'] ?? 0,
-        student['dh'] ?? 0,
-        student['dt'] ?? 0,
-        student['kld'] ?? 0,
-      ]);
+      final String name = student['name'] ?? '';
+      final String className = student['className'] ?? '';
+      final int present =student['present'] ?? 0;
+      final int work = student['work'] ?? 0;
+     final int sick = student['sick'] ?? 0;
+     final int np = student['np'] ?? 0;
+     final int vcn = student['vcn'] ?? 0;
+     final int dh = student['dh'] ?? 0;
+     final int dt = student['dt'] ?? 0;
+     final int kld = student['kld'] ?? 0;
+     final int total = work+sick+np+vcn+dh+dt+kld;
+     sheet.appendRow([name,className,present,work,sick,np,vcn,dh,dt,kld, total ]);
     }
-    // Lưu file
+    // Lưu file vào thiết bị
     final directory = await getApplicationDocumentsDirectory();
     final filePath = '${directory.path}/THỐNG_KÊ_ĐIỂM_DANH.xlsx';
-    final fileBytes = excell.save();
+    final fileBytes = ex.encode();
     final file = File(filePath);
     await file.writeAsBytes(fileBytes!);
-    // final fileBytes = excell.encode();
-    // final file = File(filePath)
-    //   ..createSync(recursive: true)
-    //   ..writeAsBytesSync(fileBytes!);
-    print('✅ File lưu tại: $filePath');
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("File Excel đã lưu tại: $filePath"),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 2)),
+    );
+    await Share.shareXFiles([XFile(filePath)], text: 'Thống kê điểm danh');
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Lỗi xuất Excel: $e"),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 2),
+        ),
+      );
   }
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -141,8 +155,7 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                             horizontal: 10,
                           ),
                           decoration: BoxDecoration(
-                            //border: Border.all(),
-                            border: BorderDirectional(),
+                            border: Border.all(),
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
@@ -163,8 +176,7 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                             horizontal: 10,
                           ),
                           decoration: BoxDecoration(
-                            //border: Border.all(),
-                            border: BorderDirectional(),
+                            border: Border.all(),
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
@@ -253,7 +265,7 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton.icon(
-                      onPressed: () => exportToExcel(studentsData),
+                      onPressed: () => exportToExcel(context, studentsData),
                       icon: const Icon(Icons.download_outlined, color: Colors.white,),
                       label: const Text('Xuất excel',
                       style: TextStyle(

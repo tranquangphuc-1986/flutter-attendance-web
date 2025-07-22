@@ -98,7 +98,7 @@ class _AddNewstudensState extends State<AddNewstudens> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Thêm mới thành công"),
-            duration: const Duration(seconds: 3),
+            duration: const Duration(seconds: 2),
           ),
         );
         Navigator.pop(context); //quay lại sau khi thêm

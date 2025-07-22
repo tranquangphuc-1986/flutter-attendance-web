@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
 import 'package:app_02/service/students_firebase_service.dart';
@@ -171,7 +172,7 @@ class _EditDataScreenState extends State<EditDataScreen> {
                 child:
                     _isLoading
                         ? CircularProgressIndicator(color: Colors.red)
-                        : const Text("Cập nhật"),
+                        : const Text("Cập nhật", style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
