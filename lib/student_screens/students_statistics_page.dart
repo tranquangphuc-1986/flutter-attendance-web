@@ -1,6 +1,12 @@
+import 'dart:io';
+import 'package:app_02/models/student.dart';
+import 'package:app_02/student_screens/StatisticsExcel.dart';
+import 'package:excel/excel.dart' as excel;
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:app_02/service/students_firebase_service.dart';
+import 'package:path_provider/path_provider.dart';
 
 class StudentsStatisticsPage extends StatefulWidget {
   @override
@@ -15,7 +21,6 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
 
   bool isLoading = false;
   List<Map<String, dynamic>> studentsData = [];
-
   List<String> classList = [
     'LĐ',
     'TMCS',
@@ -63,6 +68,52 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
     }
   }
 
+//Hàm xuất Excel
+ //Future<void> exportToExcel(List<StatisticsExcel> data) async {
+   Future<void> exportToExcel(List<Map<String, dynamic>> studentsData) async {
+    final excell = excel.Excel.createExcel();
+    final excel.Sheet sheet = excell['Tổng hợp điểm danh'];
+
+    // Tiêu đề
+    sheet.appendRow([
+      'Họ và tên',
+      'Đơn vị',
+      'Có mặt',
+      'Công tác',
+      'Do ốm',
+      'Nghỉ phép',
+      'Đi học',
+      'Việc riêng',
+      'Không lý do',
+      'Đi trễ',
+    ]);
+
+    // Dữ liệu
+    for (var student in studentsData) {
+      sheet.appendRow([
+        student['ten'],
+        student['donVi'],
+        student['co_Mat'],
+        student['cong_Tac'],
+        student['bi_Om'],
+        student['nghi_Phep'],
+        student['di_Hoc'],
+        student['viec_Rieng'],
+        student['khong_Lydo'],
+        student['di_Tre'],
+      ]);
+    }
+
+    // Lưu file
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/THỐNG_KÊ_ĐIỂM_DANH.xlsx';
+    final fileBytes = excell.encode();
+    final file = File(filePath)
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(fileBytes!);
+    print('✅ File lưu tại: $filePath');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +139,8 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                             horizontal: 10,
                           ),
                           decoration: BoxDecoration(
-                            border: Border.all(),
+                            //border: Border.all(),
+                            border: BorderDirectional(),
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
@@ -109,7 +161,8 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                             horizontal: 10,
                           ),
                           decoration: BoxDecoration(
-                            border: Border.all(),
+                            //border: Border.all(),
+                            border: BorderDirectional(),
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
@@ -198,7 +251,7 @@ class _StudentsStatisticsPageState extends State<StudentsStatisticsPage> {
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton.icon(
-                      onPressed: fetchFilteredData,
+                      onPressed: () => exportToExcel(studentsData),
                       icon: const Icon(Icons.download_outlined, color: Colors.white,),
                       label: const Text('Xuất excel',
                       style: TextStyle(
