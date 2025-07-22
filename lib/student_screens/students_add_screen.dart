@@ -70,13 +70,12 @@ class _AddNewstudensState extends State<AddNewstudens> {
             .where("phone", isEqualTo: phone)
             .get();
     return querySnapshot.docs.isNotEmpty;
+
   }
 
   void _addStudent() async {
-    _capitalizeFullName();
     final nameStudent = nameCtrl.text.trim();
     final phone = phoneCtrl.text.trim();
-
     if (await checkphone(phone)) {
       ScaffoldMessenger.of(
         context,
@@ -84,7 +83,7 @@ class _AddNewstudensState extends State<AddNewstudens> {
       setState(() => _isLoading = false);
       return;
     }
-
+    _capitalizeFullName();
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       try {
@@ -98,11 +97,9 @@ class _AddNewstudensState extends State<AddNewstudens> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Thêm mới thành công"),
-            duration: const Duration(seconds: 2),
-          ),
+            ),
         );
         Navigator.pop(context); //quay lại sau khi thêm
-
         nameCtrl.clear();
         phoneCtrl.clear();
         setState(() {
@@ -304,7 +301,6 @@ class _AddNewstudensState extends State<AddNewstudens> {
                                 ),
                               )
                               .toList(),
-                      //validator: (v) => v!.isEmpty ? "Nhập đơn vị" : null,
                       validator: (v) {
                         if (v == null || v.trim().isEmpty) {
                           return "Nhập đơn vị";

@@ -28,7 +28,7 @@ class Student {
       className: map['className'],
     );
   }
-//lấy toàn bộ danh sách sinh viêm từ collection ('student') tròng firestore - dạng list
+//lấy toàn bộ danh sách sinh viêm từ collection ('student') trong firestore - dạng list
   factory Student.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data()!;
     return Student(
