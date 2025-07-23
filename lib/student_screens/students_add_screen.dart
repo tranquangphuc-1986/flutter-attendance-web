@@ -34,6 +34,7 @@ class _AddNewstudensState extends State<AddNewstudens> {
     'LĐ',
   ];
   String? selectedClass;
+  String? phoneError;
   bool _isLoading = false;
   @override
   void dispose() {
@@ -76,13 +77,13 @@ class _AddNewstudensState extends State<AddNewstudens> {
   void _addStudent() async {
     final nameStudent = nameCtrl.text.trim();
     final phone = phoneCtrl.text.trim();
-    if (await checkphone(phone)) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Số điện thoại đã được đăng ký")));
-      setState(() => _isLoading = false);
-      return;
-    }
+    // if (await checkphone(phone)) {
+    //   ScaffoldMessenger.of(
+    //     context,
+    //   ).showSnackBar(SnackBar(content: Text("Số điện thoại đã được đăng ký")));
+    //   setState(() => _isLoading = false);
+    //   return;
+    // }
     _capitalizeFullName();
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
@@ -272,17 +273,30 @@ class _AddNewstudensState extends State<AddNewstudens> {
                     TextFormField(
                       controller: phoneCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: "Số điện thoại",
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                          errorText: phoneError, //thay thế cho validator check phone
                       ),
-                      validator: (v) {
+                      validator: (v)  {
                         if (v == null || v.trim().isEmpty) {
                           return "Nhập số điện thoại";
                         } else if (!RegExp(r'^[0-9]{10}$').hasMatch(v)) {
                           return 'Số điện thoại không hợp lệ';
                         }
                         return null;
+                      },
+                      onChanged: (v) async {
+                        setState(() {
+                          phoneError=null;
+                          _isLoading=true;
+                        });
+                        if(await checkphone(v)){
+                          phoneError="Số điện thoại đã được đăng ký";
+                        }
+                        setState(() {
+                          _isLoading = false;
+                        });
                       },
                     ),
                     const SizedBox(height: 16),
