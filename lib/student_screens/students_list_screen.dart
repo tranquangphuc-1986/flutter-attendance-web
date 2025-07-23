@@ -84,9 +84,13 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
         context: context,
         builder:
             (context) => AlertDialog(
-             title: const Center(child: Text("Thông báo",
-            style: TextStyle(color: Colors.blue, fontSize: 14, fontWeight: FontWeight.bold),),),
-          content: Center(child: Text("Đã xoá dữ liệu '${student.name}'", style: TextStyle(color: Colors.red,)),),
+              //alignment: Alignment.center,
+             title:Text("Thông báo",
+            style: TextStyle(color: Colors.blue, fontSize: 14,
+                fontWeight: FontWeight.bold),
+             textAlign: TextAlign.center,),
+          content: Text("Đã xoá dữ liệu '${student.name}'",
+              style: TextStyle(color: Colors.red,), textAlign: TextAlign.center,),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
