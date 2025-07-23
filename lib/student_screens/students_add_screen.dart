@@ -94,10 +94,10 @@ class _AddNewstudensState extends State<AddNewstudens> {
         );
         await service.addStudent(student);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Thêm mới thành công"),
-            ),
-        );
+          const SnackBar(
+            content: Text("Thêm mới thành công")),
+            );
+            await Future.delayed(const Duration(seconds: 1));
         Navigator.pop(context); //quay lại sau khi thêm
         nameCtrl.clear();
         phoneCtrl.clear();

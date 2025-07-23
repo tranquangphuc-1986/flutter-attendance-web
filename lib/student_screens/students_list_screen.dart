@@ -84,6 +84,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Đã xóa dữ liệu '${student.name}'")),
       );
+      await Future.delayed(const Duration(seconds: 1));
     }
   }
 
@@ -236,7 +237,8 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
             child: const Icon(Icons.how_to_reg),
           ),
           const SizedBox(height: 10),
-          FloatingActionButton(
+          Builder(
+            builder: (context) => FloatingActionButton(
             tooltip: "Thêm mới",
             heroTag: "Thêm mới",
             onPressed: () {
@@ -257,6 +259,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
               }
             },
             child: const Icon(Icons.add),
+          ),
           ),
         ],
       ),

@@ -103,6 +103,7 @@ class _EditDataScreenState extends State<EditDataScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Đã sửa dữ liệu")),
       );
+      await Future.delayed(const Duration(seconds: 1));
       Navigator.pop(context); // Quay lại màn hình trước
     }
   }
