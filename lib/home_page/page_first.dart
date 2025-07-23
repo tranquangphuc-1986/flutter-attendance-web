@@ -26,6 +26,12 @@ Future<void> _launchFb() async {
     throw 'Không thể mở URL: $url';
   }
 }
+Future<void> _map() async {
+  final url = Uri.parse('https://sapnhap.bando.com.vn/?zarsrc=31&utm_source=zalo&utm_medium=zalo&utm_campaign=zalo');
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    throw 'Không thể mở URL: $url';
+  }
+}
 
 class _MyPageFirstState extends State<PageFirst> {
   String currentName = '';

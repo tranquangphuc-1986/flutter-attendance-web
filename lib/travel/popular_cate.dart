@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_02/student_screens/students_statistics_page_2.dart';
+import 'package:url_launcher/url_launcher.dart';
 class PopularCategories extends StatefulWidget {
   const PopularCategories({super.key});
   @override
@@ -49,6 +50,12 @@ class _PopularCategoriesState extends State<PopularCategories> {
       setState(() {
         isLoading = false;
       }); // Cập nhật giao diện
+    }
+  }
+  Future<void> _map() async {
+    final url = Uri.parse('https://sapnhap.bando.com.vn/?zarsrc=31&utm_source=zalo&utm_medium=zalo&utm_campaign=zalo');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw 'Không thể mở URL: $url';
     }
   }
 
@@ -223,16 +230,17 @@ class _PopularCategoriesState extends State<PopularCategories> {
                   ),
 
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AttendanceScreen3_2(
-                              currentRole: currentRole,
-                              currentClass: currentClass),
-                        ),
-                      );
-                    },
+                    onTap: _map,
+                    // onTap: () {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => AttendanceScreen3_2(
+                    //           currentRole: currentRole,
+                    //           currentClass: currentClass),
+                    //     ),
+                    //   );
+                    // },
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFFFacdcc),
@@ -259,7 +267,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
                     ),
                     Text(
-                      "Tổng hợp",
+                      "Tra cứu",
                       style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
                     ),
                   ],
