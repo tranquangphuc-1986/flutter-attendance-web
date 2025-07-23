@@ -71,9 +71,7 @@ class _AddNewstudensState extends State<AddNewstudens> {
             .where("phone", isEqualTo: phone)
             .get();
     return querySnapshot.docs.isNotEmpty;
-
   }
-
   void _addStudent() async {
     final nameStudent = nameCtrl.text.trim();
     final phone = phoneCtrl.text.trim();
@@ -297,7 +295,7 @@ class _AddNewstudensState extends State<AddNewstudens> {
                         setState(() {
                           _isLoading = false;
                         });
-                        return null;
+                        return phoneCtrl.clear();
                       },
                     ),
                     const SizedBox(height: 16),
