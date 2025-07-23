@@ -249,7 +249,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Bạn không có quyền truy cập.'),
-                    duration: const Duration(seconds: 2),
+                    duration: const Duration(seconds: 1),
                     backgroundColor: Colors.red,
                   ),
                 );

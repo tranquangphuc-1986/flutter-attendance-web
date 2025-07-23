@@ -110,7 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.fingerprint),
+            leading: const Icon(Icons.phonelink_ring_rounded, color: Colors.blueAccent,),
             title: const Text('Điện thoại hỗ trợ   0978823579'),
           ),
           // ListTile(
