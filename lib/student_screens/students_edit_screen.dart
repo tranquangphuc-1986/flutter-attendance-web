@@ -100,6 +100,9 @@ class _EditDataScreenState extends State<EditDataScreen> {
         className: selectedClass!,
       );
       await FirebaseService().updateData(updatedData);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Đã sửa dữ liệu")),
+      );
       Navigator.pop(context); // Quay lại màn hình trước
     }
   }
