@@ -46,9 +46,12 @@ class UnitCard extends StatelessWidget {
             fontWeight: FontWeight.bold, color: Colors.blue), textAlign: TextAlign.center,),
         content: Text(unit.info),
         actions: [
-          TextButton(
+          ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Đóng'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+            ),
+            child: const Text('Đóng', style: TextStyle(color: Colors.white,)),
           )
         ],
       ),

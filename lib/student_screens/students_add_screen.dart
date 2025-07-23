@@ -76,9 +76,6 @@ class _AddNewstudensState extends State<AddNewstudens> {
     final nameStudent = nameCtrl.text.trim();
     final phone = phoneCtrl.text.trim();
     if (await checkphone(phone)) {
-      // ScaffoldMessenger.of(
-      //   context,
-      // ).showSnackBar(SnackBar(content: Text("Số điện thoại đã được đăng ký")));
       setState(() => _isLoading = false);
       return;
     }
@@ -96,11 +93,10 @@ class _AddNewstudensState extends State<AddNewstudens> {
         if(!mounted) return; //tránh lỗi khi context bị dispose
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("Thêm mới thành công")),
+            content: Text("Thêm mới thành công"), backgroundColor: Colors.yellow,),
             );
         await Future.delayed(const Duration(seconds: 2));
         setState(() => _isLoading = false);
-        //Navigator.pop(context); //quay lại sau khi thêm
         nameCtrl.clear();
         phoneCtrl.clear();
         setState(() {
@@ -336,7 +332,18 @@ class _AddNewstudensState extends State<AddNewstudens> {
 
 
                     const SizedBox(height: 50),
-                    //tạo một vòng tròn xoay loading
+
+                    ElevatedButton(
+                      onPressed: _isLoading ? null : _addStudent,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                      ),
+                      child:
+                      _isLoading
+                          ? CircularProgressIndicator(color: Colors.red)
+                          : const Text("Lưu", style: TextStyle(color: Colors.white)),
+                    ),
+                    //Cách 2: tạo một vòng tròn xoay loading
                     // _isLoading ? const Center(
                     //       child: CircularProgressIndicator(color: Colors.blue),
                     //     )
@@ -348,16 +355,6 @@ class _AddNewstudensState extends State<AddNewstudens> {
                     //         buttontext: "Lưu",
                     //       ),
                     //     ),
-                    ElevatedButton(
-                      onPressed: _isLoading ? null : _addStudent,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                      ),
-                      child:
-                      _isLoading
-                          ? CircularProgressIndicator(color: Colors.red)
-                          : const Text("Lưu", style: TextStyle(color: Colors.white)),
-                    ),
 
 
                   ],
