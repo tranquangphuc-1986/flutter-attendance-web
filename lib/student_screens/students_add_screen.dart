@@ -276,14 +276,6 @@ class _AddNewstudensState extends State<AddNewstudens> {
                         border: const OutlineInputBorder(),
                           errorText: phoneError, //thay thế cho validator check phone
                       ),
-                      validator: (v)  {
-                        if (v == null || v.trim().isEmpty) {
-                          return "Nhập số điện thoại";
-                        } else if (!RegExp(r'^[0-9]{10}$').hasMatch(v)) {
-                          return 'Số điện thoại không hợp lệ';
-                        }
-                        return null;
-                      },
                       onChanged: (v) async {
                         setState(() {
                           phoneError=null;
@@ -295,8 +287,17 @@ class _AddNewstudensState extends State<AddNewstudens> {
                         setState(() {
                           _isLoading = false;
                         });
-                       // return;
+                        // return;
                       },
+                      validator: (v)  {
+                        if (v == null || v.trim().isEmpty) {
+                          return "Nhập số điện thoại";
+                        } else if (!RegExp(r'^[0-9]{10}$').hasMatch(v)) {
+                          return 'Số điện thoại không hợp lệ';
+                        }
+                        return null;
+                      },
+
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
