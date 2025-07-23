@@ -93,13 +93,13 @@ class _AddNewstudensState extends State<AddNewstudens> {
           className: selectedClass ?? '',
         );
         await service.addStudent(student);
-        if(!mounted) return; //tránh lỗi khi context bị dispose
+        //if(!mounted) return; //tránh lỗi khi context bị dispose
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Thêm mới thành công")),
             );
-        await Future.delayed(const Duration(seconds: 1));
-        Navigator.pop(context); //quay lại sau khi thêm
+        //await Future.delayed(const Duration(seconds: 2));
+        //Navigator.pop(context); //quay lại sau khi thêm
         nameCtrl.clear();
         phoneCtrl.clear();
         setState(() {

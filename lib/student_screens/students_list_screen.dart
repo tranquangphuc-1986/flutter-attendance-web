@@ -80,17 +80,14 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
     );
     if (confirm == true) {
       await FirebaseService().deleteData(student.id);
-      // if (!context.mounted) return;
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text("Đã xóa dữ liệu '${student.name}'")),
-      // );
-      // await Future.delayed(const Duration(seconds: 1));
       await showDialog (
         context: context,
         builder:
             (context) => AlertDialog(
-          title: const Text("Thông báo", style: TextStyle(color: Colors.blue, fontSize: 14, fontWeight: FontWeight.bold),),
-          content: Text("Đã xoá dữ liệu '${student.name}'", style: TextStyle(color: Colors.blue,)),
+              alignment: Alignment.center,
+          title: const Center(child: Text("Thông báo",
+            style: TextStyle(color: Colors.blue, fontSize: 14, fontWeight: FontWeight.bold),),),
+          content: Center(child: Text("Đã xoá dữ liệu '${student.name}'", style: TextStyle(color: Colors.red,)),),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
