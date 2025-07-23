@@ -237,22 +237,15 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
             child: const Icon(Icons.how_to_reg),
           ),
           const SizedBox(height: 10),
-          Builder(
-            builder: (context) => FloatingActionButton(
+          FloatingActionButton(
             tooltip: "Thêm mới",
             heroTag: "Thêm mới",
             onPressed: () {
               if (currentRole == 'Admin') {
-                final result = Navigator.push(
+               Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const AddNewstudens()),
                 );
-                if (result == 'addNew'){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text("Thêm mới thành công")),
-                  );
-                }
               } else {
                 if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -266,7 +259,6 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
               }
             },
             child: const Icon(Icons.add),
-          ),
           ),
         ],
       ),
