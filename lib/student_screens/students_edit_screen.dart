@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/models/student.dart';
 import 'package:app_02/service/students_firebase_service.dart';
@@ -100,20 +99,19 @@ class _EditDataScreenState extends State<EditDataScreen> {
         className: selectedClass!,
       );
       await FirebaseService().updateData(updatedData);
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Đã sửa dữ liệu")),
       );
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       Navigator.pop(context); // Quay lại màn hình trước
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Sửa sinh viên")),
+      appBar: AppBar(title: const Text("Sửa thông tin")),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
