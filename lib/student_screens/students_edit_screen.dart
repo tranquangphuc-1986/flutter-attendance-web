@@ -86,7 +86,8 @@ class _EditDataScreenState extends State<EditDataScreen> {
     if (await checkphone(phone)) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("Số điện thoại đã được đăng ký")));
+      ).showSnackBar(SnackBar(content: Text("Số điện thoại đã được đăng ký"),
+          backgroundColor: Colors.red));
       setState(() => _isLoading = false);
       return;
     }
@@ -101,7 +102,7 @@ class _EditDataScreenState extends State<EditDataScreen> {
       await FirebaseService().updateData(updatedData);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Đã sửa dữ liệu")),
+        SnackBar(content: Text("Đã sửa dữ liệu"), backgroundColor: Colors.green,),
       );
       await Future.delayed(const Duration(seconds: 2));
       Navigator.pop(context); // Quay lại màn hình trước

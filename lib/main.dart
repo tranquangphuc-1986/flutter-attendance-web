@@ -9,8 +9,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey
-= GlobalKey<ScaffoldMessengerState>();
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -18,7 +17,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      scaffoldMessengerKey: scaffoldMessengerKey,
       debugShowCheckedModeBanner:
           false, //là một thuộc tính được sử dụng để ẩn biểu ngữ “DEBUG” màu đỏ ở góc trên bên phải của ứng dụng khi chạy ở chế độ debug.
       title: 'Ứng dụng điểm danh',
@@ -26,12 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         //textTheme: GoogleFonts.playfairDisplayTextTheme(),
         fontFamily: 'Roboto',
-        // snackBarTheme: const SnackBarThemeData(
-        //   backgroundColor: Colors.green,
-        //   contentTextStyle: TextStyle(color: Colors.white),
-        //   behavior: SnackBarBehavior.floating,
-        // ),
-      ),
+            ),
       home: const EmailLoginScreen(),
       // initialRoute: '/',
       routes: {

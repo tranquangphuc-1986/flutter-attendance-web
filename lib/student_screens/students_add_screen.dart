@@ -76,6 +76,10 @@ class _AddNewstudensState extends State<AddNewstudens> {
     final nameStudent = nameCtrl.text.trim();
     final phone = phoneCtrl.text.trim();
     if (await checkphone(phone)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Số điện thoại đã được đăng ký"), backgroundColor: Colors.red,),
+      );
       setState(() => _isLoading = false);
       return;
     }
@@ -93,7 +97,7 @@ class _AddNewstudensState extends State<AddNewstudens> {
         if(!mounted) return; //tránh lỗi khi context bị dispose
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("Thêm mới thành công"), backgroundColor: Colors.yellow,),
+            content: Text("Thêm mới thành công"), backgroundColor: Colors.green,),
             );
         await Future.delayed(const Duration(seconds: 2));
         setState(() => _isLoading = false);

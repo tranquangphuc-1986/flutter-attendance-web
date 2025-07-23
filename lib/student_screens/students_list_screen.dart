@@ -80,23 +80,31 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
     );
     if (confirm == true) {
       await FirebaseService().deleteData(student.id);
-      await showDialog (
+      await showDialog(
         context: context,
         builder:
             (context) => AlertDialog(
-             title:Text("Thông báo",
-            style: TextStyle(color: Colors.blue, fontSize: 14,
-                fontWeight: FontWeight.bold),
-             textAlign: TextAlign.center,),
-          content: Text("Đã xoá dữ liệu '${student.name}'",
-              style: TextStyle(color: Colors.red,), textAlign: TextAlign.center,),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Đóng'),
+              title: Text(
+                "Thông báo",
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              content: Text(
+                "Đã xoá dữ liệu '${student.name}'",
+                style: TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Đóng'),
+                ),
+              ],
             ),
-          ],
-        ),
       );
     }
   }
@@ -144,10 +152,13 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                         ? students
                         : students
                             .where(
-                              (s) => s.name.toLowerCase().contains(
-                                filter.toLowerCase(),)
-                              ||s.className.toLowerCase().contains(
-                                filter.toLowerCase(),)
+                              (s) =>
+                                  s.name.toLowerCase().contains(
+                                    filter.toLowerCase(),
+                                  ) ||
+                                  s.className.toLowerCase().contains(
+                                    filter.toLowerCase(),
+                                  ),
                             )
                             .toList();
 
@@ -256,7 +267,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
             heroTag: "Thêm mới",
             onPressed: () {
               if (currentRole == 'Admin') {
-               Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const AddNewstudens()),
                 );

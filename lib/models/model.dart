@@ -22,15 +22,28 @@ class LocationDetail {
 
 List<LocationDetail> locationItems = [
   LocationDetail(
-    image: "img/mountain.png",
-    name: 'The Way',
-    address: 'Spain',
+    image: "img/dhPV01.jpg",
+    name: 'Đại hội',
+    address: 'PTM',
     price: 1350,
     rating: 5.0,
     temperature: 19,
+    time: 11-7-2025 ,
+    description:
+    "Ngày 11/7/2025, Đảng bộ Phòng Tham mưu đã tổ chức thành công Đại hội lần thứ I, nhiệm kỳ 2025-20230."
+        "Đại hội đã thông qua Quyết định của BTV Đảng uỷ Công an tỉnh chỉ định đồng chí Thượng tá Lương Việt Long là Bí thư Đảng uỷ Phòng Tham mưu",
+  ),
+  LocationDetail(
+    image: "img/xoanhatam_PV01.jpg",
+    name: 'Nhà tạm',
+    address: 'PTM',
+    price: 1350,
+    rating: 5.0,
+    temperature: 22-6-2025,
     time:5 ,
     description:
-        "The Way typically refers to the Camino de Santiago, a network of pilgrimage routes leading to the shrine of the apostle Saint James the Great in the Cathedral of Santiago de Compostela in Galicia, northwest Spain.",
+        "Phòng Tham mưu chung tay xoá nhà tạm, nhà dột nát. Ngày 25/6/2025, Phòng Tham mưu đã bàn giao nhà"
+            " và phối hợp Ngân hàng BIDV chi nhánh Dung Quất hỗ trợ số tiền 60 triệu đồng cho bà Nguyễn Thị Điểu, 72 tuổi, ở thôn Phước Lộc Tây, xã Tịnh Sơn, huyện Sơn Tịnh ",
   ),
   LocationDetail(
     image: "img/thebridge.png",
@@ -44,7 +57,7 @@ List<LocationDetail> locationItems = [
         "Iceland's nature is renowned for its raw and untamed beauty, characterized by dramatic landscapes shaped by volcanic activity, glaciers, geysers, and cascading waterfalls,if you want to enjoy more then you need to visit this all place.",
   ),
   LocationDetail(
-    image: "img/sunrises.png",
+    image: "img/mountain.png",
     name: 'Oyo Lakes',
     address: 'Croatia',
     price: 3250,
