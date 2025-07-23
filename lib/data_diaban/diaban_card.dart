@@ -41,7 +41,9 @@ class UnitCard extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text(unit.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue)),
+        alignment: Alignment.center,
+        title: Text(unit.name, style: const TextStyle(fontSize: 18,
+            fontWeight: FontWeight.bold, color: Colors.blue), textAlign: TextAlign.center,),
         content: Text(unit.info),
         actions: [
           TextButton(

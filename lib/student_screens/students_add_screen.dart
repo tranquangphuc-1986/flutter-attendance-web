@@ -334,20 +334,32 @@ class _AddNewstudensState extends State<AddNewstudens> {
                       },
                     ),
 
-                    //tạo một vòng tròn xoay loading
+
                     const SizedBox(height: 50),
-                    _isLoading
-                        ? const Center(
-                          child: CircularProgressIndicator(color: Colors.blue),
-                        )
-                        //Tạo nút button lưu từ button code trước
-                        : SizedBox(
-                          width: double.infinity,
-                          child: MyButton(
-                            onTap: _addStudent,
-                            buttontext: "Lưu",
-                          ),
-                        ),
+                    //tạo một vòng tròn xoay loading
+                    // _isLoading ? const Center(
+                    //       child: CircularProgressIndicator(color: Colors.blue),
+                    //     )
+                    //     //Tạo nút button lưu từ button code trước
+                    //     : SizedBox(
+                    //       width: double.infinity,
+                    //       child: MyButton(
+                    //         onTap: _addStudent,
+                    //         buttontext: "Lưu",
+                    //       ),
+                    //     ),
+                    ElevatedButton(
+                      onPressed: _isLoading ? null : _addStudent,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                      ),
+                      child:
+                      _isLoading
+                          ? CircularProgressIndicator(color: Colors.red)
+                          : const Text("Lưu", style: TextStyle(color: Colors.white)),
+                    ),
+
+
                   ],
                 ),
               ),

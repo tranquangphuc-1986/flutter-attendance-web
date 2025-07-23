@@ -84,7 +84,6 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
         context: context,
         builder:
             (context) => AlertDialog(
-              //alignment: Alignment.center,
              title:Text("Thông báo",
             style: TextStyle(color: Colors.blue, fontSize: 14,
                 fontWeight: FontWeight.bold),
