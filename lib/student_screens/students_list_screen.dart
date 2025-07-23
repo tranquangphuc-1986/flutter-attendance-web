@@ -243,11 +243,18 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
             heroTag: "Thêm mới",
             onPressed: () {
               if (currentRole == 'Admin') {
-                Navigator.push(
+                final result = Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const AddNewstudens()),
                 );
+                if (result == 'addNew'){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text("Thêm mới thành công")),
+                  );
+                }
               } else {
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Bạn không có quyền truy cập.'),

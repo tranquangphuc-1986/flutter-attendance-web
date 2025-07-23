@@ -93,12 +93,12 @@ class _AddNewstudensState extends State<AddNewstudens> {
           className: selectedClass ?? '',
         );
         await service.addStudent(student);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Thêm mới thành công")),
-            );
-            await Future.delayed(const Duration(seconds: 1));
-        Navigator.pop(context); //quay lại sau khi thêm
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(
+        //     content: Text("Thêm mới thành công")),
+        //     );
+        // await Future.delayed(const Duration(seconds: 1));
+        Navigator.pop(context, 'addNew'); //quay lại sau khi thêm
         nameCtrl.clear();
         phoneCtrl.clear();
         setState(() {
@@ -107,7 +107,9 @@ class _AddNewstudensState extends State<AddNewstudens> {
       } catch (e) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text("Lỗi: $e")));
+        ).showSnackBar(SnackBar(content: Text("Lỗi: $e"),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 2),));
       }
     }
   }
