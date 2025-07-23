@@ -293,9 +293,9 @@ class _AddNewstudensState extends State<AddNewstudens> {
                         if (v == null || v.trim().isEmpty) {
                           return "Nhập số điện thoại";
                         } else if (!RegExp(r'^[0-9]{10}$').hasMatch(v)) {
-                          return 'Số điện thoại không hợp lệ';
+                          return 'Số điện thoại không hợp lệ hoặc đã đăng ký';
                         }
-                        return null;
+                       // return null;
                       },
 
                     ),
