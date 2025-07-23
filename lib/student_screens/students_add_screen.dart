@@ -75,13 +75,13 @@ class _AddNewstudensState extends State<AddNewstudens> {
   void _addStudent() async {
     final nameStudent = nameCtrl.text.trim();
     final phone = phoneCtrl.text.trim();
-    // if (await checkphone(phone)) {
-    //   ScaffoldMessenger.of(
-    //     context,
-    //   ).showSnackBar(SnackBar(content: Text("Số điện thoại đã được đăng ký")));
-    //   setState(() => _isLoading = false);
-    //   return;
-    // }
+    if (await checkphone(phone)) {
+      // ScaffoldMessenger.of(
+      //   context,
+      // ).showSnackBar(SnackBar(content: Text("Số điện thoại đã được đăng ký")));
+      setState(() => _isLoading = false);
+      return;
+    }
     _capitalizeFullName();
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
@@ -295,7 +295,7 @@ class _AddNewstudensState extends State<AddNewstudens> {
                         setState(() {
                           _isLoading = false;
                         });
-                        return phoneCtrl.clear();
+                        return;
                       },
                     ),
                     const SizedBox(height: 16),
