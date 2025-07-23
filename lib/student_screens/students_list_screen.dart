@@ -84,8 +84,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
         context: context,
         builder:
             (context) => AlertDialog(
-              alignment: Alignment.center,
-          title: const Center(child: Text("Thông báo",
+             title: const Center(child: Text("Thông báo",
             style: TextStyle(color: Colors.blue, fontSize: 14, fontWeight: FontWeight.bold),),),
           content: Center(child: Text("Đã xoá dữ liệu '${student.name}'", style: TextStyle(color: Colors.red,)),),
           actions: [
@@ -248,6 +247,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
             child: const Icon(Icons.how_to_reg),
           ),
           const SizedBox(height: 10),
+
           FloatingActionButton(
             tooltip: "Thêm mới",
             heroTag: "Thêm mới",

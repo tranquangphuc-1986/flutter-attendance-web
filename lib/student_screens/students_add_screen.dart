@@ -98,6 +98,7 @@ class _AddNewstudensState extends State<AddNewstudens> {
           const SnackBar(
             content: Text("Thêm mới thành công")),
             );
+        setState(() => _isLoading = false);
         //await Future.delayed(const Duration(seconds: 2));
         //Navigator.pop(context); //quay lại sau khi thêm
         nameCtrl.clear();
