@@ -21,7 +21,7 @@ List<DonVi> donViList = [
     tenTCA: 'Trương Quang Vũ',
     dtTCA: '09090909',
     fb: 'fbbinhson.com',
-    hinhAnh: 'img/anhnen.jpg',
+    hinhAnh: 'img/dongtrabong.jpg',
   ),
 
   DonVi(
@@ -32,7 +32,7 @@ List<DonVi> donViList = [
     tenTCA: 'Trương Quang Vũ',
     dtTCA: '09090909',
     fb: 'fbbinhson.com',
-    hinhAnh: 'img/anhnen.jpg',
+    hinhAnh: 'img/taytrabong.jpg',
   ),
 
   DonVi(
@@ -43,7 +43,7 @@ List<DonVi> donViList = [
     tenTCA: 'Trương Quang Vũ',
     dtTCA: '09090909',
     fb: 'fbbinhson.com',
-    hinhAnh: 'img/anhnen.jpg',
+    hinhAnh: 'img/cadam.jpg',
   ),
 
   DonVi(
@@ -54,7 +54,7 @@ List<DonVi> donViList = [
     tenTCA: 'Trương Quang Vũ',
     dtTCA: '09090909',
     fb: 'fbbinhson.com',
-    hinhAnh: 'img/binhson.jpg',
+    hinhAnh: 'img/thanhbong.jpg',
   ),
 
   DonVi(
@@ -65,7 +65,7 @@ List<DonVi> donViList = [
     tenTCA: 'Trương Quang Vũ',
     dtTCA: '09090909',
     fb: 'fbbinhson.com',
-    hinhAnh: 'img/vantuong.jpg',
+    hinhAnh: 'img/taytra.jpg',
   ),
 
 DonVi(
@@ -89,4 +89,37 @@ dtTCA: '09090909',
 fb: 'fbvantuong.com',
 hinhAnh: 'img/vantuong.jpg',
 ),
+DonVi(
+ten: 'Công an xã Đông Bình Sơn',
+sapNhap:'Bình Long, Châu Ổ, Bình Trung, Bình Dương, Bình Thạnh, Bình Chánh, Bình Nguyên',
+diaChi: 'Lê Ngung, xã Bình Sơn',
+dienThoai: '025123456',
+tenTCA: 'Trương Quang Vũ',
+dtTCA: '09090909',
+fb: 'fbbinhson.com',
+hinhAnh: 'img/dongbinhson.jpg',
+),
+
+DonVi(
+ten: 'Công an xã Bình Minh',
+sapNhap: 'Bình Long, Châu Ổ, Bình Trung, Bình Dương, Bình Thạnh, Bình Chánh, Bình Nguyên',
+diaChi: 'Lê Ngung, xã Bình Sơn',
+dienThoai: '025123456',
+tenTCA: 'Trương Quang Vũ',
+dtTCA: '09090909',
+fb: 'fbvantuong.com',
+hinhAnh: 'img/binhminh.jpg',
+),
+
+  DonVi(
+    ten: 'Công an xã Bình Chương',
+    sapNhap: 'Bình Long, Châu Ổ, Bình Trung, Bình Dương, Bình Thạnh, Bình Chánh, Bình Nguyên',
+    diaChi: 'Lê Ngung, xã Bình Sơn',
+    dienThoai: '025123456',
+    tenTCA: 'Trương Quang Vũ',
+    dtTCA: '09090909',
+    fb: 'fbvantuong.com',
+    hinhAnh: 'img/binhchuong.jpg',
+  ),
+
 ];
