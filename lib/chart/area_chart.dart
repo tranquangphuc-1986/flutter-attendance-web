@@ -1,103 +1,107 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class AreaBarChartScreen extends StatelessWidget {
+class HorizontalAreaChart extends StatelessWidget {
   final List<String> xaNames = ['Xã A', 'Xã B', 'Xã C', 'Xã D', 'Xã E'];
-  final List<double> areas = [100, 110, 90, 75, 300];
+  final List<double> areas = [300, 180, 100, 250, 270];
 
   @override
   Widget build(BuildContext context) {
-    final maxArea = areas.reduce((a, b) => a > b ? a : b);
+    final double maxValue = areas.reduce((a, b) => a > b ? a : b);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Biểu đồ diện tích các xã')),
+      appBar: AppBar(title: Text('Biểu đồ diện tích')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
           children: [
-            // Cột tên xã
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children:
-              xaNames
-                  .map(
-                    (name) => Container(
-                  height: 40,
-                  alignment: Alignment.centerRight,
-                  margin: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    name,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ),
-              )
-                  .toList(),
+            Text(
+              'Biểu đồ diện tích',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(width: 8),
-            // Biểu đồ và overlay text
+            const SizedBox(height: 20),
             Expanded(
-              child: Stack(
-                children: [
-                  // Biểu đồ thanh nằm ngang
-                  BarChart(
-                    BarChartData(
-                      alignment: BarChartAlignment.spaceAround,
-                      maxY: maxArea + 30,
-                      minY: 0,
-                      groupsSpace: 12,
-                      barTouchData: BarTouchData(enabled: false),
-                      titlesData: FlTitlesData(show: false),
-                      borderData: FlBorderData(show: false),
-                      barGroups: List.generate(xaNames.length, (index) {
-                        return BarChartGroupData(
-                          x: index,
-                          barRods: [
-                            BarChartRodData(
-                              toY: areas[index],
-                              width: 20,
-                              color: Colors.teal,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ],
-                        );
-                      }),
+              child: BarChart(
+                BarChartData(
+                  alignment: BarChartAlignment.spaceAround,
+                  maxY: maxValue + 50,
+                  barTouchData: BarTouchData(enabled: false),
+                  titlesData: FlTitlesData(
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 60,
+                        getTitlesWidget: (value, _) {
+                          int index = value.toInt();
+                          if (index >= 0 && index < xaNames.length) {
+                            return Text(
+                              xaNames[index],
+                              style: TextStyle(fontSize: 14),
+                            );
+                          }
+                          return Text('');
+                        },
+                      ),
+                    ),
+                    rightTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    topTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
                     ),
                   ),
-                  // Overlay số liệu diện tích
-                  Positioned.fill(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: List.generate(areas.length, (index) {
-                        return Container(
-                          height: 40,
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(
-                            left: _calculateTextPadding(areas[index], maxArea),
-                          ),
-                          child: Text(
-                            '${areas[index]} km²',
-                            style: const TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-                ],
+                  gridData: FlGridData(show: false),
+                  borderData: FlBorderData(show: false),
+                  barGroups: List.generate(xaNames.length, (index) {
+                    return BarChartGroupData(
+                      x: index,
+                      barRods: [
+                        BarChartRodData(
+                          toY: areas[index],
+                          width: 20,
+                          color: Colors.lightBlue,
+                          borderRadius: BorderRadius.circular(4),
+                          rodStackItems: [],
+                        ),
+                      ],
+                      showingTooltipIndicators: [],
+                    );
+                  }),
+                ),
               ),
             ),
+
+            // Hiển thị số liệu bên phải thanh
+            SizedBox(height: 16),
+            ...List.generate(xaNames.length, (index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 60), // match reservedSize
+                    Expanded(
+                      child: LinearProgressIndicator(
+                        value: areas[index] / maxValue,
+                        minHeight: 20,
+                        backgroundColor: Colors.grey[300],
+                        valueColor: AlwaysStoppedAnimation(Colors.lightBlue),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      '${areas[index].toInt()} Km2',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              );
+            }),
           ],
         ),
       ),
     );
-  }
-
-  // Hàm tính khoảng cách để text nằm trong thanh biểu đồ
-  double _calculateTextPadding(double area, double maxArea) {
-    double percent = area / maxArea;
-    return percent * 200 * 0.6; // có thể điều chỉnh số 200 tuỳ UI
   }
 }

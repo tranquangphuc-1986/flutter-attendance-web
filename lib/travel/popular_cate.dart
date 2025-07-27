@@ -218,7 +218,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AreaBarChartScreen(),
+                          builder: (context) => HorizontalAreaChart(),
                         ),
                       );
                     },
