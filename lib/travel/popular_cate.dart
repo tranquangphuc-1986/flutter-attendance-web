@@ -9,7 +9,6 @@ import 'package:app_02/student_screens/students_summary_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:app_02/student_screens/students_statistics_page_2.dart';
 import 'package:url_launcher/url_launcher.dart';
 class PopularCategories extends StatefulWidget {
@@ -219,7 +218,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AreaBarChartScreen(),
+                          builder: (context) => HorizontalAreaChart(),
                         ),
                       );
                     },

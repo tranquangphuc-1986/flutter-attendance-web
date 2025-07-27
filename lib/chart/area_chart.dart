@@ -1,103 +1,109 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class AreaBarChartScreen extends StatelessWidget {
-  final List<String> xaNames = ['Xã A', 'Xã B', 'Xã C', 'Xã D', 'Xã E'];
-  final List<double> areas = [100, 110, 90, 75, 300];
+class HorizontalAreaChart extends StatelessWidget {
+  final List<String> areaNames = ['Xã A', 'Xã B', 'Xã C', 'Xã D', 'Xã E'];
+  final List<double> areaValues = [100, 110, 90, 75, 300];
 
   @override
   Widget build(BuildContext context) {
-    final maxArea = areas.reduce((a, b) => a > b ? a : b);
+    final maxArea = areaValues.reduce((a, b) => a > b ? a : b);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Biểu đồ diện tích các xã')),
+      appBar: AppBar(title: Text("Thống kê diện tích")),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Cột tên xã
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children:
-                  xaNames
-                      .map(
-                        (name) => Container(
-                          height: 40,
-                          alignment: Alignment.centerRight,
-                          margin: const EdgeInsets.symmetric(vertical: 4),
-                          child: Text(
-                            name,
-                            style: const TextStyle(fontSize: 14),
-                          ),
+        padding: const EdgeInsets.all(16),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Stack(
+              children: [
+                // Biểu đồ thanh
+                BarChart(
+                  BarChartData(
+                    maxY: maxArea + 50,
+                    alignment: BarChartAlignment.spaceBetween,
+                    barTouchData: BarTouchData(enabled: false),
+                    titlesData: FlTitlesData(
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, _) {
+                            final index = value.toInt();
+                            if (index >= 0 && index < areaNames.length) {
+                              return Text(
+                                areaNames[index],
+                                style: TextStyle(fontSize: 14),
+                              );
+                            }
+                            return SizedBox.shrink();
+                          },
+                          reservedSize: 80,
                         ),
-                      )
-                      .toList(),
-            ),
-            const SizedBox(width: 8),
-            // Biểu đồ và overlay text
-            Expanded(
-              child: Stack(
-                children: [
-                  // Biểu đồ thanh nằm ngang
-                  BarChart(
-                    BarChartData(
-                      alignment: BarChartAlignment.spaceAround,
-                      maxY: maxArea + 30,
-                      minY: 0,
-                      groupsSpace: 12,
-                      barTouchData: BarTouchData(enabled: false),
-                      titlesData: FlTitlesData(show: false),
-                      borderData: FlBorderData(show: false),
-                      barGroups: List.generate(xaNames.length, (index) {
-                        return BarChartGroupData(
-                          x: index,
-                          barRods: [
-                            BarChartRodData(
-                              toY: areas[index],
-                              width: 20,
-                              color: Colors.teal,
-                              borderRadius: BorderRadius.circular(4),
+                      ),
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                      topTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: true),
+                      ),
+                    ),
+                    gridData: FlGridData(show: true),
+                    borderData: FlBorderData(show: false),
+                    barGroups: List.generate(areaValues.length, (index) {
+                      return BarChartGroupData(
+                        x: index,
+                        barRods: [
+                          BarChartRodData(
+                            toY: areaValues[index],
+                            width: 25,
+                            borderRadius: BorderRadius.circular(4),
+                            color: Colors.orange,
+                          ),
+                        ],
+                      );
+                    }),
+                  ),
+                ),
+
+                // Overlay số liệu trong thanh
+                Positioned.fill(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: List.generate(areaValues.length, (index) {
+                        final value = areaValues[index];
+                        final percent = value / maxArea;
+                        return Row(
+                          children: [
+                            SizedBox(width: 85), // Khoảng trống bằng leftTitle
+                            SizedBox(
+                              width: (constraints.maxWidth - 100) * percent,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  '${value.toInt()} km²',
+                                  style: TextStyle(
+                                    color: Colors.yellowAccent,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         );
                       }),
                     ),
                   ),
-                  // Overlay số liệu diện tích
-                  Positioned.fill(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: List.generate(areas.length, (index) {
-                        return Container(
-                          height: 40,
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(
-                            left: _calculateTextPadding(areas[index], maxArea),
-                          ),
-                          child: Text(
-                            '${areas[index]} km²',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
-  }
-
-  // Hàm tính khoảng cách để text nằm trong thanh biểu đồ
-  double _calculateTextPadding(double area, double maxArea) {
-    double percent = area / maxArea;
-    return percent * 200 * 0.6; // có thể điều chỉnh số 200 tuỳ UI
   }
 }
