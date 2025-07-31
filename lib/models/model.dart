@@ -40,10 +40,46 @@ List<LocationDetail> locationItems = [
     price: 1350,
     rating: 5.0,
     temperature: 22-6-2025,
-    time:5 ,
+    time: 22-6-2025,
     description:
         "Phòng Tham mưu chung tay xoá nhà tạm, nhà dột nát. Ngày 25/6/2025, Phòng Tham mưu đã bàn giao nhà"
             " và phối hợp Ngân hàng BIDV chi nhánh Dung Quất hỗ trợ số tiền 60 triệu đồng cho bà Nguyễn Thị Điểu, 72 tuổi, ở thôn Phước Lộc Tây, xã Tịnh Sơn, huyện Sơn Tịnh ",
+  ),
+  LocationDetail(
+    image: "img/pv01ĐHCAT.jpg",
+    name: 'Đại hội',
+    address: 'CAT',
+    price: 1350,
+    rating: 5.0,
+    temperature: 22-6-2025,
+    time: 30-7-2025,
+    description:
+    "Tham mưu, phục vụ Đảng ủy Công an tỉnh tổ chức thành công Đại hội đại biểu Đảng bộ Công an tỉnh lần thứ I, nhiệm kỳ 2025-2030",
+  ),
+
+  LocationDetail(
+    image: "img/hienmau_PV01.jpg",
+    name: 'Hiến máu',
+    address: 'ĐTN',
+    price: 1350,
+    rating: 5.0,
+    temperature: 22-6-2025,
+    time: 2025,
+    description:
+    "Đoàn viên, thanh niên Phòng Tham mưu xung kích trên mọi mặt trận, nổi bật trong phong trào hiến máu tình nguyện"
+  ),
+
+
+  LocationDetail(
+    image: "img/mountain.png",
+    name: 'Oyo Lakes',
+    address: 'Croatia',
+    price: 3250,
+    rating: 5.0,
+    temperature: 22,
+    time:9 ,
+    description:
+    'Oyo Lake, nestled in a picturesque setting, captivates visitors with its tranquil waters and surrounding lush landscapes. It serves as a haven for relaxation and outdoor activities, offering opportunities for boating,and peaceful walks along its shores',
   ),
   LocationDetail(
     image: "img/thebridge.png",
@@ -56,17 +92,7 @@ List<LocationDetail> locationItems = [
     description:
         "Iceland's nature is renowned for its raw and untamed beauty, characterized by dramatic landscapes shaped by volcanic activity, glaciers, geysers, and cascading waterfalls,if you want to enjoy more then you need to visit this all place.",
   ),
-  LocationDetail(
-    image: "img/mountain.png",
-    name: 'Oyo Lakes',
-    address: 'Croatia',
-    price: 3250,
-      rating: 5.0,
-    temperature: 22,
-    time:9 ,
-    description:
-        'Oyo Lake, nestled in a picturesque setting, captivates visitors with its tranquil waters and surrounding lush landscapes. It serves as a haven for relaxation and outdoor activities, offering opportunities for boating,and peaceful walks along its shores',
-  ),
+
   LocationDetail(
     image: "img/sunrises.png",
     name: 'Sun Rise',
