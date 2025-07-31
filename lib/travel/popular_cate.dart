@@ -209,7 +209,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFF9ED2F7),
-                      child: Image.asset("img/statistical.png", height: 40),
+                      child: Image.asset("img/folder.png", height: 40),
                     ),
                   ),
 
@@ -225,7 +225,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFfcbb8ef),
-                      child: Image.asset("img/anlystatis.png", height: 40),
+                      child: Image.asset("img/statistical.png", height: 40),
                     ),
                   ),
 
@@ -244,7 +244,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFFFacdcc),
-                      child: Image.asset("img/pie-chart.png", height: 40),
+                      child: Image.asset("img/search.png", height: 40),
                     ),
                   ),
                 ],
