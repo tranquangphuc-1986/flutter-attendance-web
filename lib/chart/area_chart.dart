@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AreaBarChart extends StatelessWidget {
-  final List<String> xaNames = ['Xã Tây Trà','Xã Trà Bồng', 'Xã Thanh Bồng', 'Xã Tây Trà Bồng','Xã Bình Minh', 'Xã Đông Sơn',
-    'Xã Cà Đam', 'xã Vạn Tường',  'Xã Bình Sơn', 'Xã Đông Trà Bồng', 'Xã Bình Chương',];
 
+  final List<String> xaNames = ['Tây Trà','Trà Bồng', 'Thanh Bồng', 'Tây Trà Bồng','Bình Minh', 'Đông Sơn',
+    'Cà Đam', 'Vạn Tường',  'Bình Sơn', 'Đông Trà Bồng', 'Bình Chương',];
 
   final List<double> areas = [170.86, 139.43, 133.89, 129.1, 128.61, 119.18,
     112.35, 109.28, 100.1, 74.83, 30.79,];
@@ -37,7 +37,7 @@ class AreaBarChart extends StatelessWidget {
                           width: 60,
                           child: Text(
                             xaNames[index],
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 12),
                             textAlign: TextAlign.right,
                           ),
                         ),

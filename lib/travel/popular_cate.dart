@@ -1,5 +1,6 @@
 import 'package:app_02/cax/cax_home_screen.dart';
 import 'package:app_02/chart/area_chart.dart';
+import 'package:app_02/chart/chart_screen.dart';
 import 'package:app_02/data_diaban/diaban_page_home.dart';
 import 'package:app_02/student_screens/students_attendance_screen3_1.dart';
 import 'package:app_02/student_screens/students_attendance_screen3_2.dart';
@@ -218,7 +219,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AreaBarChart(),
+                          builder: (context) => ChartScreen(),
                         ),
                       );
                     },
@@ -259,11 +260,11 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
                     ),
                     Text(
-                      "Dữ liệu",
+                      "Sáp nhập",
                       style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
                     ),
                     Text(
-                      "Thống kê",
+                      "Biểu đồ",
                       style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
                     ),
                     Text(
