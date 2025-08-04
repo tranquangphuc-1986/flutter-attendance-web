@@ -244,7 +244,8 @@ class _MyPageFirstState extends State<PageFirst> {
               GestureDetector(
                 onTap: _launchFb,
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.074, //70,
+                  height: 70,
+                 // height: MediaQuery.of(context).size.height* 0.08,
                   margin: EdgeInsets.all(12),
                   padding: EdgeInsets.symmetric(vertical: 14, horizontal: 14),
                   decoration: BoxDecoration(
