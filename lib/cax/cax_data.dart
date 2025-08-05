@@ -97,7 +97,7 @@ dienThoai: '025123456',
 tenTCA: 'Trương Quang Vũ',
 dtTCA: '09090909',
 fb: 'fbbinhson.com',
-hinhAnh: 'img/dongbinhson.jpg',
+hinhAnh: 'img/BN.jpg',
 ),
 
 DonVi(
@@ -108,7 +108,7 @@ dienThoai: '025123456',
 tenTCA: 'Trương Quang Vũ',
 dtTCA: '09090909',
 fb: 'fbvantuong.com',
-hinhAnh: 'img/binhminh.jpg',
+hinhAnh: 'img/BN.jpg',
 ),
 
   DonVi(
@@ -119,7 +119,7 @@ hinhAnh: 'img/binhminh.jpg',
     tenTCA: 'Trương Quang Vũ',
     dtTCA: '09090909',
     fb: 'fbvantuong.com',
-    hinhAnh: 'img/binhchuong.jpg',
+    hinhAnh: 'img/BN.jpg',
   ),
 
 ];
