@@ -16,7 +16,12 @@ class _ChartScreenState extends State<ChartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Biểu đồ'),
+          backgroundColor: Colors.blue,),
+        backgroundColor: Colors.white,
+    body:  Padding(
       padding: const EdgeInsets.only(right: 20, left: 20, top: 10),
       child: Form(
         child: SingleChildScrollView(
@@ -37,17 +42,16 @@ class _ChartScreenState extends State<ChartScreen> {
                     child: Row(
                       children: [
                         CircleAvatar(
-                          radius: 15,
+                          radius: 20,
                           backgroundColor: const Color(0xFFF8CDEC),
-                          child: Image.asset("img/person.png", height: 12),
+                          child: Image.asset("img/person.png", height: 18),
                         ),
                         SizedBox(width: 4),
                         Text(
                           'Biểu đồ dân số',
                           style: TextStyle(
                             color: Colors.blueAccent,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
                           ),
                         ),
                       ],
@@ -70,17 +74,16 @@ class _ChartScreenState extends State<ChartScreen> {
                     child: Row(
                       children: [
                         CircleAvatar(
-                          radius: 15,
+                          radius: 20,
                           backgroundColor: const Color(0xFFF8CDEC),
-                          child: Image.asset("img/person.png", height: 12),
+                          child: Image.asset("img/statistical.png", height: 18),
                         ),
                         SizedBox(width: 4),
                         Text(
                           'Biểu đồ diện tích',
                           style: TextStyle(
                             color: Colors.blueAccent,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
                           ),
                         ),
                       ],
@@ -92,6 +95,7 @@ class _ChartScreenState extends State<ChartScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }
