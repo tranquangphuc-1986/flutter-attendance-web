@@ -61,7 +61,6 @@ class _ChartScreenState extends State<ChartScreen> {
               ),
 
               SizedBox(height: 16),
-              Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

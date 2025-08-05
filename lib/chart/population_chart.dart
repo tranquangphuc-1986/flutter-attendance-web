@@ -20,7 +20,7 @@ class PopulationChart extends StatelessWidget {
           children: [
             Text(
               'Biểu đồ Dân số',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             Expanded(
@@ -59,7 +59,7 @@ class PopulationChart extends StatelessWidget {
                                     MediaQuery.of(context).size.width *
                                     0.6,
                                 decoration: BoxDecoration(
-                                  color: Colors.blue,
+                                  color: Colors.lightGreen,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                               ),

@@ -1,5 +1,6 @@
 import 'package:app_02/home_page/page_first.dart';
 import 'package:app_02/home_page/setting.dart';
+import 'package:app_02/student_screens/students_list_screen.dart';
 import 'package:app_02/travel/myhome_page.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +16,7 @@ int selectedIndex = 1;
 final List screens = [
   SettingsScreen(),
   PageFirst(key: UniqueKey(),),
-  //PageFirst(),
-  const MyHomePage(),
+  StudentsListScreen(),
 ];
 
 class _MyPageState extends State<MyPage> {
@@ -44,7 +44,7 @@ class _MyPageState extends State<MyPage> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Cài đặt"),
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Trang chủ"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Cá nhân"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Cán bộ"),
         ],
       ),
       body: screens[selectedIndex],
