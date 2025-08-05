@@ -42,16 +42,16 @@ class _ChartScreenState extends State<ChartScreen> {
                     child: Row(
                       children: [
                         CircleAvatar(
-                          radius: 20,
+                          radius: 25,
                           backgroundColor: const Color(0xFFF8CDEC),
-                          child: Image.asset("img/person.png", height: 18),
+                          child: Image.asset("img/person.png", height: 22),
                         ),
-                        SizedBox(width: 4),
+                        SizedBox(width: 10),
                         Text(
                           'Biểu đồ dân số',
                           style: TextStyle(
                             color: Colors.blueAccent,
-                            fontSize: 18,
+                            fontSize: 20,
                           ),
                         ),
                       ],
@@ -60,7 +60,8 @@ class _ChartScreenState extends State<ChartScreen> {
                 ],
               ),
 
-              SizedBox(height: 10),
+              SizedBox(height: 16),
+              Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -74,16 +75,16 @@ class _ChartScreenState extends State<ChartScreen> {
                     child: Row(
                       children: [
                         CircleAvatar(
-                          radius: 20,
+                          radius: 25,
                           backgroundColor: const Color(0xFFF8CDEC),
-                          child: Image.asset("img/statistical.png", height: 18),
+                          child: Image.asset("img/statistical.png", height: 22),
                         ),
-                        SizedBox(width: 4),
+                        SizedBox(width: 10),
                         Text(
                           'Biểu đồ diện tích',
                           style: TextStyle(
                             color: Colors.blueAccent,
-                            fontSize: 18,
+                            fontSize: 20,
                           ),
                         ),
                       ],

@@ -19,7 +19,7 @@ class PopulationChart extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'Biểu đồ diện tích',
+              'Biểu đồ Dân số',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
@@ -71,7 +71,7 @@ class PopulationChart extends StatelessWidget {
                                       horizontal: 8.0,
                                     ),
                                     child: Text(
-                                      '${value.toInt()} Km2',
+                                      '${value.toInt()} người',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
