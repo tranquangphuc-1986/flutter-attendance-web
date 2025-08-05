@@ -1,8 +1,5 @@
 import 'package:app_02/chart/area_chart.dart';
 import 'package:app_02/chart/population_chart.dart';
-import 'package:app_02/student_screens/students_statistics_page.dart';
-import 'package:app_02/student_screens/students_list_screen.dart';
-import 'package:app_02/student_screens/students_summary_screen.dart';
 import 'package:flutter/material.dart';
 
 class ChartScreen extends StatefulWidget {
@@ -40,99 +37,49 @@ class _ChartScreenState extends State<ChartScreen> {
                     child: Row(
                       children: [
                         CircleAvatar(
-                          radius: 20,
+                          radius: 15,
                           backgroundColor: const Color(0xFFF8CDEC),
-                          child: Image.asset("img/person.png", height: 15),
+                          child: Image.asset("img/person.png", height: 12),
                         ),
                         SizedBox(width: 4),
                         Text(
                           'Biểu đồ dân số',
                           style: TextStyle(
                             color: Colors.blueAccent,
+                            fontSize: 14,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
                     ),
                   ),
+                ],
+              ),
 
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => AreaBarChart(),
-                        ),
+                        MaterialPageRoute(builder: (context) => AreaBarChart()),
                       );
                     },
                     child: Row(
                       children: [
                         CircleAvatar(
-                          radius: 20,
+                          radius: 15,
                           backgroundColor: const Color(0xFFF8CDEC),
-                          child: Image.asset("img/person.png", height: 15),
+                          child: Image.asset("img/person.png", height: 12),
                         ),
                         SizedBox(width: 4),
                         Text(
                           'Biểu đồ diện tích',
                           style: TextStyle(
                             color: Colors.blueAccent,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => StudentsListScreen(),
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: const Color(0xFFF8CDEC),
-                          child: Image.asset("img/person.png", height: 15),
-                        ),
-                        SizedBox(width: 4),
-                        Text(
-                          'Biểu đồ doanh nghiệp',
-                          style: TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => StudentsListScreen(),
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: const Color(0xFFF8CDEC),
-                          child: Image.asset("img/person.png", height: 15),
-                        ),
-                        SizedBox(width: 4),
-                        Text(
-                          'Biểu đồ vi phạm pháp luật',
-                          style: TextStyle(
-                            color: Colors.blueAccent,
+                            fontSize: 14,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

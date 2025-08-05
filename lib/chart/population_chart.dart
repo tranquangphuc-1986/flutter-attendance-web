@@ -13,7 +13,7 @@ class PopulationChart extends StatelessWidget {
     final double maxArea = areas.reduce((a, b) => a > b ? a : b);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Biểu đồ diện tích')),
+      appBar: AppBar(title: Text('Biểu đồ Dân số')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
