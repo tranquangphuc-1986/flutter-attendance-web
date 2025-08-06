@@ -1,3 +1,4 @@
+import 'package:app_02/chart/chart_screen.dart';
 import 'package:app_02/home_page/page_first.dart';
 import 'package:app_02/home_page/setting.dart';
 import 'package:app_02/student_screens/students_list_screen.dart';
@@ -16,7 +17,8 @@ int selectedIndex = 1;
 final List screens = [
   SettingsScreen(),
   PageFirst(key: UniqueKey(),),
-  StudentsListScreen(key: UniqueKey(),),
+  ChartScreen(),
+  //StudentsListScreen(key: UniqueKey(),),
 ];
 
 class _MyPageState extends State<MyPage> {
@@ -44,7 +46,7 @@ class _MyPageState extends State<MyPage> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Cài đặt"),
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Trang chủ"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Cán bộ"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Biểu đồ"),
         ],
       ),
       body: screens[selectedIndex],
