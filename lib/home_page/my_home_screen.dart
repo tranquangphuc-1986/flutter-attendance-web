@@ -16,7 +16,7 @@ int selectedIndex = 1;
 final List screens = [
   SettingsScreen(),
   PageFirst(key: UniqueKey(),),
-  StudentsListScreen(),
+  StudentsListScreen(key: UniqueKey(),),
 ];
 
 class _MyPageState extends State<MyPage> {
