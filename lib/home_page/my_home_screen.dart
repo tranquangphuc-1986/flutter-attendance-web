@@ -17,8 +17,7 @@ int selectedIndex = 1;
 final List screens = [
   SettingsScreen(),
   PageFirst(key: UniqueKey(),),
-  ChartScreen(),
-  //StudentsListScreen(key: UniqueKey(),),
+  StudentsListScreen(key: UniqueKey(),),
 ];
 
 class _MyPageState extends State<MyPage> {
@@ -46,7 +45,7 @@ class _MyPageState extends State<MyPage> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Cài đặt"),
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Trang chủ"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Biểu đồ"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Cán bộ"),
         ],
       ),
       body: screens[selectedIndex],
