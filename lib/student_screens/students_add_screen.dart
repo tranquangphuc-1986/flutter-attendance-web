@@ -73,6 +73,7 @@ class _AddNewstudensState extends State<AddNewstudens> {
     return querySnapshot.docs.isNotEmpty;
   }
   void _addStudent() async {
+    _capitalizeFullName();
     final nameStudent = nameCtrl.text.trim();
     final phone = phoneCtrl.text.trim();
     if (await checkphone(phone)) {
@@ -83,7 +84,6 @@ class _AddNewstudensState extends State<AddNewstudens> {
       setState(() => _isLoading = false);
       return;
     }
-    _capitalizeFullName();
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       try {
