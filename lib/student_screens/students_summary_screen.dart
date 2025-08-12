@@ -199,7 +199,7 @@ class _SummaryScreenResultState extends State<SummaryScreenResult> {
                                 children: [
                                   Icon(Icons.bar_chart, color: Colors.blue),
                                   const Text(
-                                    'Kết quả điểm danh:',
+                                    'Kết quả điểm danh (chọn để xem chi tiết):',
                                     style: TextStyle(
                                       color: Colors.blue,
                                       fontSize: 16,
