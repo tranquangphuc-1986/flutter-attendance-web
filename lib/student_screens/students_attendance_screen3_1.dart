@@ -67,7 +67,7 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
      _firebaseService.getStudents().listen((allStudentList) {
       setState(() {
         if (currentRole == 'Lãnh đạo') {
-          _studentList = allStudentList.where((s) => s.className == 'Lãnh đạo').toList();
+          _studentList = allStudentList.where((s) => s.className == 'LĐ').toList();
         } else if (currentRole.startsWith('Chỉ huy')) {
           final clas =
           currentRole
