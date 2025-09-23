@@ -2,6 +2,7 @@ import 'package:app_02/cax/cax_home_screen.dart';
 import 'package:app_02/chart/area_chart.dart';
 import 'package:app_02/chart/chart_screen.dart';
 import 'package:app_02/data_diaban/diaban_page_home.dart';
+import 'package:app_02/student_screens/scan_Qrcode.dart';
 import 'package:app_02/student_screens/students_attendance_screen3_1.dart';
 import 'package:app_02/student_screens/students_attendance_screen3_2.dart';
 import 'package:app_02/student_screens/students_statistics_page.dart';
@@ -21,6 +22,7 @@ class PopularCategories extends StatefulWidget {
 class _PopularCategoriesState extends State<PopularCategories> {
   String currentRole = '';
   String currentClass = '';
+  String phone = '';
   bool isLoading = true;
   @override
   void initState() {
@@ -44,6 +46,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
       setState(() {
         currentRole = doc['role'];
         currentClass = doc_student['className'];
+        phone = doc_student['phone'];
         isLoading = false;
       });
     } catch (e) {
@@ -105,9 +108,9 @@ class _PopularCategoriesState extends State<PopularCategories> {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (context) => AttendanceScreen3_1(
-                            currentRole: currentRole,
-                            currentClass: currentClass,
+                              (context) => AttendanceQRScreen (phone: phone, //AttendanceScreen3_1(
+                           // currentRole: currentRole,
+                            //currentClass: currentClass,
                           ),
                         ),
                       );
@@ -136,14 +139,14 @@ class _PopularCategoriesState extends State<PopularCategories> {
                   ),
 
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => StudentsStatisticsPage(),
-                        ),
-                      );
-                    },
+                    // onTap: () {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => StudentsStatisticsPage(),
+                    //     ),
+                    //   );
+                    // },
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFFFacdcc),
