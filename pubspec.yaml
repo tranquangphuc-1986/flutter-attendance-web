@@ -51,7 +51,8 @@ dependencies:
   excel: ^2.0.4
   path_provider: ^2.1.5
   share_plus: ^7.2.1
-  geolocator: ^12.0.0
+  geolocator: ^13.0.1
+  permission_handler: ^11.0.1
   mobile_scanner: ^4.0.0
 
 dev_dependencies:

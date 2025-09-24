@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AttendanceQRScreen extends StatefulWidget {
   final String phone; // id hoặc phone của sinh viên
@@ -28,7 +29,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   void initState() {
     super.initState();
     _setupDeadlineTimerForToday();
-    _checkGpsAndPermissions();
+    _checkGpsAndPermissions(context);
   }
 
   @override
@@ -65,44 +66,84 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     //_setupDeadlineTimerForToday();
   }
   // ---------- Permissions & GPS ----------
-  Future<void> _checkGpsAndPermissions() async {
-    try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        setState(() {
-          //statusMessage = "Vui lòng bật GPS để điểm danh.";
-          _showSnackbar('Vui lòng bật GPS để điểm danh.');
-        });
-        return;
-      }
-
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          setState(() {
-            statusMessage = "Ứng dụng cần quyền GPS. Vui lòng cho phép.";
-          });
-          return;
-        }
-      }
-      if (permission == LocationPermission.deniedForever) {
-        setState(() {
-          statusMessage =
-          "Quyền GPS bị chặn vĩnh viễn. Mở cài đặt để cấp quyền.";
-        });
-        return;
-      }
-
-      setState(() {
-        statusMessage = "Sẵn sàng quét QR để điểm danh.";
-      });
-    } catch (e) {
-      setState(() {
-        statusMessage = "Lỗi quyền/GPS: $e";
-      });
+  // Future<void> _checkGpsAndPermissions() async {
+  //   try {
+  //     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //     if (!serviceEnabled) {
+  //       setState(() {
+  //         //statusMessage = "Vui lòng bật GPS để điểm danh.";
+  //         _showSnackbar('Vui lòng bật GPS để điểm danh.');
+  //       });
+  //       return;
+  //     }
+  //
+  //     LocationPermission permission = await Geolocator.checkPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       permission = await Geolocator.requestPermission();
+  //       if (permission == LocationPermission.denied) {
+  //         setState(() {
+  //           statusMessage = "Ứng dụng cần quyền GPS. Vui lòng cho phép.";
+  //         });
+  //         return;
+  //       }
+  //     }
+  //     if (permission == LocationPermission.deniedForever) {
+  //       setState(() {
+  //         statusMessage =
+  //         "Quyền GPS bị chặn vĩnh viễn. Mở cài đặt để cấp quyền.";
+  //       });
+  //       return;
+  //     }
+  //
+  //     setState(() {
+  //       statusMessage = "Sẵn sàng quét QR để điểm danh.";
+  //     });
+  //   } catch (e) {
+  //     setState(() {
+  //       statusMessage = "Lỗi quyền/GPS: $e";
+  //     });
+  //   }
+  // }
+  Future<bool> _checkGpsAndPermissions(BuildContext context) async {
+    // 1. Kiểm tra GPS (Location Services) đã bật chưa
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Nếu GPS tắt -> hiển thị cảnh báo
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("GPS đang tắt. Vui lòng bật GPS trong Cài đặt."),
+        ),
+      );
+      return false;
     }
+
+    // 2. Kiểm tra quyền Location
+    var status = await Permission.locationWhenInUse.status;
+
+    if (status.isDenied) {
+      // Xin quyền lần đầu
+      status = await Permission.locationWhenInUse.request();
+    }
+
+    if (status.isPermanentlyDenied) {
+      // User từ chối vĩnh viễn -> mở App Settings
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Bạn đã chặn quyền GPS. Vui lòng bật lại trong Cài đặt."),
+        ),
+      );
+      await openAppSettings();
+      return false;
+    }
+
+    if (status.isGranted) {
+      return true; // Có quyền và GPS bật
+    }
+
+    return false;
   }
+
+
 
   // Lưu Firestore
   Future<void> _saveAttendanceToFirebase(String status, String method,
