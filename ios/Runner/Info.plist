@@ -47,5 +47,7 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
     <string>Ứng dụng cần sử dụng camera để quét mã QR.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Ứng dụng cần quyền truy cập vị trí để hoạt động chính xác.</string>
 </dict>
 </plist>
