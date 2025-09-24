@@ -153,7 +153,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     // if (raw == null) return;
     // isProcessingScan = true;
 
-    //test code cu khi lamf SQL.....
+    //test code cu khi lam SQL.....
     if (isProcessingScan || hasCheckedIn) return;
     final List<Barcode> barcodes = capture.barcodes;
     if (barcodes.isEmpty) return;
