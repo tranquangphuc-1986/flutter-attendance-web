@@ -93,6 +93,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           statusMessage =
           "Quyền GPS bị chặn vĩnh viễn. Mở cài đặt để cấp quyền.";
         });
+        await openAppSettings();
+        //return false;
         return;
       }
 
