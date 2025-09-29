@@ -46,7 +46,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
       setState(() {
         currentRole = doc['role'];
         currentClass = doc_student['className'];
-        phone = doc_student['phone'];
+        phone = doc['phone'];
         isLoading = false;
       });
     } catch (e) {
