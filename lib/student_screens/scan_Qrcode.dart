@@ -286,7 +286,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           statusMessage =
           "✅ Bạn ở vị trí hợp lệ (${distance.toStringAsFixed(1)} m). Gửi điểm danh...";
         });
-        await _saveAttendanceToFirebase(
+        final success = await _saveAttendanceToFirebase(
           status: "PRESENT",
           method: "GPS_QR",
           qrLat: qrLat,
@@ -296,6 +296,14 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           distance: distance,
           note: obj['label'] ?? obj['siteId'] ?? '',
         );
+        if (success) {
+          setState(() {
+            hasCheckedIn = true;
+            lastAction = "Có mặt";
+            statusMessage = "Điểm danh có mặt thành công";
+          });
+          _showCheckinResultDialog("Có mặt");
+        }
       } else {
         _showAlert(
           "Ngoài phạm vi",
