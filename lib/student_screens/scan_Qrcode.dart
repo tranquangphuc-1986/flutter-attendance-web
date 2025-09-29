@@ -419,7 +419,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                   Card(
                     child: ListTile(
                       title: Text(
-                        studentName.isEmpty ? widget.phone : studentName,
+                        studentName.isEmpty ? widget.phone : studentPhone,
                       ),
                       subtitle: Text(
                         "Tên: ${studentName.isEmpty ? '-' : studentName}\nSĐT: ${studentPhone.isEmpty ? '-' : studentPhone}",
