@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -17,13 +18,19 @@ class AttendanceQRScreen extends StatefulWidget {
 class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   final MobileScannerController cameraController = MobileScannerController();
   bool isProcessingScan = false;
+  bool loading = false;
   bool hasCheckedIn = false;
   String statusMessage = "Đưa mã QR vào khung quét";
   String lastAction = "";
 
+  /// Student info (fetched from server or fallback)
+  String studentName = "";
+  String studentPhone = "";
+  String studentClass = "";
+
   Timer? _deadlineTimer;
   final int CHECKIN_START_HOUR = 7; // 07:00
-  final int CHECKIN_END_HOUR = 23;  // 09:00
+  final int CHECKIN_END_HOUR = 23; // 09:00
 
   @override
   void initState() {
@@ -42,7 +49,13 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   // Hàm set deadline 23h
   void _setupDeadlineTimerForToday() {
     final now = DateTime.now();
-    final deadline = DateTime(now.year, now.month, now.day, CHECKIN_END_HOUR, 0);
+    final deadline = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      CHECKIN_END_HOUR,
+      0,
+    );
     if (now.isAfter(deadline)) return;
     final duration = deadline.difference(now);
     _deadlineTimer = Timer(duration, () async {
@@ -59,12 +72,14 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     final end = DateTime(now.year, now.month, now.day, CHECKIN_END_HOUR, 0);
     return !now.isBefore(start) && !now.isAfter(end);
   }
-//Kiem tra GPS
+
+  //Kiem tra GPS
   Future<void> _initFlow() async {
     //await _checkGpsAndPermissions();
-   // await _fetchStudentInfo();
+    // await _fetchStudentInfo();
     //_setupDeadlineTimerForToday();
   }
+
   // ---------- Permissions & GPS ----------
 
   //   Future<void> _checkGpsAndPermissions() async {
@@ -128,7 +143,9 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       // User từ chối vĩnh viễn -> mở App Settings
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Bạn đã chặn quyền GPS. Vui lòng bật lại trong Cài đặt."),
+          content: Text(
+            "Bạn đã chặn quyền GPS. Vui lòng bật lại trong Cài đặt.",
+          ),
         ),
       );
       await openAppSettings();
@@ -140,29 +157,70 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     return false;
   }
 
+  Future<void> _fetchStudentInfo() async {
+    // Thử fetch từ backend; nếu không thành công, chỉ hiện mã ID
+    try {
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final doc =
+          await FirebaseFirestore.instance
+              .collection('userLogin')
+              .doc(uid)
+              .get();
+      setState(() {
+        studentName = doc['name'];
+        studentPhone = doc['phone'];
+      });
+    } catch (_) {
+      // Ignore - có thể offline hoặc endpoint khác
+      setState(() {
+        studentName = "";
+        studentPhone = "";
+      });
+    }
+  }
+
   // Lưu Firestore
-  Future<void> _saveAttendanceToFirebase(String status, String method,
-      {double? qrLat, double? qrLng, double? phoneLat, double? phoneLng, double? distance}) async {
+  Future<void> _saveAttendanceToFirebase(
+    String status,
+    String method, {
+    double? qrLat,
+    double? qrLng,
+    double? phoneLat,
+    double? phoneLng,
+    double? distance,
+  }) async {
     await FirebaseFirestore.instance
         .collection("attendanceqr")
         .doc("${widget.phone}_${DateTime.now().toIso8601String()}")
         .set({
-      "phone": widget.phone,
-      "status": status, // PRESENT | ABSENT | LEAVE | NOT_CHECKED
-      "method": method, // GPS_QR | MANUAL | AUTO
-      "timestamp": FieldValue.serverTimestamp(),
-      "qrLat": qrLat,
-      "qrLng": qrLng,
-      "phoneLat": phoneLat,
-      "phoneLng": phoneLng,
-      "distanceMeters": distance,
-    });
+          "phone": widget.phone,
+          "status": status, // PRESENT | ABSENT | LEAVE | NOT_CHECKED
+          "method": method, // GPS_QR | MANUAL | AUTO
+          "timestamp": FieldValue.serverTimestamp(),
+          "qrLat": qrLat,
+          "qrLng": qrLng,
+          "phoneLat": phoneLat,
+          "phoneLng": phoneLng,
+          "distanceMeters": distance,
+        });
     setState(() {
       hasCheckedIn = true;
       lastAction = status;
       statusMessage = "Đã lưu trạng thái: $status";
     });
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Điểm danh $status thành công")));
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final doc =
+        await FirebaseFirestore.instance.collection('userLogin').doc(uid).get();
+    try {
+      setState(() {
+        loading = false;
+        studentName = doc['name'];
+        studentPhone = doc['phone'];
+      });
+    } catch (_) {}
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Điểm danh $status thành công")));
   }
 
   // Quét QR
@@ -217,18 +275,14 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       // double allowedRadius = _extractDouble(obj['allowed_radius']) ?? 50.0;
 
       //Cach 3
-      double qrLat = _extractDoubleFromJson(obj, [
-        'lat',
-        'latitude',
-        'class_lat',
-      ])?? (throw Exception("null lat"));
-      double qrLng = _extractDoubleFromJson(obj, [
-        'lng',
-        'longitude',
-        'class_lng',
-      ])?? (throw Exception("null long"));
+      double qrLat =
+          _extractDoubleFromJson(obj, ['lat', 'latitude', 'class_lat']) ??
+          (throw Exception("null lat"));
+      double qrLng =
+          _extractDoubleFromJson(obj, ['lng', 'longitude', 'class_lng']) ??
+          (throw Exception("null long"));
       double allowedRadius =
-          _extractDoubleFromJson(obj, ['radius', 'allowed_radius'] ) ?? 50.0;
+          _extractDoubleFromJson(obj, ['radius', 'allowed_radius']) ?? 50.0;
 
       if (!_isWithinTimeWindow()) {
         _showAlert("Ngoài khung giờ", "Chỉ được điểm danh từ 7h đến 9h");
@@ -236,22 +290,30 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       }
 
       Position pos = await Geolocator.getCurrentPosition(
-        locationSettings: LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
+        locationSettings: LocationSettings(accuracy: LocationAccuracy.high),
       );
       final double distance = Geolocator.distanceBetween(
-          pos.latitude,
-          pos.longitude,
-          qrLat,
-          qrLng);
+        pos.latitude,
+        pos.longitude,
+        qrLat,
+        qrLng,
+      );
 
       if (distance <= allowedRadius) {
-        await _saveAttendanceToFirebase("PRESENT", "GPS_QR",
-            qrLat: qrLat, qrLng: qrLng, phoneLat: pos.latitude, phoneLng: pos.longitude, distance: distance);
+        await _saveAttendanceToFirebase(
+          "PRESENT",
+          "GPS_QR",
+          qrLat: qrLat,
+          qrLng: qrLng,
+          phoneLat: pos.latitude,
+          phoneLng: pos.longitude,
+          distance: distance,
+        );
       } else {
-        _showAlert("Ngoài phạm vi",
-            "Khoảng cách ${distance.toStringAsFixed(1)} m > $allowedRadius m");
+        _showAlert(
+          "Ngoài phạm vi",
+          "Khoảng cách ${distance.toStringAsFixed(1)} m > $allowedRadius m",
+        );
       }
     } catch (e) {
       _showAlert("Lỗi", "QR code không hợp lệ: $e");
@@ -262,24 +324,33 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
 
   // Manual chọn trạng thái
   Future<void> _onManualStatus(String label) async {
-    await _saveAttendanceToFirebase(label == "Vắng mặt" ? "ABSENT" : "LEAVE", "MANUAL");
+    await _saveAttendanceToFirebase(
+      label == "Vắng mặt" ? "ABSENT" : "LEAVE",
+      "MANUAL",
+    );
   }
-// ---------- UI helpers ----------
+
+  // ---------- UI helpers ----------
   void _showSnackbar(String msg) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
+
   // Alert
   void _showAlert(String title, String msg) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(title),
-        content: Text(msg),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("OK"))
-        ],
-      ),
+      builder:
+          (_) => AlertDialog(
+            title: Text(title),
+            content: Text(msg),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("OK"),
+              ),
+            ],
+          ),
     );
   }
 
@@ -287,7 +358,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Điểm danh QR"),
+        title: const Text("Điểm danh QR"),
         actions: [
           IconButton(
             icon: const Icon(Icons.cameraswitch),
@@ -303,41 +374,116 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       ),
       body: Column(
         children: [
-        Expanded(
-        flex: 5,
-        child: MobileScanner(
-          controller: cameraController,
-          fit: BoxFit.cover,
-          onDetect: _onDetect,
-        ),
-      ),
-      Expanded(
-        flex: 3,
-        child: Column(
-            children: [
-        ElevatedButton.icon(
-        icon: const Icon(Icons.qr_code),
-        label: const Text("Quét QR (Có mặt)"),
-        onPressed: _isWithinTimeWindow() ? () {} : null,
-      ),
-      Row(
-        children: [
           Expanded(
-              child: OutlinedButton(
-                  onPressed: () => _onManualStatus("Vắng mặt"),
-                  child: const Text("Vắng mặt"))),
-          const SizedBox(width: 10),
+            flex: 5,
+            child: Stack(
+              children: [
+                MobileScanner(
+                  controller: cameraController,
+                  fit: BoxFit.cover,
+                  onDetect: _onDetect,
+                ),
+                Positioned(
+                  top: 12,
+                  left: 12,
+                  right: 12,
+                  child: Card(
+                    color: Colors.black.withOpacity(0.45),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            statusMessage,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          const SizedBox(height: 4),
+                          if (loading) const LinearProgressIndicator(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
           Expanded(
-              child: OutlinedButton(
-                  onPressed: () => _onManualStatus("Nghỉ phép"),
-                  child: const Text("Nghỉ phép"))),
-        ],
-      ),
-              Text("Trạng thái: $lastAction"),
-              Text(statusMessage),
-            ],
-        ),
-      )
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+              child: Column(
+                children: [
+                  // Student info
+                  Card(
+                    child: ListTile(
+                      title: Text(
+                        studentName.isEmpty ? widget.phone : studentName,
+                      ),
+                      subtitle: Text(
+                        "Tên: ${studentName.isEmpty ? '-' : studentName}\nSĐT: ${studentPhone.isEmpty ? '-' : studentPhone}",
+                      ),
+                      isThreeLine: true,
+                      trailing:
+                          hasCheckedIn
+                              ? const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              )
+                              : null,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.qr_code),
+                          label: const Text("Quét QR (Có mặt)"),
+                          onPressed: _isWithinTimeWindow() ? () {} : null,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => _onManualStatus("Vắng mặt"),
+                          child: const Text("Vắng mặt"),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => _onManualStatus("Nghỉ phép"),
+                          child: const Text("Nghỉ phép"),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  // Last action
+                  if (lastAction.isNotEmpty)
+                    Text(
+                      "Trạng thái gần nhất: $lastAction",
+                      style: const TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Khung giờ: ${CHECKIN_START_HOUR.toString().padLeft(2, '0')}:00 - ${CHECKIN_END_HOUR.toString().padLeft(2, '0')}:00",
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+
+                  // Text("Trạng thái: $lastAction"),
+                  // Text(statusMessage),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
