@@ -37,6 +37,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     super.initState();
     _setupDeadlineTimerForToday();
     _checkGpsAndPermissions(context);
+    _fetchStudentInfo();
   }
 
   @override
