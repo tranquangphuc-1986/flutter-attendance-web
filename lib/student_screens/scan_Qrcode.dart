@@ -337,8 +337,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     try{
     await FirebaseFirestore.instance
         .collection("attendanceqr")
-        //.doc("${widget.phone}_${DateTime.now().toIso8601String()}")
-        .add({ //set({
+        .doc("${widget.phone}_${DateTime.now().toIso8601String()}")
+        .set({
           "phone": widget.phone,
           "status": status, // PRESENT | ABSENT | LEAVE | NOT_CHECKED
           "method": method, // GPS_QR | MANUAL | AUTO
@@ -350,30 +350,32 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           "distanceMeters": distance,
           "note": note ?? "",
         });
-return true;
-  } catch (e) {
-  print("Error saving attendance: $e");
-  return false; // thất bại
-  }
-    // setState(() {
-    //   hasCheckedIn = true;
-    //   lastAction = status;
-    //   statusMessage = "Đã lưu trạng thái: $status";
-    // });
-    // final uid = FirebaseAuth.instance.currentUser!.uid;
-    // final doc =
-    //     await FirebaseFirestore.instance.collection('userLogin').doc(uid).get();
-    // try {
-    //   setState(() {
-    //     loading = false;
-    //     studentName = doc['name'];
-    //     studentPhone = doc['phone'];
-    //   });
-    // } catch (_) {}
-    // ScaffoldMessenger.of(
-    //   context,
-    // ).showSnackBar(SnackBar(content: Text("Điểm danh $status thành công")));
-    // return true;
+//return true;
+
+    setState(() {
+      hasCheckedIn = true;
+      lastAction = status;
+      statusMessage = "Đã lưu trạng thái: $status";
+    });
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final doc =
+        await FirebaseFirestore.instance.collection('userLogin').doc(uid).get();
+    try {
+      setState(() {
+        loading = false;
+        studentName = doc['name'];
+        studentPhone = doc['phone'];
+      });
+    } catch (_) {}
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Điểm danh $status thành công")));
+    return true;
+
+    } catch (e) {
+      print("Error saving attendance: $e");
+      return false; // thất bại
+    }
   }
 
   // Manual chọn trạng thái
