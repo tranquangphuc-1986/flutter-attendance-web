@@ -16,8 +16,10 @@ class AttendanceQRScreen extends StatefulWidget {
 }
 
 class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
+  /// Camera / scanner
   final MobileScannerController cameraController = MobileScannerController();
   bool isProcessingScan = false;
+  /// State hiển thị
   bool loading = false;
   bool hasCheckedIn = false;
   String statusMessage = "Đưa mã QR vào khung quét";
@@ -47,7 +49,23 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     super.dispose();
   }
 
+  Future<void> _initFlow() async {
+    //await _checkGpsAndPermissions();
+    // await _fetchStudentInfo();
+    //_setupDeadlineTimerForToday();
+  }
+
   // Hàm set deadline 23h
+  Future<void> _autoSaveNotChecked() async {
+    setState(() {
+      statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
+    });
+    await _saveAttendanceToFirebase(
+      status: "NOT_CHECKED",
+      method: "AUTO",
+      note: "Hết hạn điểm danh - ghi tự động",
+    );
+  }
   void _setupDeadlineTimerForToday() {
     final now = DateTime.now();
     final deadline = DateTime(
@@ -57,15 +75,21 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       CHECKIN_END_HOUR,
       0,
     );
-    if (now.isAfter(deadline)) return;
+    if (now.isAfter(deadline)){
+      // đã quá hạn hôm nay
+      if (!hasCheckedIn) {
+        _autoSaveNotChecked();
+      }
+    return;
+  }
     final duration = deadline.difference(now);
+    _deadlineTimer?.cancel();
     _deadlineTimer = Timer(duration, () async {
       if (!hasCheckedIn) {
-        await _saveAttendanceToFirebase("NOT_CHECKED", "AUTO");
+        await _autoSaveNotChecked();
       }
     });
   }
-
   // Kiểm tra thời gian hợp lệ
   bool _isWithinTimeWindow() {
     final now = DateTime.now();
@@ -75,11 +99,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   }
 
   //Kiem tra GPS
-  Future<void> _initFlow() async {
-    //await _checkGpsAndPermissions();
-    // await _fetchStudentInfo();
-    //_setupDeadlineTimerForToday();
-  }
 
   // ---------- Permissions & GPS ----------
 
@@ -180,50 +199,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     }
   }
 
-  // Lưu Firestore
-  Future<void> _saveAttendanceToFirebase(
-    String status,
-    String method, {
-    double? qrLat,
-    double? qrLng,
-    double? phoneLat,
-    double? phoneLng,
-    double? distance,
-  }) async {
-    await FirebaseFirestore.instance
-        .collection("attendanceqr")
-        .doc("${widget.phone}_${DateTime.now().toIso8601String()}")
-        .set({
-          "phone": widget.phone,
-          "status": status, // PRESENT | ABSENT | LEAVE | NOT_CHECKED
-          "method": method, // GPS_QR | MANUAL | AUTO
-          "timestamp": FieldValue.serverTimestamp(),
-          "qrLat": qrLat,
-          "qrLng": qrLng,
-          "phoneLat": phoneLat,
-          "phoneLng": phoneLng,
-          "distanceMeters": distance,
-        });
-    setState(() {
-      hasCheckedIn = true;
-      lastAction = status;
-      statusMessage = "Đã lưu trạng thái: $status";
-    });
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-    final doc =
-        await FirebaseFirestore.instance.collection('userLogin').doc(uid).get();
-    try {
-      setState(() {
-        loading = false;
-        studentName = doc['name'];
-        studentPhone = doc['phone'];
-      });
-    } catch (_) {}
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Điểm danh $status thành công")));
-  }
-
   // Quét QR
   double? _extractDoubleFromJson(Map obj, List<String> candidates) {
     for (final key in candidates) {
@@ -259,7 +234,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     setState(() {
       statusMessage = "Đang xử lý QR...";
     });
-    //....end...
 
     try {
       final obj = jsonDecode(raw);
@@ -278,21 +252,28 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       //Cach 3
       double qrLat =
           _extractDoubleFromJson(obj, ['lat', 'latitude', 'class_lat']) ??
-          (throw Exception("null lat"));
+              (throw Exception("null lat"));
       double qrLng =
           _extractDoubleFromJson(obj, ['lng', 'longitude', 'class_lng']) ??
-          (throw Exception("null long"));
+              (throw Exception("null long"));
       double allowedRadius =
           _extractDoubleFromJson(obj, ['radius', 'allowed_radius']) ?? 50.0;
 
-      if (!_isWithinTimeWindow()) {
-        _showAlert("Ngoài khung giờ", "Chỉ được điểm danh từ 7h đến 9h");
+      if (qrLat == null || qrLng == null) {
+        _showSnackbar("QR code không chứa tọa độ hợp lệ.");
+        debugPrint("⚠️ Parse lỗi: lat=$qrLat, lng=$qrLng");
         return;
       }
 
+      if (!_isWithinTimeWindow()) {
+        _showAlert("Ngoài khung giờ điểm danh", "Chỉ được điểm danh từ 7h đến 9h");
+        return;
+      }
+      // Lấy vị trí điện thoại
       Position pos = await Geolocator.getCurrentPosition(
         locationSettings: LocationSettings(accuracy: LocationAccuracy.high),
       );
+      // Tính khoảng cách (m)
       final double distance = Geolocator.distanceBetween(
         pos.latitude,
         pos.longitude,
@@ -301,14 +282,19 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       );
 
       if (distance <= allowedRadius) {
+        setState(() {
+          statusMessage =
+          "✅ Bạn ở vị trí hợp lệ (${distance.toStringAsFixed(1)} m). Gửi điểm danh...";
+        });
         await _saveAttendanceToFirebase(
-          "PRESENT",
-          "GPS_QR",
+          status: "PRESENT",
+          method: "GPS_QR",
           qrLat: qrLat,
           qrLng: qrLng,
           phoneLat: pos.latitude,
           phoneLng: pos.longitude,
           distance: distance,
+          note: obj['label'] ?? obj['siteId'] ?? '',
         );
       } else {
         _showAlert(
@@ -319,16 +305,115 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     } catch (e) {
       _showAlert("Lỗi", "QR code không hợp lệ: $e");
     } finally {
+      await Future.delayed(const Duration(milliseconds: 800));
       isProcessingScan = false;
+      if (!hasCheckedIn) {
+        setState(() {
+          statusMessage = "Đưa mã QR vào khung quét";
+        });
+      }
     }
   }
 
+  // Lưu Firestore
+  Future<bool> _saveAttendanceToFirebase({
+    required String status,
+    required String method,
+    double? qrLat,
+    double? qrLng,
+    double? phoneLat,
+    double? phoneLng,
+    double? distance,
+    String? note,
+  }) async {
+    await FirebaseFirestore.instance
+        .collection("attendanceqr")
+        .doc("${widget.phone}_${DateTime.now().toIso8601String()}")
+        .set({
+          "phone": widget.phone,
+          "status": status, // PRESENT | ABSENT | LEAVE | NOT_CHECKED
+          "method": method, // GPS_QR | MANUAL | AUTO
+          "timestamp": FieldValue.serverTimestamp(),
+          "qrLat": qrLat,
+          "qrLng": qrLng,
+          "phoneLat": phoneLat,
+          "phoneLng": phoneLng,
+          "distanceMeters": distance,
+          "note": note ?? "",
+        });
+return true;
+    // setState(() {
+    //   hasCheckedIn = true;
+    //   lastAction = status;
+    //   statusMessage = "Đã lưu trạng thái: $status";
+    // });
+    // final uid = FirebaseAuth.instance.currentUser!.uid;
+    // final doc =
+    //     await FirebaseFirestore.instance.collection('userLogin').doc(uid).get();
+    // try {
+    //   setState(() {
+    //     loading = false;
+    //     studentName = doc['name'];
+    //     studentPhone = doc['phone'];
+    //   });
+    // } catch (_) {}
+    // ScaffoldMessenger.of(
+    //   context,
+    // ).showSnackBar(SnackBar(content: Text("Điểm danh $status thành công")));
+    // return true;
+  }
+
   // Manual chọn trạng thái
-  Future<void> _onManualStatus(String label) async {
-    await _saveAttendanceToFirebase(
-      label == "Vắng mặt" ? "ABSENT" : "LEAVE",
-      "MANUAL",
+  //Cách 1
+  // Future<void> _onManualStatus(String label) async {
+  //   await _saveAttendanceToFirebase(
+  //     label == "Vắng mặt" ? "ABSENT" : "LEAVE",
+  //     "MANUAL",
+  //   );
+  // }
+  //Cách 2
+  Future<void> _onManualStatus(String statusLabel) async {
+    // Confirm dialog
+    final ok = await showDialog<bool>(
+      context: context,
+      builder:
+          (c) => AlertDialog(
+        title: Text("Xác nhận"),
+        content: Text("Bạn có chắc muốn ghi '$statusLabel'?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(c, false),
+            child: const Text("Hủy"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(c, true),
+            child: const Text("Xác nhận"),
+          ),
+        ],
+      ),
     );
+
+    if (ok != true) return;
+    setState(() {
+      loading = true;
+      statusMessage = "Đang gửi trạng thái $statusLabel...";
+    });
+    final success = await _saveAttendanceToFirebase(
+      status: statusLabel == "Vắng mặt" ? "ABSENT" : "LEAVE",
+      method: "MANUAL",
+      note: statusLabel,
+    );
+    setState(() {
+      loading = false;
+    });
+    if (success) {
+      setState(() {
+        hasCheckedIn = true;
+        lastAction = statusLabel;
+        statusMessage = "$statusLabel đã lưu";
+      });
+      _showCheckinResultDialog(statusLabel);
+    }
   }
 
   // ---------- UI helpers ----------
@@ -355,6 +440,53 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     );
   }
 
+  void _showCheckinResultDialog(String statusLabel) {
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      builder:
+          (c) => AlertDialog(
+        title: Text("Kết quả điểm danh: $statusLabel"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildInfoRow(
+              "Họ và tên",
+              studentName.isEmpty ? "(không có)" : studentName,
+            ),
+            _buildInfoRow(
+              "SĐT",
+              studentPhone.isEmpty ? "(không có)" : studentPhone,
+            ),
+            _buildInfoRow("Mã ID", widget.phone),
+            _buildInfoRow(
+              "Lớp",
+              studentClass.isEmpty ? "(không có)" : studentClass,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(c),
+            child: const Text("Đóng"),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Text("$label: ", style: const TextStyle(fontWeight: FontWeight.bold)),
+          Expanded(child: Text(value)),
+        ],
+      ),
+    );
+  }
+
+  // ---------- Build UI ----------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
