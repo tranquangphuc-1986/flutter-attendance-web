@@ -334,10 +334,11 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     double? distance,
     String? note,
   }) async {
+    try{
     await FirebaseFirestore.instance
         .collection("attendanceqr")
-        .doc("${widget.phone}_${DateTime.now().toIso8601String()}")
-        .set({
+        //.doc("${widget.phone}_${DateTime.now().toIso8601String()}")
+        .add({ //set({
           "phone": widget.phone,
           "status": status, // PRESENT | ABSENT | LEAVE | NOT_CHECKED
           "method": method, // GPS_QR | MANUAL | AUTO
@@ -350,6 +351,10 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           "note": note ?? "",
         });
 return true;
+  } catch (e) {
+  print("Error saving attendance: $e");
+  return false; // thất bại
+  }
     // setState(() {
     //   hasCheckedIn = true;
     //   lastAction = status;
