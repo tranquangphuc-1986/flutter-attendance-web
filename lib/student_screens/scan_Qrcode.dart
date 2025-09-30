@@ -16,6 +16,7 @@ class AttendanceQRScreen extends StatefulWidget {
 }
 
 class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
+
   /// Camera / scanner
   final MobileScannerController cameraController = MobileScannerController();
   bool isProcessingScan = false;
@@ -351,7 +352,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           "phoneLng": phoneLng,
           "distanceMeters": distance,
           "note": note ?? "",
-        });
+        }, SetOptions(merge: true));
 //return true;
 
     setState(() {
@@ -380,39 +381,38 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     }
   }
 
-  // Hàm lấy docId theo ngày
-  String _getDocId(String phone) {
-    final today = DateTime.now();
-    final dateId = "${today.year}-${today.month}-${today.day}";
-    return "${phone}_$dateId";
-  }
-
-// Hàm update trạng thái
-  Future<bool> markAttendance({required String status, required String method}) async {
-    try {
-      final phoneValue = studentPhone.isNotEmpty ? studentPhone : widget.phone;
-      final docId = _getDocId(phoneValue);
-
-      await FirebaseFirestore.instance
-          .collection("attendanceqr")
-          .doc(docId)
-          .set({
-        "phone": phoneValue,
-        "name": studentName,
-        "status": status,   // PRESENT | ABSENT | LEAVE
-        "method": method,   // QR | MANUAL
-        "timestamp": FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true)); // cho phép update nhiều lần
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Cập nhật trạng thái: $status")),
-      );
-      return true;
-    } catch (e) {
-      debugPrint("❌ Error markAttendance: $e");
-      return false;
-    }
-  }
+//   // Hàm lấy docId theo ngày
+//   String _getDocId(String phone) {
+//     final today = DateTime.now();
+//     final dateId = "${today.year}-${today.month}-${today.day}";
+//     return "${phone}_$dateId";
+//   }
+// // Hàm update trạng thái
+//   Future<bool> markAttendance({required String status, required String method}) async {
+//     try {
+//       final phoneValue = studentPhone.isNotEmpty ? studentPhone : widget.phone;
+//       final docId = _getDocId(phoneValue);
+//
+//       await FirebaseFirestore.instance
+//           .collection("attendanceqr")
+//           .doc(docId)
+//           .set({
+//         "phone": phoneValue,
+//         "name": studentName,
+//         "status": status,   // PRESENT | ABSENT | LEAVE
+//         "method": method,   // QR | MANUAL
+//         "timestamp": FieldValue.serverTimestamp(),
+//       }, SetOptions(merge: true)); // cho phép update nhiều lần
+//
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text("Cập nhật trạng thái: $status")),
+//       );
+//       return true;
+//     } catch (e) {
+//       debugPrint("❌ Error markAttendance: $e");
+//       return false;
+//     }
+//   }
 
   // Manual chọn trạng thái
   //Cách 1
@@ -449,11 +449,10 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       loading = true;
       statusMessage = "Đang gửi trạng thái $statusLabel...";
     });
-    final success = //await _saveAttendanceToFirebase(
-    await markAttendance(
+    final success = await _saveAttendanceToFirebase(
       status: statusLabel == "Vắng mặt" ? "ABSENT" : "LEAVE",
       method: "MANUAL",
-     // note: statusLabel,
+      note: statusLabel,
     );
     setState(() {
       loading = false;
@@ -503,15 +502,15 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildInfoRow(
-              "Họ và tên:",
+              "Họ và tên",
               studentName.isEmpty ? "(không có)" : studentName,
             ),
             _buildInfoRow(
-              "SĐT:",
+              "SĐT",
               studentPhone.isEmpty ? "(không có)" : studentPhone,
             ),
             _buildInfoRow(
-              "Đơn vị:",
+              "Đơn vị",
               studentClass.isEmpty ? "(không có)" : studentClass,
             ),
           ],

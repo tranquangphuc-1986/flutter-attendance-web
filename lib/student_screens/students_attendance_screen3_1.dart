@@ -89,6 +89,7 @@ class _AttendanceScreen3_1State extends State<AttendanceScreen3_1> {
       attendanceMap[studentId] = status;
     });
   }
+
   void _loadDataStudents() {
     _firebaseService.getTodayAttendance().listen((result) {
       setState(() {
