@@ -325,6 +325,12 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   }
 
   // Lưu Firestore
+    // Hàm lấy docId theo ngày
+  String _getDocId(String phone) {
+    final today = DateTime.now();
+    final dateId = "${today.year}-${today.month}-${today.day}";
+    return "${phone}_$dateId";
+  }
   Future<bool> _saveAttendanceToFirebase({
     required String status,
     required String method,
@@ -337,9 +343,11 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   }) async {
     try{
       final phoneValue = studentPhone.isNotEmpty ? studentPhone : widget.phone;
+      final docId = _getDocId(phoneValue);
     await FirebaseFirestore.instance
         .collection("attendanceqr")
-        .doc("${widget.phone}_${DateTime.now().toIso8601String()}")
+        //.doc("${widget.phone}_${DateTime.now().toIso8601String()}")
+        .doc(docId)
         .set({
           "phone": phoneValue,
           "name": studentName,
