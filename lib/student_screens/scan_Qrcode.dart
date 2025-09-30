@@ -69,41 +69,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     //_setupDeadlineTimerForToday();
   }
 
-  // Hàm set deadline 23h
-  Future<void> _autoSaveNotChecked() async {
-    setState(() {
-      statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
-    });
-    await _saveAttendanceToFirebase(
-      status: "NOT_CHECKED",
-      method: "AUTO",
-      note: "Hết hạn điểm danh - ghi tự động",
-    );
-  }
-  void _setupDeadlineTimerForToday() {
-    final now = DateTime.now();
-    final deadline = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      CHECKIN_END_HOUR,
-      0,
-    );
-    if (now.isAfter(deadline)){
-      // đã quá hạn hôm nay
-      if (!hasCheckedIn) {
-        _autoSaveNotChecked();
-      }
-    return;
-  }
-    final duration = deadline.difference(now);
-    _deadlineTimer?.cancel();
-    _deadlineTimer = Timer(duration, () async {
-      if (!hasCheckedIn) {
-        await _autoSaveNotChecked();
-      }
-    });
-  }
+
   // Kiểm tra thời gian hợp lệ
   bool _isWithinTimeWindow() {
     final now = DateTime.now();
@@ -540,6 +506,42 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     );
   }
 
+  // Hàm set deadline 23h
+  Future<void> _autoSaveNotChecked() async {
+    setState(() {
+      statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
+    });
+    await _saveAttendanceToFirebase(
+      status: "NOT_CHECKED",
+      method: "AUTO",
+      note: "Hết hạn điểm danh - ghi tự động",
+    );
+  }
+  void _setupDeadlineTimerForToday() {
+    final now = DateTime.now();
+    final deadline = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      CHECKIN_END_HOUR,
+      0,
+    );
+    if (now.isAfter(deadline)){
+      // đã quá hạn hôm nay
+      if (!hasCheckedIn) {
+        _autoSaveNotChecked();
+      }
+      return;
+    }
+    final duration = deadline.difference(now);
+    _deadlineTimer?.cancel();
+    _deadlineTimer = Timer(duration, () async {
+      if (!hasCheckedIn) {
+        await _autoSaveNotChecked();
+      }
+    });
+  }
+
   // ---------- Build UI ----------
   @override
   Widget build(BuildContext context) {
@@ -559,8 +561,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      body: //SingleChildScrollView(
+     Column(
         children: [
           Expanded(
             flex: 5,
@@ -686,7 +688,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           ),
         ],
       ),
-      ),
+     // ),
     );
   }
 }
