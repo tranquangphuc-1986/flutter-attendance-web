@@ -33,7 +33,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
 
   Timer? _deadlineTimer;
   final int CHECKIN_START_HOUR = 7; // 07:00
-  final int CHECKIN_END_HOUR = 23; // 09:00
+  final int CHECKIN_END_HOUR = 18; // 09:00
 
   @override
   void initState() {
@@ -559,7 +559,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           ),
         ],
       ),
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
         children: [
           Expanded(
             flex: 5,
@@ -645,7 +646,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                     ],
                   ),
                   const SizedBox(height: 8),
-
                   Row(
                     children: [
                       Expanded(
@@ -663,12 +663,29 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                       ),
                     ],
                   ),
-
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => _onManualStatus("Bị ốm"),
+                          child: const Text("Bị ốm"),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => _onManualStatus("Công tác"),
+                          child: const Text("Công tác"),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
           ),
         ],
+      ),
       ),
     );
   }
