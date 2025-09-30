@@ -39,8 +39,21 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   void initState() {
     super.initState();
     _setupDeadlineTimerForToday();
-    _checkGpsAndPermissions(context);
+    //_checkGpsAndPermissions(context);
     _fetchStudentInfo();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bool ok = await _checkGpsAndPermissions(context);
+      if (!ok) {
+        // Nếu thiếu quyền -> thoát hoặc show cảnh báo
+        setState(() {
+          statusMessage = "Cần quyền Camera + GPS để điểm danh.";
+        });
+      } else {
+        setState(() {
+          statusMessage = "Sẵn sàng quét QR để điểm danh.";
+        });
+      }
+    });
   }
 
   @override
@@ -100,9 +113,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   }
 
   //Kiem tra GPS
-
   // ---------- Permissions & GPS ----------
-
+  //
   //   Future<void> _checkGpsAndPermissions() async {
   //   try {
   //     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -152,6 +164,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           content: Text("GPS đang tắt. Vui lòng bật GPS trong Cài đặt."),
         ),
       );
+      await Geolocator.openLocationSettings(); // mở thẳng Location Settings
       return false;
     }
     // 2. Kiểm tra quyền Location
@@ -172,10 +185,33 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       await openAppSettings();
       return false;
     }
-    if (status.isGranted) {
-      return true; // Có quyền và GPS bật
+    if (!status.isGranted) {
+      return false; // Không có quyền và GPS
     }
-    return false;
+    // if (status.isGranted) {
+    //   return true; // Có quyền và GPS bật
+    // }
+    // return false;
+
+    // 3. Kiểm tra quyền Camera
+    var camStatus = await Permission.camera.status;
+    if (camStatus.isDenied) {
+      camStatus = await Permission.camera.request();
+    }
+    if (camStatus.isPermanentlyDenied) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Quyền Camera bị chặn vĩnh viễn. Vui lòng bật lại trong Cài đặt."),
+        ),
+      );
+      await openAppSettings();
+      return false;
+    }
+    if (!camStatus.isGranted) {
+      return false;
+    }
+    // Nếu cả GPS & Camera đều OK
+    return true;
   }
 
   Future<void> _fetchStudentInfo() async {
@@ -389,48 +425,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     }
   }
 
-//   // Hàm lấy docId theo ngày
-//   String _getDocId(String phone) {
-//     final today = DateTime.now();
-//     final dateId = "${today.year}-${today.month}-${today.day}";
-//     return "${phone}_$dateId";
-//   }
-// // Hàm update trạng thái
-//   Future<bool> markAttendance({required String status, required String method}) async {
-//     try {
-//       final phoneValue = studentPhone.isNotEmpty ? studentPhone : widget.phone;
-//       final docId = _getDocId(phoneValue);
-//
-//       await FirebaseFirestore.instance
-//           .collection("attendanceqr")
-//           .doc(docId)
-//           .set({
-//         "phone": phoneValue,
-//         "name": studentName,
-//         "status": status,   // PRESENT | ABSENT | LEAVE
-//         "method": method,   // QR | MANUAL
-//         "timestamp": FieldValue.serverTimestamp(),
-//       }, SetOptions(merge: true)); // cho phép update nhiều lần
-//
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text("Cập nhật trạng thái: $status")),
-//       );
-//       return true;
-//     } catch (e) {
-//       debugPrint("❌ Error markAttendance: $e");
-//       return false;
-//     }
-//   }
-
-  // Manual chọn trạng thái
-  //Cách 1
-  // Future<void> _onManualStatus(String label) async {
-  //   await _saveAttendanceToFirebase(
-  //     label == "Vắng mặt" ? "ABSENT" : "LEAVE",
-  //     "MANUAL",
-  //   );
-  // }
-  //Cách 2
+  // Manual chọn trạng thái còn lại (ngoài Có mặt)
   Future<void> _onManualStatus(String statusLabel) async {
     // Confirm dialog
     final ok = await showDialog<bool>(
