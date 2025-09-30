@@ -300,7 +300,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           setState(() {
             hasCheckedIn = true;
             lastAction = "Có mặt";
-            statusMessage = "Điểm danh có mặt thành công";
+            statusMessage = "Điểm danh 'Có mặt' thành công";
           });
           _showCheckinResultDialog("Có mặt");
         }
@@ -335,11 +335,13 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     String? note,
   }) async {
     try{
+      final phoneValue = studentPhone.isNotEmpty ? studentPhone : widget.phone;
     await FirebaseFirestore.instance
         .collection("attendanceqr")
         .doc("${widget.phone}_${DateTime.now().toIso8601String()}")
         .set({
-          "phone": widget.phone,
+          "phone": phoneValue,
+          "name": studentName,
           "status": status, // PRESENT | ABSENT | LEAVE | NOT_CHECKED
           "method": method, // GPS_QR | MANUAL | AUTO
           "timestamp": FieldValue.serverTimestamp(),
