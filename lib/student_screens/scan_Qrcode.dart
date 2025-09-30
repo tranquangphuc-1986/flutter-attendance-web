@@ -306,7 +306,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
         }
       } else {
         _showAlert(
-          "Ngoài phạm vi",
+          "Bạn nằm ngoài phạm vi điểm danh",
           "Khoảng cách ${distance.toStringAsFixed(1)} m > $allowedRadius m",
         );
       }
@@ -380,6 +380,40 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     }
   }
 
+  // Hàm lấy docId theo ngày
+  String _getDocId(String phone) {
+    final today = DateTime.now();
+    final dateId = "${today.year}-${today.month}-${today.day}";
+    return "${phone}_$dateId";
+  }
+
+// Hàm update trạng thái
+  Future<bool> markAttendance({required String status, required String method}) async {
+    try {
+      final phoneValue = studentPhone.isNotEmpty ? studentPhone : widget.phone;
+      final docId = _getDocId(phoneValue);
+
+      await FirebaseFirestore.instance
+          .collection("attendanceqr")
+          .doc(docId)
+          .set({
+        "phone": phoneValue,
+        "name": studentName,
+        "status": status,   // PRESENT | ABSENT | LEAVE
+        "method": method,   // QR | MANUAL
+        "timestamp": FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true)); // cho phép update nhiều lần
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Cập nhật trạng thái: $status")),
+      );
+      return true;
+    } catch (e) {
+      debugPrint("❌ Error markAttendance: $e");
+      return false;
+    }
+  }
+
   // Manual chọn trạng thái
   //Cách 1
   // Future<void> _onManualStatus(String label) async {
@@ -415,10 +449,11 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       loading = true;
       statusMessage = "Đang gửi trạng thái $statusLabel...";
     });
-    final success = await _saveAttendanceToFirebase(
+    final success = //await _saveAttendanceToFirebase(
+    await markAttendance(
       status: statusLabel == "Vắng mặt" ? "ABSENT" : "LEAVE",
       method: "MANUAL",
-      note: statusLabel,
+     // note: statusLabel,
     );
     setState(() {
       loading = false;
@@ -468,16 +503,15 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildInfoRow(
-              "Họ và tên",
+              "Họ và tên:",
               studentName.isEmpty ? "(không có)" : studentName,
             ),
             _buildInfoRow(
-              "SĐT",
+              "SĐT:",
               studentPhone.isEmpty ? "(không có)" : studentPhone,
             ),
-            _buildInfoRow("Mã ID", widget.phone),
             _buildInfoRow(
-              "Lớp",
+              "Đơn vị:",
               studentClass.isEmpty ? "(không có)" : studentClass,
             ),
           ],
@@ -491,6 +525,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       ),
     );
   }
+
   Widget _buildInfoRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -567,8 +602,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                   // Student info
                   Card(
                     child: ListTile(
-                      title: Text(
-                        studentName.isEmpty ? widget.phone : studentPhone,
+                      title: Text("Thông tin cán bộ điểm danh"
                       ),
                       subtitle: Text(
                         "Tên: ${studentName.isEmpty ? '-' : studentName}\nSĐT: ${studentPhone.isEmpty ? '-' : studentPhone}",
