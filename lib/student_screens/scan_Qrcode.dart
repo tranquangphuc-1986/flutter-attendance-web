@@ -69,6 +69,48 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     //_setupDeadlineTimerForToday();
   }
 
+// Hàm set deadline 18h
+  Future<void> _autoSaveNotChecked() async {
+    final phoneToSave = studentPhone.isNotEmpty ? studentPhone : widget.phone;
+    final nameToSave  = studentName.isNotEmpty ? studentName : "(No Name)";
+    setState(() {
+      statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
+    });
+    await _saveAttendanceToFirebase(
+      status: "NOT_CHECKED",
+      method: "AUTO",
+      note: "Hết hạn điểm danh - ghi tự động",
+      // truyền luôn name + phone
+      extraData: {
+        "name": nameToSave,
+        "phone": phoneToSave,
+      },
+    );
+  }
+  void _setupDeadlineTimerForToday() {
+    final now = DateTime.now();
+    final deadline = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      CHECKIN_END_HOUR,
+      0,
+    );
+    if (now.isAfter(deadline)){
+      // đã quá hạn hôm nay
+      if (!hasCheckedIn) {
+        _autoSaveNotChecked();
+      }
+      return;
+    }
+    final duration = deadline.difference(now);
+    _deadlineTimer?.cancel();
+    _deadlineTimer = Timer(duration, () async {
+      if (!hasCheckedIn) {
+        await _autoSaveNotChecked();
+      }
+    });
+  }
 
   // Kiểm tra thời gian hợp lệ
   bool _isWithinTimeWindow() {
@@ -507,48 +549,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     );
   }
 
-  // Hàm set deadline 18h
-  Future<void> _autoSaveNotChecked() async {
-    final phoneToSave = studentPhone.isNotEmpty ? studentPhone : widget.phone;
-    final nameToSave  = studentName.isNotEmpty ? studentName : "(No Name)";
-    setState(() {
-      statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
-    });
-    await _saveAttendanceToFirebase(
-      status: "NOT_CHECKED",
-      method: "AUTO",
-      note: "Hết hạn điểm danh - ghi tự động",
-      // truyền luôn name + phone
-      extraData: {
-        "name": nameToSave,
-        "phone": phoneToSave,
-      },
-    );
-  }
-  void _setupDeadlineTimerForToday() {
-    final now = DateTime.now();
-    final deadline = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      CHECKIN_END_HOUR,
-      0,
-    );
-    if (now.isAfter(deadline)){
-      // đã quá hạn hôm nay
-      if (!hasCheckedIn) {
-        _autoSaveNotChecked();
-      }
-      return;
-    }
-    final duration = deadline.difference(now);
-    _deadlineTimer?.cancel();
-    _deadlineTimer = Timer(duration, () async {
-      if (!hasCheckedIn) {
-        await _autoSaveNotChecked();
-      }
-    });
-  }
 
   // ---------- Build UI ----------
   @override
