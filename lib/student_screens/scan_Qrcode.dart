@@ -619,8 +619,20 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                               : null,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
+                  // Last action
+                  if (lastAction.isNotEmpty)
+                    Text(
+                      "Trạng thái gần nhất: $lastAction",
+                      style: const TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Khung giờ: ${CHECKIN_START_HOUR.toString().padLeft(2, '0')}:00 - ${CHECKIN_END_HOUR.toString().padLeft(2, '0')}:00",
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
 
+                  const SizedBox(height: 12),
                   Row(
                     children: [
                       Expanded(
@@ -651,21 +663,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  // Last action
-                  if (lastAction.isNotEmpty)
-                    Text(
-                      "Trạng thái gần nhất: $lastAction",
-                      style: const TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "Khung giờ: ${CHECKIN_START_HOUR.toString().padLeft(2, '0')}:00 - ${CHECKIN_END_HOUR.toString().padLeft(2, '0')}:00",
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
 
-                  // Text("Trạng thái: $lastAction"),
-                  // Text(statusMessage),
                 ],
               ),
             ),
