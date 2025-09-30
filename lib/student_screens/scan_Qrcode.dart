@@ -327,7 +327,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   }
 
   // Lưu Firestore
-    // Hàm lấy docId theo ngày
+  // Hàm lấy docId theo ngày
   String _getDocId(String phone) {
     final today = DateTime.now();
     final dateId = "${today.year}-${today.month}-${today.day}";
@@ -342,6 +342,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     double? phoneLng,
     double? distance,
     String? note,
+    Map<String, dynamic>? extraData, // cho phép thêm dữ liệu ngoài
   }) async {
     try{
       final phoneValue = studentPhone.isNotEmpty ? studentPhone : widget.phone;
@@ -506,8 +507,10 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     );
   }
 
-  // Hàm set deadline 23h
+  // Hàm set deadline 18h
   Future<void> _autoSaveNotChecked() async {
+    final phoneToSave = studentPhone.isNotEmpty ? studentPhone : widget.phone;
+    final nameToSave  = studentName.isNotEmpty ? studentName : "(No Name)";
     setState(() {
       statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
     });
@@ -515,6 +518,11 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       status: "NOT_CHECKED",
       method: "AUTO",
       note: "Hết hạn điểm danh - ghi tự động",
+      // truyền luôn name + phone
+      extraData: {
+        "name": nameToSave,
+        "phone": phoneToSave,
+      },
     );
   }
   void _setupDeadlineTimerForToday() {
@@ -565,7 +573,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
      Column(
         children: [
           Expanded(
-            flex: 5,
+            flex: 3,
             child: Stack(
               children: [
                 MobileScanner(
@@ -648,6 +656,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                     ],
                   ),
                   const SizedBox(height: 8),
+
                   Row(
                     children: [
                       Expanded(
@@ -665,6 +674,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Expanded(
