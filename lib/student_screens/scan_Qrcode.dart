@@ -33,12 +33,12 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
 
   Timer? _deadlineTimer;
   final int CHECKIN_START_HOUR = 7; // 07:00
-  final int CHECKIN_END_HOUR = 18; // 09:00
+  final int CHECKIN_END_HOUR = 11; // 09:00
 
   @override
   void initState() {
     super.initState();
-    _setupDeadlineTimerForToday();
+   // _setupDeadlineTimerForToday();
     //_checkGpsAndPermissions(context);
     _fetchStudentInfo();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -70,47 +70,40 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   }
 
 // Hàm set deadline 18h
-  Future<void> _autoSaveNotChecked() async {
-    final phoneToSave = studentPhone.isNotEmpty ? studentPhone : widget.phone;
-    final nameToSave  = studentName.isNotEmpty ? studentName : "(No Name)";
-    setState(() {
-      statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
-    });
-    await _saveAttendanceToFirebase(
-      status: "NOT_CHECKED",
-      method: "AUTO",
-      note: "Hết hạn điểm danh - ghi tự động",
-      // truyền luôn name + phone
-      extraData: {
-        "name": nameToSave,
-        "phone": phoneToSave,
-      },
-    );
-  }
-  void _setupDeadlineTimerForToday() {
-    final now = DateTime.now();
-    final deadline = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      CHECKIN_END_HOUR,
-      0,
-    );
-    if (now.isAfter(deadline)){
-      // đã quá hạn hôm nay
-      if (!hasCheckedIn) {
-        _autoSaveNotChecked();
-      }
-      return;
-    }
-    final duration = deadline.difference(now);
-    _deadlineTimer?.cancel();
-    _deadlineTimer = Timer(duration, () async {
-      if (!hasCheckedIn) {
-        await _autoSaveNotChecked();
-      }
-    });
-  }
+//   Future<void> _autoSaveNotChecked() async {
+//     setState(() {
+//       statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
+//     });
+//     await _saveAttendanceToFirebase(
+//       status: "NOT_CHECKED",
+//       method: "AUTO",
+//       note: "Hết hạn điểm danh - ghi tự động",
+//     );
+//   }
+//   void _setupDeadlineTimerForToday() {
+//     final now = DateTime.now();
+//     final deadline = DateTime(
+//       now.year,
+//       now.month,
+//       now.day,
+//       CHECKIN_END_HOUR,
+//       0,
+//     );
+//     if (now.isAfter(deadline)){
+//       // đã quá hạn hôm nay
+//       if (!hasCheckedIn) {
+//         _autoSaveNotChecked();
+//       }
+//       return;
+//     }
+//     final duration = deadline.difference(now);
+//     _deadlineTimer?.cancel();
+//     _deadlineTimer = Timer(duration, () async {
+//       if (!hasCheckedIn) {
+//         await _autoSaveNotChecked();
+//       }
+//     });
+//   }
 
   // Kiểm tra thời gian hợp lệ
   bool _isWithinTimeWindow() {
@@ -384,7 +377,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     double? phoneLng,
     double? distance,
     String? note,
-    Map<String, dynamic>? extraData, // cho phép thêm dữ liệu ngoài
   }) async {
     try{
       final phoneValue = studentPhone.isNotEmpty ? studentPhone : widget.phone;
