@@ -56,7 +56,7 @@ async function autoMarkNotChecked() {
 
     if (attendanceSnap.empty) {
       // Chưa có điểm danh hôm nay -> thêm bản ghi NOT_CHECKED
-      await firestore.collection("attendanceqr").add({
+      await firestore.collection("attendanceqr").doc(userData.phone).add({
         phone: userData.phone,
         name: userData.name || null,
         status: "NOT_CHECKED",
