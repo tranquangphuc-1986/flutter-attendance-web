@@ -38,7 +38,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   @override
   void initState() {
     super.initState();
-   // _setupDeadlineTimerForToday();
+    _setupDeadlineTimerForToday();
     //_checkGpsAndPermissions(context);
        _fetchStudentInfo();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
