@@ -1,28 +1,54 @@
+#name: Auto Mark Not Checked
+#
+#on:
+#  schedule:
+#    # Chạy mỗi ngày lúc 18:01 (giờ Việt Nam = UTC+7)
+#    - cron: '1 11 * * 1-5'   # 11:01 UTC = 18:01 VN, chỉ chạy từ Thứ 2 - Thứ 6
+#  workflow_dispatch:         # Cho phép chạy thủ công từ GitHub Actions
+#
+#jobs:
+#  run-script:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout repo
+#        uses: actions/checkout@v3
+#
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: '18'
+#
+#      - name: Install dependencies
+#        run: npm install @google-cloud/firestore
+#
+#      - name: Run autoMarkNotChecked
+#        env:
+#          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_TOKEN_PHUC }}
+#        run: node autoMarkNotChecked.js
 name: Auto Mark Not Checked
 
 on:
   schedule:
-    # Chạy mỗi ngày lúc 18:01 (giờ Việt Nam = UTC+7)
-    - cron: '1 11 * * 1-5'   # 11:01 UTC = 18:01 VN, chỉ chạy từ Thứ 2 - Thứ 6
-  workflow_dispatch:         # Cho phép chạy thủ công từ GitHub Actions
+    - cron: "5 23 * * 1-5"   # chạy lúc 11:05 AM (thứ 2-6), giờ UTC
+  workflow_dispatch:          # có thể chạy tay
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
+      - name: Checkout Repo
         uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 18
 
-      - name: Install dependencies
-        run: npm install @google-cloud/firestore
+      - name: Install deps
+        run: npm install
 
       - name: Run autoMarkNotChecked
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_TOKEN_PHUC }}
-        run: node autoMarkNotChecked.js
+        run: npm start
