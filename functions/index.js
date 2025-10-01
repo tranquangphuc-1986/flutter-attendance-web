@@ -22,8 +22,8 @@ exports.autoMarkNotChecked = functions.pubsub
       // Kiểm tra sinh viên này đã có điểm danh hôm nay chưa
       const attendanceSnap = await db.collection("attendanceqr")
         .where("uid", "==", userDoc.id)
-        .where("date", ">=", startTs)
-        .where("date", "<=", endTs)
+        .where("timestamp", ">=", startTs)
+        .where("timestamp", "<=", endTs)
         .limit(1)
         .get();
 
