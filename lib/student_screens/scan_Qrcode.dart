@@ -40,6 +40,10 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     super.initState();
    // _setupDeadlineTimerForToday();
     //_checkGpsAndPermissions(context);
+    if (!_isWithinTimeWindow()) {
+      _showAlert("Ngoài khung giờ điểm danh", "Chỉ được điểm danh từ 7h đến 9h");
+      return;
+    };
     _fetchStudentInfo();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bool ok = await _checkGpsAndPermissions(context);
@@ -156,11 +160,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   // }
 
   Future<bool> _checkGpsAndPermissions(BuildContext context) async {
-
-    if (!_isWithinTimeWindow()) {
-      _showAlert("Ngoài khung giờ điểm danh", "Chỉ được điểm danh từ 7h đến 9h");
-      return false;
-    }
     // 1. Kiểm tra GPS (Location Services) đã bật chưa
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -261,16 +260,12 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   }
 
   Future<void> _onDetect(BarcodeCapture capture) async {
-
-    // if (!_isWithinTimeWindow()) {
-    //   _showAlert("Ngoài khung giờ điểm danh", "Chỉ được điểm danh từ 7h đến 9h");
-    //   return;
-    // }
     // if (isProcessingScan || hasCheckedIn) return;
     // final raw = capture.barcodes.first.rawValue;
     // if (raw == null) return;
     // isProcessingScan = true;
-        //test code cu khi lam SQL.....
+
+    //test code cu khi lam SQL.....
     if (isProcessingScan || hasCheckedIn) return;
     final List<Barcode> barcodes = capture.barcodes;
     if (barcodes.isEmpty) return;
@@ -312,6 +307,10 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
         return;
       }
 
+      if (!_isWithinTimeWindow()) {
+        _showAlert("Ngoài khung giờ điểm danh", "Chỉ được điểm danh từ 7h đến 9h");
+        return;
+      }
       // Lấy vị trí điện thoại
       Position pos = await Geolocator.getCurrentPosition(
         locationSettings: LocationSettings(accuracy: LocationAccuracy.high),
