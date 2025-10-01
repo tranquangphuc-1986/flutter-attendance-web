@@ -32,7 +32,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   String studentClass = "";
   String uID = "";
   Timer? _deadlineTimer;
-  final int CHECKIN_START_HOUR = 0; // 07:00
+  final int CHECKIN_START_HOUR = 7; // 07:00
   final int CHECKIN_END_HOUR = 23; // 09:00
 
   @override

@@ -31,26 +31,29 @@ class _AdminCloseAttendanceScreenState
 
     for (var userDoc in userSnap.docs) {
       final userData = userDoc.data();
-
+  final phone = userData["phone"]??"";
+  if(phone.isEmpty) continue;
       // Kiểm tra sinh viên này đã có điểm danh hôm nay chưa
       final attendanceSnap = await FirebaseFirestore.instance
           .collection("attendanceqr")
-          .where("uid", isEqualTo: userDoc.id)
-          .where("date", isGreaterThanOrEqualTo: startTs)
-          .where("date", isLessThanOrEqualTo: endTs)
+         // .where("uid", isEqualTo: userDoc.id)
+          .where("phone", isEqualTo: phone)
+          .where("timestamp", isGreaterThanOrEqualTo: startTs)
+          .where("timestamp", isLessThanOrEqualTo: endTs)
           .limit(1)
           .get();
 
       if (attendanceSnap.docs.isEmpty) {
         // Nếu chưa có, thêm bản ghi NOT_CHECKED
         await FirebaseFirestore.instance.collection("attendanceqr").add({
-          "uid": userDoc.id,
+         // "uid": userDoc.id,
+          "phone": phone,
           "name": userData["name"] ?? "",
-          "phone": userData["phone"] ?? "",
+        // "phone": userData["phone"] ?? "",
           "status": "NOT_CHECKED",
           "note": "Quá giờ điểm danh",
           "method": "AUTO",
-          "date": Timestamp.now(),
+          "timestamp": Timestamp.now(),
         });
         updatedCount++;
       }
