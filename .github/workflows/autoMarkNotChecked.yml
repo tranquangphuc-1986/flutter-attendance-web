@@ -1,0 +1,29 @@
+name: Auto Mark Not Checked
+
+on:
+  schedule:
+    - cron: "5 11 * * 1-5"   # chạy 11:05 UTC = 18:05 VN, từ Thứ 2 -> Thứ 6
+  workflow_dispatch:          # cho phép chạy tay
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install deps
+        working-directory: ./cron-scripts
+        run: npm install
+
+      - name: Run autoMarkNotChecked
+        working-directory: ./cron-scripts
+        env:
+          FIREBASE_TOKEN_PHUC: ${{ secrets.FIREBASE_TOKEN_PHUC }}
+        run: npm start
