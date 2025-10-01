@@ -16,9 +16,10 @@ exports.autoMarkNotChecked = functions.pubsub
 
     const usersSnap = await db.collection("userLogin").get();
 
-    for (const userDoc of usersSnap.docs) {
+//    for (const userDoc of usersSnap.docs) {
+//      const userData = userDoc.data();
+      await Promise.all(usersSnap.docs.map(async (userDoc) => {
       const userData = userDoc.data();
-
       // Kiểm tra sinh viên này đã có điểm danh hôm nay chưa
       const attendanceSnap = await db.collection("attendanceqr")
         .where("uid", "==", userDoc.id)
@@ -38,9 +39,9 @@ exports.autoMarkNotChecked = functions.pubsub
           method: "AUTO",
           timestamp: admin.firestore.Timestamp.now(),
         });
+        console.log ('Ghi NOT_CHECK');
       }
-
-    }
+    }));
 
     console.log("✅ Đã cập nhật trạng thái NOT_CHECKED cho các sinh viên chưa điểm danh");
     return null;
