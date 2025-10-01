@@ -30,8 +30,8 @@ name: Auto Mark Not Checked
 
 on:
   schedule:
-    - cron: "5 23 * * 1-5"   # chạy lúc 11:05 AM (thứ 2-6), giờ UTC
-  workflow_dispatch:          # có thể chạy tay
+    - cron: "5 11 * * 1-5"   # chạy lúc 11:05 AM (UTC) = 18:05 VN, thứ 2-6
+  workflow_dispatch:          # cho phép chạy tay
 
 jobs:
   run-script:
@@ -50,5 +50,5 @@ jobs:
 
       - name: Run autoMarkNotChecked
         env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_TOKEN_PHUC }}
+          FIREBASE_TOKEN_PHUC: ${{ secrets.FIREBASE_TOKEN_PHUC }}
         run: npm start
