@@ -428,6 +428,10 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
 
   // Manual chọn trạng thái còn lại (ngoài Có mặt)
   Future<void> _onManualStatus(String statusLabel) async {
+    if (!_isWithinTimeWindow()) {
+      _showAlert("Ngoài khung giờ điểm danh", "Chỉ được điểm danh từ 7h đến 9h");
+      return;
+    }
     // Confirm dialog
     final ok = await showDialog<bool>(
       context: context,
