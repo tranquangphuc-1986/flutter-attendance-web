@@ -40,7 +40,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     super.initState();
     _setupDeadlineTimerForToday();
     //_checkGpsAndPermissions(context);
-       _fetchStudentInfo();
+    _fetchStudentInfo();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bool ok = await _checkGpsAndPermissions(context);
       if (!ok) {
@@ -69,17 +69,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     //_setupDeadlineTimerForToday();
   }
 
-// Hàm set deadline 18h
-//   Future<void> _autoSaveNotChecked() async {
-//     setState(() {
-//       statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
-//     });
-//     await _saveAttendanceToFirebase(
-//       status: "NOT_CHECKED",
-//       method: "AUTO",
-//       note: "Hết hạn điểm danh - ghi tự động",
-//     );
-//   }
   void _setupDeadlineTimerForToday() {
     final now = DateTime.now();
     final deadline = DateTime(
@@ -92,8 +81,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     if (now.isAfter(deadline)){
       // đã quá hạn hôm nay
       if (!hasCheckedIn) {
-        //_autoSaveNotChecked();
-      setState(() {
+         setState(() {
       statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
         });
       }
@@ -103,8 +91,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     _deadlineTimer?.cancel();
     _deadlineTimer = Timer(duration, () async {
       if (!hasCheckedIn) {
-        //await _autoSaveNotChecked();
-        setState(() {
+          setState(() {
           statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
         });
       }
