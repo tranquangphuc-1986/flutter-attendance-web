@@ -40,11 +40,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     super.initState();
    // _setupDeadlineTimerForToday();
     //_checkGpsAndPermissions(context);
-    if (!_isWithinTimeWindow()) {
-      _showAlert("Ngoài khung giờ điểm danh", "Chỉ được điểm danh từ 7h đến 9h");
-      return;
-    };
-    _fetchStudentInfo();
+       _fetchStudentInfo();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bool ok = await _checkGpsAndPermissions(context);
       if (!ok) {
@@ -84,30 +80,36 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
 //       note: "Hết hạn điểm danh - ghi tự động",
 //     );
 //   }
-//   void _setupDeadlineTimerForToday() {
-//     final now = DateTime.now();
-//     final deadline = DateTime(
-//       now.year,
-//       now.month,
-//       now.day,
-//       CHECKIN_END_HOUR,
-//       0,
-//     );
-//     if (now.isAfter(deadline)){
-//       // đã quá hạn hôm nay
-//       if (!hasCheckedIn) {
-//         _autoSaveNotChecked();
-//       }
-//       return;
-//     }
-//     final duration = deadline.difference(now);
-//     _deadlineTimer?.cancel();
-//     _deadlineTimer = Timer(duration, () async {
-//       if (!hasCheckedIn) {
-//         await _autoSaveNotChecked();
-//       }
-//     });
-//   }
+  void _setupDeadlineTimerForToday() {
+    final now = DateTime.now();
+    final deadline = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      CHECKIN_END_HOUR,
+      0,
+    );
+    if (now.isAfter(deadline)){
+      // đã quá hạn hôm nay
+      if (!hasCheckedIn) {
+        //_autoSaveNotChecked();
+      setState(() {
+      statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
+        });
+      }
+      return;
+    }
+    final duration = deadline.difference(now);
+    _deadlineTimer?.cancel();
+    _deadlineTimer = Timer(duration, () async {
+      if (!hasCheckedIn) {
+        //await _autoSaveNotChecked();
+        setState(() {
+          statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
+        });
+      }
+    });
+  }
 
   // Kiểm tra thời gian hợp lệ
   bool _isWithinTimeWindow() {
