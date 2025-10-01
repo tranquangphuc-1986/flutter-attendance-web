@@ -30,10 +30,10 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   String studentName = "";
   String studentPhone = "";
   String studentClass = "";
-
+  String uID = "";
   Timer? _deadlineTimer;
-  final int CHECKIN_START_HOUR = 7; // 07:00
-  final int CHECKIN_END_HOUR = 11; // 09:00
+  final int CHECKIN_START_HOUR = 0; // 07:00
+  final int CHECKIN_END_HOUR = 23; // 09:00
 
   @override
   void initState() {
@@ -233,6 +233,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       setState(() {
         studentName = doc['name'];
         studentPhone = doc['phone'];
+        uID = doc['uid'];
       });
     } catch (_) {
       // Ignore - có thể offline hoặc endpoint khác
@@ -385,8 +386,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     String? note,
   }) async {
     try{
-      final phoneValue = studentPhone.isNotEmpty ? studentPhone : widget.phone;
-      final docId = _getDocId(phoneValue);
+     final phoneValue = studentPhone.isNotEmpty ? studentPhone : widget.phone;
+     final docId = _getDocId(phoneValue);
     await FirebaseFirestore.instance
         .collection("attendanceqr")
         //.doc("${widget.phone}_${DateTime.now().toIso8601String()}")
