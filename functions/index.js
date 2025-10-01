@@ -36,9 +36,10 @@ exports.autoMarkNotChecked = functions.pubsub
           status: "NOT_CHECKED",
           note: "Quá giờ điểm danh",
           method: "AUTO",
-          date: admin.firestore.Timestamp.now(),
+          timestamp: admin.firestore.Timestamp.now(),
         });
       }
+
     }
 
     console.log("✅ Đã cập nhật trạng thái NOT_CHECKED cho các sinh viên chưa điểm danh");
