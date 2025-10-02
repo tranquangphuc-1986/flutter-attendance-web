@@ -47,6 +47,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
     <string>Ứng dụng cần sử dụng camera để quét mã QR.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Ứng dụng cần truy cập ảnh để chọn mã QR từ album.</string>
 
 </dict>
 </plist>

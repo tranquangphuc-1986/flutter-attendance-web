@@ -78,6 +78,15 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       CHECKIN_END_HOUR,
       0,
     );
+
+    //Kiểm tra thứ 7, chủ nhật
+    if(now.weekday>=6){
+      setState(() {
+        statusMessage = "⏰ Thứ 7 và Chủ nhật không điểm danh'.";
+      });
+      return;
+    }
+
     if (now.isAfter(deadline)){
       // đã quá hạn hôm nay
       if (!hasCheckedIn) {
