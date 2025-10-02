@@ -39,21 +39,21 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   void initState() {
     super.initState();
     _setupDeadlineTimerForToday();
-    //_checkGpsAndPermissions(context);
+    _checkGpsAndPermissions(context);
     _fetchStudentInfo();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      bool ok = await _checkGpsAndPermissions(context);
-      if (!ok) {
-        // Nếu thiếu quyền -> thoát hoặc show cảnh báo
-        setState(() {
-          statusMessage = "Cần quyền Camera + GPS để điểm danh.";
-        });
-      } else {
-        setState(() {
-          statusMessage = "Sẵn sàng quét QR để điểm danh.";
-        });
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   bool ok = await _checkGpsAndPermissions(context);
+    //   if (!ok) {
+    //     // Nếu thiếu quyền -> thoát hoặc show cảnh báo
+    //     setState(() {
+    //       statusMessage = "Cần quyền Camera + GPS để điểm danh.";
+    //     });
+    //   } else {
+    //     setState(() {
+    //       statusMessage = "Sẵn sàng quét QR để điểm danh.";
+    //     });
+    //   }
+    // });
   }
 
   @override
@@ -179,33 +179,34 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       await openAppSettings();
       return false;
     }
-    if (!status.isGranted) {
-      return false; // Không có quyền và GPS
-    }
-    // if (status.isGranted) {
-    //   return true; // Có quyền và GPS bật
-    // }
-    // return false;
 
-    // 3. Kiểm tra quyền Camera
-    var camStatus = await Permission.camera.status;
-    if (camStatus.isDenied) {
-      camStatus = await Permission.camera.request();
+    if (status.isGranted) {
+      return true; // Có quyền và GPS bật
     }
-    if (camStatus.isPermanentlyDenied) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Quyền Camera bị chặn vĩnh viễn. Vui lòng bật lại trong Cài đặt."),
-        ),
-      );
-      await openAppSettings();
-      return false;
-    }
-    if (!camStatus.isGranted) {
-      return false;
-    }
-    // Nếu cả GPS & Camera đều OK
-    return true;
+    return false;
+
+    // if (!status.isGranted) {
+    //   return false; // Không có quyền và GPS
+    // }
+    // // 3. Kiểm tra quyền Camera
+    // var camStatus = await Permission.camera.status;
+    // if (camStatus.isDenied) {
+    //   camStatus = await Permission.camera.request();
+    // }
+    // if (camStatus.isPermanentlyDenied) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(
+    //       content: Text("Quyền Camera bị chặn vĩnh viễn. Vui lòng bật lại trong Cài đặt."),
+    //     ),
+    //   );
+    //   await openAppSettings();
+    //   return false;
+    // }
+    // if (!camStatus.isGranted) {
+    //   return false;
+    // }
+    // // Nếu cả GPS & Camera đều OK
+    // return true;
   }
 
   Future<void> _fetchStudentInfo() async {
