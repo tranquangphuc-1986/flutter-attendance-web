@@ -80,9 +80,9 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     );
 
     //Kiểm tra thứ 7, chủ nhật
-    if(now.weekday>=3){
+    if(now.weekday>=4){
       setState(() {
-        statusMessage = "⏰ Thứ 7 và Chủ nhật không điểm danh'.";
+        statusMessage = "⏰ Thứ 7 và Chủ nhật không điểm danh.";
       });
       return;
     }
@@ -112,7 +112,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     final now = DateTime.now();
     final start = DateTime(now.year, now.month, now.day, CHECKIN_START_HOUR, 0);
     final end = DateTime(now.year, now.month, now.day, CHECKIN_END_HOUR, 0);
-    return !now.isBefore(start) && !now.isAfter(end);
+
+    return !now.isBefore(start) && !now.isAfter(end) && (now.weekday >= 1 && now.weekday <= 4);
   }
 
   //Kiem tra GPS
@@ -308,7 +309,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       }
 
       if (!_isWithinTimeWindow()) {
-        _showAlert("Ngoài khung giờ điểm danh", "Chỉ được điểm danh từ 7h đến 9h");
+        _showAlert("Ngoài khung giờ điểm danh.", "Khung giờ điểm danh: 7h - 9h từ Thứ 2 - Thứ 6.");
         return;
       }
       // Lấy vị trí điện thoại
@@ -433,7 +434,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   // Manual chọn trạng thái còn lại (ngoài Có mặt)
   Future<void> _onManualStatus(String statusLabel) async {
     if (!_isWithinTimeWindow()) {
-      _showAlert("Ngoài khung giờ điểm danh", "Chỉ được điểm danh từ 7h đến 9h");
+      _showAlert("Ngoài khung giờ điểm danh.", "Khung giờ điểm danh: 7h - 9h từ Thứ 2 - Thứ 6.");
       return;
     }
     // Confirm dialog
