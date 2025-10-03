@@ -105,7 +105,7 @@ class AuthService {
      await initDeviceId();
     //await getHashedDeviceId();
     final uid = _auth.currentUser!.uid;
-    final userDoc = _db.collection("users").doc(uid);
+    final userDoc = _db.collection("usersPhone").doc(uid);
     final snapshot = await userDoc.get();
 
     if (snapshot.exists) {
