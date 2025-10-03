@@ -80,7 +80,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     );
 
     //Kiểm tra thứ 7, chủ nhật
-    if(now.weekday>=4){
+    if(now.weekday>=5){
       setState(() {
         statusMessage = "⏰ Thứ 7 và Chủ nhật không điểm danh.";
       });
@@ -113,7 +113,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     final start = DateTime(now.year, now.month, now.day, CHECKIN_START_HOUR, 0);
     final end = DateTime(now.year, now.month, now.day, CHECKIN_END_HOUR, 0);
 
-    return !now.isBefore(start) && !now.isAfter(end) && (now.weekday >= 1 && now.weekday <= 4);
+    return !now.isBefore(start) && !now.isAfter(end) && (now.weekday >= 1 && now.weekday <= 5);
   }
 
   //Kiem tra GPS
