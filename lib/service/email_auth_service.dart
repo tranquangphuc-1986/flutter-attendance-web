@@ -8,45 +8,7 @@ class AuthService{
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// Lấy ID thiết bị và có mã hóa (Android/iOS/Web)
-  String? verificationId;
-  String? deviceId;
-  Future<void> initDeviceId() async {
-    final deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      final info = await deviceInfo.androidInfo;
-      deviceId = info.id;
-    } else if (Platform.isIOS) {
-      final info = await deviceInfo.iosInfo;
-      deviceId = info.identifierForVendor;
-    }
-  }
-  /// Xử lý đăng nhập thành công + Device Binding
-  Future<void> handleLoginSuccess(String email) async {
-    await initDeviceId();
-    //await getHashedDeviceId();
-    final uid = _auth.currentUser!.uid;
-    final userDoc = _firestore.collection("userLogin").doc(uid);
-    final snapshot = await userDoc.get();
-    if (snapshot.exists) {
-      // user đã có trong database
-      final List<dynamic> devices = snapshot['deviceIds'] ?? [];
-      if (!devices.contains(deviceId)) {
-        // Thiết bị mới
-        await userDoc.update({
-          "deviceIds": FieldValue.arrayUnion([deviceId])
-        });
-      }
-    } else {
-      // Tạo user mới
-      await userDoc.set({
-        "email": email,
-        "deviceIds": [deviceId],
-      });
-    }
-  }
-
-  Future<String>signUpUser({
+    Future<String>signUpUser({
     required String email,
     required String password,
     required String name,
@@ -93,7 +55,6 @@ class AuthService{
           password: password,
         );
         res="Thành công";
-        await handleLoginSuccess(email);
       }else{
         res="Thất bại";
       }
