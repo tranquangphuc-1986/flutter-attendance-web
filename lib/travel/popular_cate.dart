@@ -192,7 +192,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginPhoneScreen(),//HomeScreenCAX(),
+                          builder: (context) => HomeScreenCAX(),
                         ),
                       );
                     },
