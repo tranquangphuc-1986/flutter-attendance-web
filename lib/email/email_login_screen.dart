@@ -71,65 +71,53 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     final digest = sha1.convert(bytes);
     return digest.toString();
   }
-
-  /// Xử lý đăng nhập thành công + Device Binding
+  /// Xử lý đăng nhập thành công + Giới hạn 1 thiết bị
   // Future<void> handleLoginSuccess(String email) async {
-  //   //await initDeviceId();
-  //   await getHashedDeviceId();
-  //   final uid = _auth.currentUser!.uid;
-  //   final userDoc = _firestore.collection("userLogin").doc(uid);
-  //   final snapshot = await userDoc.get();
-  //
-  //   if (snapshot.exists) {
-  //     // user đã có trong database
-  //     final List<dynamic> devices = snapshot['deviceIds'] ?? [];
-  //     if (!devices.contains(deviceId)) {
-  //       // Thiết bị mới
-  //       await userDoc.update({
-  //         "deviceIds": FieldValue.arrayUnion([deviceId]),
-  //       });
-  //     }
-  //   } else {
-  //     // Tạo user mới
-  //     await userDoc.set({
-  //       "email": emailController.text,
-  //       "deviceIds": [deviceId],
-  //     });
-  //   }
-  // }
-
-  /// Xử lý đăng nhập thành công + Device Binding
-  // Future<void> handleLoginSuccess(String email) async {
-  //   // Lấy hashed device ID
   //   final hashedDeviceId = await getHashedDeviceId();
-  //   deviceId = hashedDeviceId; //Đảm bảo deviceId có giá trị trước khi dùng
+  //   deviceId = hashedDeviceId;
   //
   //   final uid = _auth.currentUser!.uid;
   //   final userDoc = _firestore.collection("userLogin").doc(uid);
   //   final snapshot = await userDoc.get();
   //
   //   if (snapshot.exists) {
-  //     // user đã có trong database
-  //     final data = snapshot.data() ?? {}; //Lấy map dữ liệu, tránh lỗi khi field chưa tồn tại
+  //     final data = snapshot.data() ?? {};
   //     final List<dynamic> devices =
   //     (data['deviceIds'] is List) ? List.from(data['deviceIds']) : [];
-  //     // Thiết bị mới
+  //
+  //     // 🔒 Nếu tài khoản đã liên kết thiết bị khác → chặn đăng nhập
+  //     if (devices.isNotEmpty && !devices.contains(deviceId)) {
+  //       // Xuất thông báo chặn
+  //       showSnackBAR(context,
+  //           "Tài khoản này đã được đăng nhập trên thiết bị khác. Vui lòng đăng xuất thiết bị cũ trước.");
+  //       await _auth.signOut();
+  //       return;
+  //     }
+  //
+  //     // Nếu chưa có device hoặc cùng thiết bị → cho phép đăng nhập
   //     if (!devices.contains(deviceId)) {
   //       await userDoc.set({
-  //         "deviceIds": FieldValue.arrayUnion([deviceId]), //Tự động thêm phần tử vào mảng, không bị trùng
-  //       }, SetOptions(merge: true)); //Giúp không ghi đè các field khác của user
+  //         "deviceIds": FieldValue.arrayUnion([deviceId]),
+  //       }, SetOptions(merge: true));
   //     }
   //   } else {
-  //     // user mới -> tạo document
+  //     // 🔰 user mới → tạo mới với device hiện tại
   //     await userDoc.set({
   //       "email": emailController.text.trim(),
   //       "deviceIds": [deviceId],
   //       "createdAt": FieldValue.serverTimestamp(),
   //     });
   //   }
+  //
+  //   // 👉 Nếu hợp lệ thì cho vào trang chính
+  //   showSnackBAR(context, "Đăng nhập thành công!");
+  //   Navigator.pushReplacement(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => MyPage()),
+  //   );
   // }
 
-  /// Xử lý đăng nhập thành công + Giới hạn 1 thiết bị
+  /// Xử lý đăng nhập thành công + Giới hạn 1 tài khoản / 1 thiết bị
   Future<void> handleLoginSuccess(String email) async {
     final hashedDeviceId = await getHashedDeviceId();
     deviceId = hashedDeviceId;
@@ -138,28 +126,46 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     final userDoc = _firestore.collection("userLogin").doc(uid);
     final snapshot = await userDoc.get();
 
+    // 🔍 Kiểm tra xem deviceId này đã tồn tại ở tài khoản khác chưa
+    final existingDevice = await _firestore
+        .collection("userLogin")
+        .where("deviceIds", arrayContains: deviceId)
+        .get();
+
+    if (existingDevice.docs.isNotEmpty) {
+      final otherUserId = existingDevice.docs.first.id;
+      if (otherUserId != uid) {
+        // ❌ Thiết bị này đã đăng nhập tài khoản khác
+        showSnackBAR(
+            context,
+            "Thiết bị này đã được sử dụng để đăng nhập tài khoản khác. "
+                "Vui lòng đăng xuất tài khoản đó trước khi tiếp tục.");
+        await _auth.signOut();
+        return;
+      }
+    }
+
+    // ✅ Kiểm tra tài khoản này có đăng nhập trên thiết bị khác không
     if (snapshot.exists) {
       final data = snapshot.data() ?? {};
       final List<dynamic> devices =
       (data['deviceIds'] is List) ? List.from(data['deviceIds']) : [];
 
-      // 🔒 Nếu tài khoản đã liên kết thiết bị khác → chặn đăng nhập
       if (devices.isNotEmpty && !devices.contains(deviceId)) {
-        // Xuất thông báo chặn
         showSnackBAR(context,
-            "Tài khoản này đã được đăng nhập trên thiết bị khác. Vui lòng đăng xuất thiết bị cũ trước.");
+            "Tài khoản này đã đăng nhập trên thiết bị khác. Vui lòng đăng xuất thiết bị cũ trước.");
         await _auth.signOut();
         return;
       }
 
-      // Nếu chưa có device hoặc cùng thiết bị → cho phép đăng nhập
+      // Nếu chưa có deviceId hoặc cùng thiết bị → cho phép login
       if (!devices.contains(deviceId)) {
         await userDoc.set({
           "deviceIds": FieldValue.arrayUnion([deviceId]),
         }, SetOptions(merge: true));
       }
     } else {
-      // 🔰 user mới → tạo mới với device hiện tại
+      // 🔰 User mới → tạo mới
       await userDoc.set({
         "email": emailController.text.trim(),
         "deviceIds": [deviceId],
@@ -174,7 +180,6 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       MaterialPageRoute(builder: (context) => MyPage()),
     );
   }
-
 
 
   void _login() async {
