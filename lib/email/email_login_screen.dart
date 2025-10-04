@@ -196,10 +196,10 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       });
       await handleLoginSuccess(emailController.text);
       showSnackBAR(context, "Đăng nhập thành công!");
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MyPage()),
-      );
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => MyPage()),
+      // );
     } else {
       setState(() {
         isLoading = false;
