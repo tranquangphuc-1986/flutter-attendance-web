@@ -71,51 +71,6 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     final digest = sha1.convert(bytes);
     return digest.toString();
   }
-  /// Xử lý đăng nhập thành công + Giới hạn 1 thiết bị
-  // Future<void> handleLoginSuccess(String email) async {
-  //   final hashedDeviceId = await getHashedDeviceId();
-  //   deviceId = hashedDeviceId;
-  //
-  //   final uid = _auth.currentUser!.uid;
-  //   final userDoc = _firestore.collection("userLogin").doc(uid);
-  //   final snapshot = await userDoc.get();
-  //
-  //   if (snapshot.exists) {
-  //     final data = snapshot.data() ?? {};
-  //     final List<dynamic> devices =
-  //     (data['deviceIds'] is List) ? List.from(data['deviceIds']) : [];
-  //
-  //     // 🔒 Nếu tài khoản đã liên kết thiết bị khác → chặn đăng nhập
-  //     if (devices.isNotEmpty && !devices.contains(deviceId)) {
-  //       // Xuất thông báo chặn
-  //       showSnackBAR(context,
-  //           "Tài khoản này đã được đăng nhập trên thiết bị khác. Vui lòng đăng xuất thiết bị cũ trước.");
-  //       await _auth.signOut();
-  //       return;
-  //     }
-  //
-  //     // Nếu chưa có device hoặc cùng thiết bị → cho phép đăng nhập
-  //     if (!devices.contains(deviceId)) {
-  //       await userDoc.set({
-  //         "deviceIds": FieldValue.arrayUnion([deviceId]),
-  //       }, SetOptions(merge: true));
-  //     }
-  //   } else {
-  //     // 🔰 user mới → tạo mới với device hiện tại
-  //     await userDoc.set({
-  //       "email": emailController.text.trim(),
-  //       "deviceIds": [deviceId],
-  //       "createdAt": FieldValue.serverTimestamp(),
-  //     });
-  //   }
-  //
-  //   // 👉 Nếu hợp lệ thì cho vào trang chính
-  //   showSnackBAR(context, "Đăng nhập thành công!");
-  //   Navigator.pushReplacement(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => MyPage()),
-  //   );
-  // }
 
   /// Xử lý đăng nhập thành công + Giới hạn 1 tài khoản / 1 thiết bị
   Future<void> handleLoginSuccess(String email) async {
@@ -172,7 +127,6 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         "createdAt": FieldValue.serverTimestamp(),
       });
     }
-
     // 👉 Nếu hợp lệ thì cho vào trang chính
     showSnackBAR(context, "Đăng nhập thành công!");
     Navigator.pushReplacement(
@@ -181,25 +135,20 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     );
   }
 
-
   void _login() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => isLoading = true);
+
     final result = await _authService.loginUser(
-      email: emailController.text,
-      password: passwordController.text,
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
     );
-    if ((result == "Thành công") & (_formKey.currentState!.validate())) {
-      setState(() {
-        isLoading = false;
-      });
-      await handleLoginSuccess(emailController.text);
-      showSnackBAR(context, "Đăng nhập thành công!");
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => MyPage()),
-      // );
+
+    setState(() => isLoading = false);
+
+    if (result == "Thành công") {
+      // ✅ Chuyển trách nhiệm điều hướng cho handleLoginSuccess
+      await handleLoginSuccess(emailController.text.trim());
     } else {
       setState(() {
         isLoading = false;
@@ -208,12 +157,44 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Đăng nhập $result"),
-          duration: const Duration(seconds: 2),
           backgroundColor: Colors.red,
+          duration: const Duration(seconds: 2),
         ),
       );
     }
   }
+    // void _login() async {
+    // setState(() {
+    //   isLoading = true;
+    // });
+    // final result = await _authService.loginUser(
+    //   email: emailController.text,
+    //   password: passwordController.text,
+    // );
+    // if ((result == "Thành công") & (_formKey.currentState!.validate())) {
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    //   await handleLoginSuccess(emailController.text);
+    //   //showSnackBAR(context, "Đăng nhập thành công!");
+    //   // Navigator.pushReplacement(
+    //   //   context,
+    //   //   MaterialPageRoute(builder: (context) => MyPage()),
+    //   // );
+    // } else {
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    //   // Thông báo đăng nhập thất bại
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text("Đăng nhập $result"),
+    //       duration: const Duration(seconds: 2),
+    //       backgroundColor: Colors.red,
+    //     ),
+    //   );
+    // }
+   // }
 
   @override
   Widget build(BuildContext context) {
