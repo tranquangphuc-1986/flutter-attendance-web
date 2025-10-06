@@ -50,15 +50,22 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
     try {
       if (kIsWeb) {
-        // 👉 Web: không có hardware id cố định, nên tạo ID ngẫu nhiên lưu lại
-        rawId = "web_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey()}";
-        // // 👉 Web không hỗ trợ Platform, nên dùng WebBrowserInfo. Và dùng ID thiet bị cố định (app mobile)
+
+        // Cách 1: 👉 Web: không có hardware id cố định, nên tạo ID ngẫu nhiên lưu lại
+        final webInfo = await deviceInfo.webBrowserInfo;
+        // Dựa vào đặc trưng hệ thống để tạo ID ổn định giữa các browser
+        rawId =
+        "${webInfo.vendor ?? "web"}-${webInfo.platform ?? "unknown"}-${DateTime.now().timeZoneName}-${Platform.operatingSystemVersion}";
+
+        // Cách 2 👉 Web không hỗ trợ Platform, nên dùng WebBrowserInfo. Và dùng ID thiet bị cố định (app mobile)
         // final webInfo = await deviceInfo.webBrowserInfo;
         // rawId =
-        //     "${webInfo.vendor ?? "web"}-${webInfo.userAgent ?? "unknown"}-${webInfo.hardwareConcurrency ?? 0}";
+        // "${webInfo.vendor ?? "web"}-${webInfo.userAgent ?? "unknown"}-${webInfo.hardwareConcurrency ?? 0}";
+
       } else if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
-        rawId = "${androidInfo.id ?? androidInfo.device}";
+       // rawId = "${androidInfo.id ?? androidInfo.device}";
+        rawId = "${androidInfo.id}-${androidInfo.device}-${androidInfo.model}";
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfo.iosInfo;
         rawId = iosInfo.identifierForVendor ?? "unknown_ios";
@@ -71,6 +78,8 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       } else if (Platform.isMacOS) {
         final macInfo = await deviceInfo.macOsInfo;
         rawId = macInfo.systemGUID ?? "unknown_macos";
+      } else {
+        rawId = "unknown_platform_${DateTime.now().millisecondsSinceEpoch}";
       }
     } catch (e) {
       rawId = "error_${e.toString()}";
