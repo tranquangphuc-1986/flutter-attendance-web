@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/service/email_auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EmailLoginScreen extends StatefulWidget {
   const EmailLoginScreen({super.key});
@@ -38,14 +39,23 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
   /// ✅ Trả về SHA-1 hash của DeviceId (Web + Android + iOS)
   static Future<String> getHashedDeviceId() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // 🔹 Nếu đã có deviceId lưu cục bộ => dùng lại để đảm bảo ổn định
+    final savedId = prefs.getString('cached_device_id');
+    if (savedId != null) return savedId;
+
     String rawId = "unknown_device";
     final deviceInfo = DeviceInfoPlugin();
+
     try {
       if (kIsWeb) {
-        // 👉 Web không hỗ trợ Platform, nên dùng WebBrowserInfo
-        final webInfo = await deviceInfo.webBrowserInfo;
-        rawId =
-            "${webInfo.vendor ?? "web"}-${webInfo.userAgent ?? "unknown"}-${webInfo.hardwareConcurrency ?? 0}";
+        // 👉 Web: không có hardware id cố định, nên tạo ID ngẫu nhiên lưu lại
+        rawId = "web_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey()}";
+        // // 👉 Web không hỗ trợ Platform, nên dùng WebBrowserInfo. Và dùng ID thiet bị cố định (app mobile)
+        // final webInfo = await deviceInfo.webBrowserInfo;
+        // rawId =
+        //     "${webInfo.vendor ?? "web"}-${webInfo.userAgent ?? "unknown"}-${webInfo.hardwareConcurrency ?? 0}";
       } else if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
         rawId = "${androidInfo.id ?? androidInfo.device}";
@@ -69,7 +79,10 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     // Hash SHA-1 để ngắn gọn và an toàn
     final bytes = utf8.encode(rawId);
     final digest = sha1.convert(bytes);
-    return digest.toString();
+    final hashedId = digest.toString();
+    // 🔒 Lưu lại để dùng cho lần sau
+    await prefs.setString('cached_device_id', hashedId);
+    return hashedId;
   }
 
   /// Xử lý đăng nhập thành công + Giới hạn 1 tài khoản / 1 thiết bị
@@ -106,12 +119,12 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       final List<dynamic> devices =
       (data['deviceIds'] is List) ? List.from(data['deviceIds']) : [];
 
-      // if (devices.isNotEmpty && !devices.contains(deviceId)) {
-      //   showSnackBAR(context,
-      //       "Tài khoản này đã đăng nhập trên thiết bị khác. Vui lòng đăng xuất thiết bị cũ trước.");
-      //   await _auth.signOut();
-      //   return;
-      // }
+      if (devices.isNotEmpty && !devices.contains(deviceId)) {
+        showSnackBAR(context,
+            "Tài khoản này đã đăng nhập trên thiết bị khác. Vui lòng đăng xuất thiết bị cũ trước.");
+        await _auth.signOut();
+        return;
+      }
 
       // Nếu chưa có deviceId hoặc cùng thiết bị → cho phép login
       if (!devices.contains(deviceId)) {
