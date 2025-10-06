@@ -106,12 +106,12 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       final List<dynamic> devices =
       (data['deviceIds'] is List) ? List.from(data['deviceIds']) : [];
 
-      if (devices.isNotEmpty && !devices.contains(deviceId)) {
-        showSnackBAR(context,
-            "Tài khoản này đã đăng nhập trên thiết bị khác. Vui lòng đăng xuất thiết bị cũ trước.");
-        await _auth.signOut();
-        return;
-      }
+      // if (devices.isNotEmpty && !devices.contains(deviceId)) {
+      //   showSnackBAR(context,
+      //       "Tài khoản này đã đăng nhập trên thiết bị khác. Vui lòng đăng xuất thiết bị cũ trước.");
+      //   await _auth.signOut();
+      //   return;
+      // }
 
       // Nếu chưa có deviceId hoặc cùng thiết bị → cho phép login
       if (!devices.contains(deviceId)) {
