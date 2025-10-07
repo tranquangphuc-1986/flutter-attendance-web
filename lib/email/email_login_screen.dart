@@ -115,8 +115,11 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       if (kIsWeb) {
         // 👉 Web không có hardware ID — tạo fingerprint ổn định bằng thông tin hệ thống
         final webInfo = await deviceInfo.webBrowserInfo;
+       // rawId =
+       // "${webInfo.platform ?? 'web'}|${webInfo.hardwareConcurrency ?? 0}|${webInfo.maxTouchPoints ?? 0}|${webInfo.vendor ?? 'vendor'}|${Uri.base.host}";
         rawId =
-        "${webInfo.platform ?? 'web'}|${webInfo.hardwareConcurrency ?? 0}|${webInfo.maxTouchPoints ?? 0}|${webInfo.vendor ?? 'vendor'}|${Uri.base.host}";
+          "${webInfo.vendor ?? "web"}-${webInfo.userAgent ?? "unknown"}-${webInfo.hardwareConcurrency ?? 0}";
+
         // rawId =
         // "${webInfo.vendor ?? 'web'}|${webInfo.platform ?? 'unknown'}|"
         //     "${webInfo.userAgent ?? 'ua'}|${webInfo.hardwareConcurrency ?? 0}|"
@@ -128,7 +131,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfo.iosInfo;
         rawId =
-        "${iosInfo.identifierForVendor ?? 'ios_unknown'}|${iosInfo.name}|${iosInfo.systemName}";
+        "${iosInfo.identifierForVendor ?? 'ios_unknown'}"; // |${iosInfo.name}|${iosInfo.systemName}";
       } else if (Platform.isWindows) {
         final winInfo = await deviceInfo.windowsInfo;
         rawId =
@@ -153,10 +156,27 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
     // 💾 Lưu lại vào local cache để tái sử dụng lần sau
     await prefs.setString('cached_device_id', hashedId);
-
     return hashedId;
   }
 
+  /// 🧹 Xóa cache DeviceId (khi đăng xuất hoặc reset ứng dụng)
+  Future<void> resetDeviceId() async {
+    try {
+      if (kIsWeb) {
+        // 👉 Với web, xóa localStorage thủ công
+        // ignore: undefined_prefixed_name
+        // Dùng js interop nếu cần, nhưng shared_preferences_web xử lý rồi
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('cached_device_id');
+      } else {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('cached_device_id');
+      }
+      debugPrint("✅ Device ID cache cleared successfully");
+    } catch (e) {
+      debugPrint("⚠️ Error clearing device ID cache: $e");
+    }
+  }
 
   /// Xử lý đăng nhập thành công + Giới hạn 1 tài khoản / 1 thiết bị
   Future<void> handleLoginSuccess(String email) async {

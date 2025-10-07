@@ -1,3 +1,4 @@
+import 'package:app_02/email/email_login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -61,9 +62,11 @@ class AuthService{
    }
     return res;
   }
+
 Future<void> signOut()async{
    await _auth.signOut();
-  }
+     }
+
   //Cập nhật lại Mật khẩu
   Future<void> updatePassword(String email, String newPassword) async {
     final userRef = FirebaseFirestore.instance.collection('userLogin');
