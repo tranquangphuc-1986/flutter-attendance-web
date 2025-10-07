@@ -116,9 +116,11 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         // 👉 Web không có hardware ID — tạo fingerprint ổn định bằng thông tin hệ thống
         final webInfo = await deviceInfo.webBrowserInfo;
         rawId =
-        "${webInfo.vendor ?? 'web'}|${webInfo.platform ?? 'unknown'}|"
-            "${webInfo.userAgent ?? 'ua'}|${webInfo.hardwareConcurrency ?? 0}|"
-            "${DateTime.now().timeZoneName}";
+        "${webInfo.platform ?? 'web'}|${webInfo.hardwareConcurrency ?? 0}|${webInfo.maxTouchPoints ?? 0}|${webInfo.vendor ?? 'vendor'}|${Uri.base.host}";
+        // rawId =
+        // "${webInfo.vendor ?? 'web'}|${webInfo.platform ?? 'unknown'}|"
+        //     "${webInfo.userAgent ?? 'ua'}|${webInfo.hardwareConcurrency ?? 0}|"
+        //     "${DateTime.now().timeZoneName}";
       } else if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
         rawId =
@@ -154,7 +156,6 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
     return hashedId;
   }
-
 
 
   /// Xử lý đăng nhập thành công + Giới hạn 1 tài khoản / 1 thiết bị
