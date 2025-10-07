@@ -35,66 +35,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   /// Lấy ID thiết bị và có mã hóa (Android/iOS/Web)
-  String? verificationId;
-  String? deviceId;
-
-  // /// ✅ Trả về SHA-1 hash của DeviceId (Web + Android + iOS)
-  // static Future<String> getHashedDeviceId() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //
-  //   // 🔹 Nếu đã có deviceId lưu cục bộ => dùng lại để đảm bảo ổn định
-  //   final savedId = prefs.getString('cached_device_id');
-  //   if (savedId != null) return savedId;
-  //
-  //   String rawId = "unknown_device";
-  //   final deviceInfo = DeviceInfoPlugin();
-  //
-  //   try {
-  //     if (kIsWeb) {
-  //
-  //       // Cách 1: 👉 Web: không có hardware id cố định, nên tạo ID ngẫu nhiên lưu lại
-  //       final webInfo = await deviceInfo.webBrowserInfo;
-  //       // Dựa vào đặc trưng hệ thống để tạo ID ổn định giữa các browser
-  //       rawId =
-  //       "${webInfo.vendor ?? "web"}-${webInfo.platform ?? "unknown"}-${DateTime.now().timeZoneName}-${Platform.operatingSystemVersion}";
-  //
-  //       // Cách 2 👉 Web không hỗ trợ Platform, nên dùng WebBrowserInfo. Và dùng ID thiet bị cố định (app mobile)
-  //       // final webInfo = await deviceInfo.webBrowserInfo;
-  //       // rawId =
-  //       // "${webInfo.vendor ?? "web"}-${webInfo.userAgent ?? "unknown"}-${webInfo.hardwareConcurrency ?? 0}";
-  //
-  //     } else if (Platform.isAndroid) {
-  //       final androidInfo = await deviceInfo.androidInfo;
-  //      // rawId = "${androidInfo.id ?? androidInfo.device}";
-  //       rawId = "${androidInfo.id}-${androidInfo.device}-${androidInfo.model}";
-  //     } else if (Platform.isIOS) {
-  //       final iosInfo = await deviceInfo.iosInfo;
-  //       rawId = iosInfo.identifierForVendor ?? "unknown_ios";
-  //     } else if (Platform.isWindows) {
-  //       final winInfo = await deviceInfo.windowsInfo;
-  //       rawId = winInfo.deviceId;
-  //     } else if (Platform.isLinux) {
-  //       final linuxInfo = await deviceInfo.linuxInfo;
-  //       rawId = linuxInfo.machineId ?? "unknown_linux";
-  //     } else if (Platform.isMacOS) {
-  //       final macInfo = await deviceInfo.macOsInfo;
-  //       rawId = macInfo.systemGUID ?? "unknown_macos";
-  //     } else {
-  //       rawId = "unknown_platform_${DateTime.now().millisecondsSinceEpoch}";
-  //     }
-  //   } catch (e) {
-  //     rawId = "error_${e.toString()}";
-  //   }
-  //
-  //   // Hash SHA-1 để ngắn gọn và an toàn
-  //   final bytes = utf8.encode(rawId);
-  //   final digest = sha1.convert(bytes);
-  //   final hashedId = digest.toString();
-  //   // 🔒 Lưu lại để dùng cho lần sau
-  //   await prefs.setString('cached_device_id', hashedId);
-  //   return hashedId;
-  // }
-
+   String? deviceId;
 
   /// ✅ Hàm lấy DeviceId duy nhất (Web + Android + iOS + Desktop)
   ///   - Tự động lưu cache vào SharedPreferences để tái sử dụng.
@@ -116,34 +57,21 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       if (kIsWeb) {
         // 👉 Web không có hardware ID — tạo fingerprint ổn định bằng thông tin hệ thống
         final webInfo = await deviceInfo.webBrowserInfo;
-       // 1. Code 1
-       //  rawId =
-       // "${webInfo.platform ?? 'web'}|${webInfo.hardwareConcurrency ?? 0}|${webInfo.maxTouchPoints ?? 0}|${webInfo.vendor ?? 'vendor'}|${Uri.base.host}";
-       //  2. Code 2
-       //  rawId =
-       //    "${webInfo.vendor ?? "web"}-${webInfo.userAgent ?? "unknown"}-${webInfo.hardwareConcurrency ?? 0}";
-        // rawId =
-        // "${webInfo.vendor ?? 'web'}|${webInfo.platform ?? 'unknown'}|"
-        //     "${webInfo.userAgent ?? 'ua'}|${webInfo.hardwareConcurrency ?? 0}|"
-        //     "${DateTime.now().timeZoneName}";
-        // rawId =
-        // "web_${webInfo.vendor ?? 'unknown'}_${webInfo.hardwareConcurrency ?? 0}_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey()}";
+        //  rawId =
+        //    "${webInfo.vendor ?? "web"}-${webInfo.userAgent ?? "unknown"}-${webInfo.hardwareConcurrency ?? 0}";
         // 🧩 Tạo fingerprint ổn định giữa các trình duyệt trên cùng thiết bị
-
-        final width = html.window.screen?.width ?? 0;
-        final height = html.window.screen?.height ?? 0;
-        final pixelRatio = html.window.devicePixelRatio;
-
+        final width = html.window.screen?.width ?? 0; //Lấy độ phân giải màn hình (theo pixel) của thiết bị
+        final height = html.window.screen?.height ?? 0; //Lấy độ phân giải màn hình (theo pixel) của thiết bị
+        final pixelRatio = html.window.devicePixelRatio; //Lấy tỷ lệ mật độ điểm ảnh (device pixel ratio)
+        //Ghép lại tạp thành 1 ID riêng
         rawId =
         "web_${webInfo.platform ?? 'web'}_${webInfo.vendor ?? 'unknown'}_${webInfo.hardwareConcurrency ?? 0}_${webInfo.maxTouchPoints ?? 0}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}";
       } else if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
-        rawId =
-        "${androidInfo.id}|${androidInfo.device}|${androidInfo.model}|${androidInfo.manufacturer}";
-       // rawId = "${androidInfo.id}_${androidInfo.device}_${androidInfo.serialNumber ?? ''}";
-      } else if (Platform.isIOS) {
+        rawId = "${androidInfo.id}_${androidInfo.model}_${androidInfo.device}_${androidInfo.manufacturer}_${androidInfo.serialNumber ?? ''}";
+         } else if (Platform.isIOS) {
         final iosInfo = await deviceInfo.iosInfo;
-        rawId = iosInfo.identifierForVendor ?? 'ios_unknown';
+        rawId = "${iosInfo.identifierForVendor}_${iosInfo.model}_${iosInfo.systemName}";
       } else if (Platform.isWindows) {
         final winInfo = await deviceInfo.windowsInfo;
         rawId =
