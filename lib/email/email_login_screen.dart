@@ -115,23 +115,27 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       if (kIsWeb) {
         // 👉 Web không có hardware ID — tạo fingerprint ổn định bằng thông tin hệ thống
         final webInfo = await deviceInfo.webBrowserInfo;
-       // rawId =
+       // 1. Code 1
+       //  rawId =
        // "${webInfo.platform ?? 'web'}|${webInfo.hardwareConcurrency ?? 0}|${webInfo.maxTouchPoints ?? 0}|${webInfo.vendor ?? 'vendor'}|${Uri.base.host}";
-        rawId =
-          "${webInfo.vendor ?? "web"}-${webInfo.userAgent ?? "unknown"}-${webInfo.hardwareConcurrency ?? 0}";
-
+       //  2. Code 2
+       //  rawId =
+       //    "${webInfo.vendor ?? "web"}-${webInfo.userAgent ?? "unknown"}-${webInfo.hardwareConcurrency ?? 0}";
         // rawId =
         // "${webInfo.vendor ?? 'web'}|${webInfo.platform ?? 'unknown'}|"
         //     "${webInfo.userAgent ?? 'ua'}|${webInfo.hardwareConcurrency ?? 0}|"
         //     "${DateTime.now().timeZoneName}";
+        rawId =
+        "web_${webInfo.vendor ?? 'unknown'}_${webInfo.hardwareConcurrency ?? 0}_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey()}";
+
       } else if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
         rawId =
         "${androidInfo.id}|${androidInfo.device}|${androidInfo.model}|${androidInfo.manufacturer}";
+       // rawId = "${androidInfo.id}_${androidInfo.device}_${androidInfo.serialNumber ?? ''}";
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfo.iosInfo;
-        rawId =
-        "${iosInfo.identifierForVendor ?? 'ios_unknown'}"; // |${iosInfo.name}|${iosInfo.systemName}";
+        rawId = iosInfo.identifierForVendor ?? 'ios_unknown';
       } else if (Platform.isWindows) {
         final winInfo = await deviceInfo.windowsInfo;
         rawId =
