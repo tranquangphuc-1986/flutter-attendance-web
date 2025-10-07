@@ -38,6 +38,12 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   /// Lấy ID thiết bị và có mã hóa (Android/iOS/Web)
    String? deviceId;
 
+  @override
+  void initState() {
+    super.initState();
+    resetDeviceId();
+  }
+
   /// ✅ Hàm lấy DeviceId duy nhất (Web + Android + iOS + Desktop)
   ///   - Tự động lưu cache vào SharedPreferences để tái sử dụng.
   ///   - Dùng SHA-1 để rút gọn và ẩn thông tin thiết bị.
@@ -55,7 +61,6 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     final deviceInfo = DeviceInfoPlugin();
     try {
       if (kIsWeb) {
-
         final webInfo = await deviceInfo.webBrowserInfo;
         // 🧩 Tạo fingerprint ổn định giữa các trình duyệt trên cùng thiết bị
         final width = html.window.screen?.width ?? 0; //Lấy độ phân giải màn hình (theo pixel) của thiết bị
@@ -100,7 +105,6 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   Future<void> resetDeviceId() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('cached_device_id');
-
     if (kIsWeb) {
       html.window.localStorage.remove('device_key');
     }
