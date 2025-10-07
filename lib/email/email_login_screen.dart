@@ -74,9 +74,8 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         final height = html.window.screen?.height ?? 0; //Lấy độ phân giải màn hình (theo pixel) của thiết bị
         final pixelRatio = html.window.devicePixelRatio; //Lấy tỷ lệ mật độ điểm ảnh (device pixel ratio)
         //Ghép lại tạp thành 1 ID riêng
-        rawId =
-        "web_${webInfo.platform ?? 'web'}_${webInfo.vendor ?? 'unknown'}_${webInfo.hardwareConcurrency ?? 0}_${webInfo.maxTouchPoints ?? 0}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}_${webDeviceKey}";
-        //rawId = "web_${webInfo.platform}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}_${webDeviceKey}";
+        //rawId = "web_${webInfo.platform ?? 'web'}_${webInfo.vendor ?? 'unknown'}_${webInfo.hardwareConcurrency ?? 0}_${webInfo.maxTouchPoints ?? 0}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}_${webDeviceKey}";
+        rawId = "web_${webInfo.platform}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}_${webDeviceKey}";
       } else if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
         rawId = "${androidInfo.id}_${androidInfo.model}_${androidInfo.device}_${androidInfo.manufacturer}_${androidInfo.serialNumber ?? ''}";
