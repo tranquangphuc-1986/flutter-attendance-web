@@ -1,6 +1,8 @@
+// ignore: deprecated_member_use
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:app_02/Widgets/snackbar.dart';
 import 'package:app_02/home_page/my_home_screen.dart';
 import 'package:app_02/Widgets/my_button.dart';
@@ -29,7 +31,6 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   bool isPasswordHidden = true;
   final _formKey = GlobalKey<FormState>();
   final AuthService _authService = AuthService();
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -125,9 +126,16 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         // "${webInfo.vendor ?? 'web'}|${webInfo.platform ?? 'unknown'}|"
         //     "${webInfo.userAgent ?? 'ua'}|${webInfo.hardwareConcurrency ?? 0}|"
         //     "${DateTime.now().timeZoneName}";
-        rawId =
-        "web_${webInfo.vendor ?? 'unknown'}_${webInfo.hardwareConcurrency ?? 0}_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey()}";
+        // rawId =
+        // "web_${webInfo.vendor ?? 'unknown'}_${webInfo.hardwareConcurrency ?? 0}_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey()}";
+        // 🧩 Tạo fingerprint ổn định giữa các trình duyệt trên cùng thiết bị
 
+        final width = html.window.screen?.width ?? 0;
+        final height = html.window.screen?.height ?? 0;
+        final pixelRatio = html.window.devicePixelRatio;
+
+        rawId =
+        "web_${webInfo.platform ?? 'web'}_${webInfo.vendor ?? 'unknown'}_${webInfo.hardwareConcurrency ?? 0}_${webInfo.maxTouchPoints ?? 0}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}";
       } else if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
         rawId =
