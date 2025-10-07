@@ -46,25 +46,24 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     final prefs = await SharedPreferences.getInstance();
 
     // 🔹 Nếu có ID đã lưu → trả về luôn
-    final cachedId = prefs.getString('cached_device_id');
-    if (cachedId != null && cachedId.isNotEmpty) {
-      return cachedId;
-    }
+    // final cachedId = prefs.getString('cached_device_id');
+    // if (cachedId != null && cachedId.isNotEmpty) {
+    //   return cachedId;
+    // }
 
     String rawId = "unknown_device";
     final deviceInfo = DeviceInfoPlugin();
-
     try {
       if (kIsWeb) {
         // 👉 Web không có hardware ID — tạo fingerprint ổn định bằng thông tin hệ thống
         // 👉 Dùng localStorage để lưu device key cố định theo domain
         // 👉 Dùng localStorage để lưu device key cố định theo domain
-        final localStorage = html.window.localStorage;
-        String? webDeviceKey = localStorage['device_key'];
-        if (webDeviceKey == null) {
-          webDeviceKey = const Uuid().v4(); // tạo UUID ngẫu nhiên
-          localStorage['device_key'] = webDeviceKey; // lưu lại cho trình duyệt
-        }
+        // final localStorage = html.window.localStorage;
+        // String? webDeviceKey = localStorage['device_key'];
+        // if (webDeviceKey == null) {
+        //   webDeviceKey = const Uuid().v4(); // tạo UUID ngẫu nhiên
+        //   localStorage['device_key'] = webDeviceKey; // lưu lại cho trình duyệt
+        // }
 
         final webInfo = await deviceInfo.webBrowserInfo;
         //  rawId =
@@ -75,7 +74,8 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         final pixelRatio = html.window.devicePixelRatio; //Lấy tỷ lệ mật độ điểm ảnh (device pixel ratio)
         //Ghép lại tạp thành 1 ID riêng
         //rawId = "web_${webInfo.platform ?? 'web'}_${webInfo.vendor ?? 'unknown'}_${webInfo.hardwareConcurrency ?? 0}_${webInfo.maxTouchPoints ?? 0}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}_${webDeviceKey}";
-        rawId = "web_${webInfo.platform}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}_${webDeviceKey}";
+        //rawId = "web_${webInfo.platform}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}_${webDeviceKey}";
+        rawId = "web_${webInfo.platform ?? 'web'}_${webInfo.hardwareConcurrency ?? 0}_${webInfo.maxTouchPoints ?? 0}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}";
       } else if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
         rawId = "${androidInfo.id}_${androidInfo.model}_${androidInfo.device}_${androidInfo.manufacturer}_${androidInfo.serialNumber ?? ''}";
