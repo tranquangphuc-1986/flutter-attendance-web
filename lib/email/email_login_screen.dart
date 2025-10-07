@@ -16,6 +16,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/service/email_auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class EmailLoginScreen extends StatefulWidget {
   const EmailLoginScreen({super.key});
@@ -56,6 +57,15 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     try {
       if (kIsWeb) {
         // 👉 Web không có hardware ID — tạo fingerprint ổn định bằng thông tin hệ thống
+        // 👉 Dùng localStorage để lưu device key cố định theo domain
+        // 👉 Dùng localStorage để lưu device key cố định theo domain
+        final localStorage = html.window.localStorage;
+        String? webDeviceKey = localStorage['device_key'];
+        if (webDeviceKey == null) {
+          webDeviceKey = const Uuid().v4(); // tạo UUID ngẫu nhiên
+          localStorage['device_key'] = webDeviceKey; // lưu lại cho trình duyệt
+        }
+
         final webInfo = await deviceInfo.webBrowserInfo;
         //  rawId =
         //    "${webInfo.vendor ?? "web"}-${webInfo.userAgent ?? "unknown"}-${webInfo.hardwareConcurrency ?? 0}";
@@ -65,7 +75,8 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         final pixelRatio = html.window.devicePixelRatio; //Lấy tỷ lệ mật độ điểm ảnh (device pixel ratio)
         //Ghép lại tạp thành 1 ID riêng
         rawId =
-        "web_${webInfo.platform ?? 'web'}_${webInfo.vendor ?? 'unknown'}_${webInfo.hardwareConcurrency ?? 0}_${webInfo.maxTouchPoints ?? 0}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}";
+        "web_${webInfo.platform ?? 'web'}_${webInfo.vendor ?? 'unknown'}_${webInfo.hardwareConcurrency ?? 0}_${webInfo.maxTouchPoints ?? 0}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}_${webDeviceKey}";
+        //rawId = "web_${webInfo.platform}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}_${webDeviceKey}";
       } else if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
         rawId = "${androidInfo.id}_${androidInfo.model}_${androidInfo.device}_${androidInfo.manufacturer}_${androidInfo.serialNumber ?? ''}";
@@ -99,22 +110,13 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     return hashedId;
   }
 
-  /// 🧹 Xóa cache DeviceId (khi đăng xuất hoặc reset ứng dụng)
+  /// 🔄 Xóa ID thiết bị khi đăng xuất / reset
   Future<void> resetDeviceId() async {
-    try {
-      if (kIsWeb) {
-        // 👉 Với web, xóa localStorage thủ công
-        // ignore: undefined_prefixed_name
-        // Dùng js interop nếu cần, nhưng shared_preferences_web xử lý rồi
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.remove('cached_device_id');
-      } else {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.remove('cached_device_id');
-      }
-      debugPrint("✅ Device ID cache cleared successfully");
-    } catch (e) {
-      debugPrint("⚠️ Error clearing device ID cache: $e");
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('cached_device_id');
+
+    if (kIsWeb) {
+      html.window.localStorage.remove('device_key');
     }
   }
 
