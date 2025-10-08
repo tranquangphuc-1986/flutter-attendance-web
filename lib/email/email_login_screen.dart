@@ -211,16 +211,21 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         sha1.convert(utf8.encode("$userAgent-$width-$height-$pixelRatio")).toString();
 
         // Dùng localStorage để giữ ID cố định giữa các lần đăng nhập
+        // Dùng LocalStorage để giữ nguyên ID giữa các lần mở
         String? browserKey = html.window.localStorage['device_uuid'];
-        if (browserKey == null) {
-          // Ưu tiên fingerprint, nếu fingerprint null hoặc lỗi → tạo UUID
-          if (fingerprint.isNotEmpty) {
-            browserKey = fingerprint.substring(0, 20);
-          } else {
-            browserKey = _uuid.v4();
-          }
-          html.window.localStorage['device_uuid'] = browserKey;
-        }
+        browserKey ??= fingerprint.substring(0, 20); // cắt ngắn ID
+        html.window.localStorage['device_uuid'] = browserKey;
+
+        // String? browserKey = html.window.localStorage['device_uuid'];
+        // if (browserKey == null) {
+        //   // Ưu tiên fingerprint, nếu fingerprint null hoặc lỗi → tạo UUID
+        //   if (fingerprint.isNotEmpty) {
+        //     browserKey = fingerprint.substring(0, 20);
+        //   } else {
+        //     browserKey = _uuid.v4();
+        //   }
+        //   html.window.localStorage['device_uuid'] = browserKey;
+        // }
 
         // fingerprint cơ bản nhưng ổn định (ẩn thông tin cá nhân)
         rawId =
