@@ -186,83 +186,115 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   // }
 
 //.......
-  /// ✅ Lấy Device ID duy nhất và hash SHA-1 (ổn định, không tiết lộ thông tin cá nhân)
+  /// ✅ Sinh Device ID hợp nhất cho Web + Mobile + Desktop
   static Future<String> getHashedDeviceId() async {
     final prefs = await SharedPreferences.getInstance();
 
-    // 🔄 Dùng cache để giảm gọi thiết bị nhiều lần
+    // Nếu có cache rồi → trả về luôn
     final cachedId = prefs.getString('cached_device_id');
     if (cachedId != null && cachedId.isNotEmpty) return cachedId;
 
-    final deviceInfo = DeviceInfoPlugin();
-    String rawId = "unknown_device";
+    String rawFingerprint = "unknown_device";
 
     try {
+      final deviceInfo = DeviceInfoPlugin();
+
       if (kIsWeb) {
-        final webInfo = await deviceInfo.webBrowserInfo;
-        //Ghép fingerprint dựa trên userAgent và độ phân giải
-        final userAgent = webInfo.userAgent??'unknown';
-        final width = html.window.screen?.width ?? 0;
-        final height = html.window.screen?.height ?? 0;
-        final pixelRatio = html.window.devicePixelRatio;
+        // ===== WEB: Canvas + Audio Fingerprint =====
+        final navigator = html.window.navigator;
+        final screen = html.window.screen;
 
-        // Hash fingerprint -> ổn định trên mọi trình duyệt cùng máy
-        final fingerprint =
-        sha1.convert(utf8.encode("$userAgent-$width-$height-$pixelRatio")).toString();
+        final platform = navigator.platform ?? '';
+        final userAgent = navigator.userAgent;
+        final language = navigator.language ?? '';
+        final hardwareConcurrency = navigator.hardwareConcurrency?.toString() ?? '';
+        final maxTouchPoints = navigator.maxTouchPoints?.toString() ?? '';
+        final pixelRatio = html.window.devicePixelRatio.toString();
+        final timezone = DateTime.now().timeZoneName;
+        final screenSize = '${screen?.width}x${screen?.height}';
 
-        // Dùng localStorage để giữ ID cố định giữa các lần đăng nhập
-        // Dùng LocalStorage để giữ nguyên ID giữa các lần mở
-        String? browserKey = html.window.localStorage['device_uuid'];
-        browserKey ??= fingerprint.substring(0, 20); // cắt ngắn ID
-        html.window.localStorage['device_uuid'] = browserKey;
+        // 🎨 Canvas fingerprint
+        final canvas = html.CanvasElement(width: 120, height: 40);
+        final ctx = canvas.context2D;
+        ctx.font = '16pt Arial';
+        ctx.fillStyle = '#f60';
+        ctx.fillText('FlutterFingerprint', 5, 25);
+        ctx.strokeStyle = '#069';
+        ctx.strokeRect(2, 2, 100, 30);
+        final canvasData = canvas.toDataUrl();
 
-        // String? browserKey = html.window.localStorage['device_uuid'];
-        // if (browserKey == null) {
-        //   // Ưu tiên fingerprint, nếu fingerprint null hoặc lỗi → tạo UUID
-        //   if (fingerprint.isNotEmpty) {
-        //     browserKey = fingerprint.substring(0, 20);
-        //   } else {
-        //     browserKey = _uuid.v4();
-        //   }
-        //   html.window.localStorage['device_uuid'] = browserKey;
+        // 🎧 Audio fingerprint
+        // String audioHash = '';
+        // try {
+        //   final audioCtx = html.AudioContext();
+        //   final oscillator = audioCtx.createOscillator();
+        //   final analyser = audioCtx.createAnalyser();
+        //   final gain = audioCtx.createGain();
+        //
+        //   oscillator.connectNode(gain);
+        //   gain.connectNode(analyser);
+        //   gain.gain!.value = 0.01;
+        //   oscillator.frequency!.value = 440;
+        //   oscillator.start(0);
+        //   await Future.delayed(const Duration(milliseconds: 50));
+        //
+        //   final buffer = Float32List(analyser.frequencyBinCount ?? 32);
+        //   analyser.getFloatFrequencyData(buffer);
+        //   audioHash = sha1.convert(utf8.encode(buffer.join(','))).toString();
+        //   oscillator.stop();
+        //   audioCtx.close();
+        // } catch (_) {
+        //   audioHash = 'audio_error';
         // }
 
-        // fingerprint cơ bản nhưng ổn định (ẩn thông tin cá nhân)
-        rawId =
-        "web_${webInfo.platform}_${width}x${height}_${pixelRatio.toStringAsFixed(1)}_$browserKey";
+        // rawFingerprint =
+        // 'web|$platform|$userAgent|$language|$hardwareConcurrency|$maxTouchPoints|'
+        //     '$pixelRatio|$timezone|$screenSize|$canvasData|$audioHash';
+        rawFingerprint =
+        'web|$platform|$userAgent|$language|$hardwareConcurrency|$maxTouchPoints|'
+            '$pixelRatio|$timezone|$screenSize|$canvasData';
 
+        // Dùng LocalStorage để giữ nguyên giữa các lần mở trình duyệt
+        String? browserKey = html.window.localStorage['device_uuid'];
+        if (browserKey == null) {
+          browserKey = sha1.convert(utf8.encode(rawFingerprint)).toString().substring(0, 20);
+          html.window.localStorage['device_uuid'] = browserKey;
+        }
+        rawFingerprint += '|$browserKey';
       } else if (Platform.isAndroid) {
+        // ===== ANDROID =====
         final info = await deviceInfo.androidInfo;
         String? deviceUuid = prefs.getString('android_device_uuid');
         deviceUuid ??= _uuid.v4();
         await prefs.setString('android_device_uuid', deviceUuid);
-        rawId =
-        "android_${info.model}_${info.manufacturer}_${info.device}_$deviceUuid";
 
+        rawFingerprint =
+        'android|${info.model}|${info.manufacturer}|${info.version.sdkInt}|$deviceUuid';
       } else if (Platform.isIOS) {
+        // ===== IOS =====
         final info = await deviceInfo.iosInfo;
         String? deviceUuid = prefs.getString('ios_device_uuid');
         deviceUuid ??= _uuid.v4();
         await prefs.setString('ios_device_uuid', deviceUuid);
-        rawId =
-        "ios_${info.model}_${info.systemName}_${info.systemVersion}_$deviceUuid";
 
+        rawFingerprint =
+        'ios|${info.model}|${info.systemName}|${info.systemVersion}|$deviceUuid';
       } else {
-        // Desktop (Windows, macOS, Linux)
-        String? desktopUuid = prefs.getString('desktop_device_uuid');
-        desktopUuid ??= _uuid.v4();
-        await prefs.setString('desktop_device_uuid', desktopUuid);
-        rawId = "desktop_$desktopUuid";
+        // ===== DESKTOP =====
+        String? deviceUuid = prefs.getString('desktop_device_uuid');
+        deviceUuid ??= _uuid.v4();
+        await prefs.setString('desktop_device_uuid', deviceUuid);
+        rawFingerprint = 'desktop|$deviceUuid';
       }
+
+      // ===== SHA-256 → tạo mã ngắn và bảo mật =====
+      final hashedId =
+      sha256.convert(utf8.encode(rawFingerprint)).toString().substring(0, 20);
+      await prefs.setString('cached_device_id', hashedId);
+      return hashedId;
     } catch (e) {
-      rawId = "error_${e.hashCode}";
+      return 'error_${e.toString()}';
     }
-
-    // Mã hóa SHA-1 → ngắn gọn, không thể truy ngược
-    final hashedId = sha1.convert(utf8.encode(rawId)).toString();
-    await prefs.setString('cached_device_id', hashedId);
-
-    return hashedId;
   }
 
   /// 🔄 Reset device ID khi đăng xuất
@@ -274,6 +306,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     await prefs.remove('desktop_device_uuid');
     if (kIsWeb) html.window.localStorage.remove('device_uuid');
   }
+
   /// ✅ Xử lý khi đăng nhập thành công — ràng buộc tài khoản ↔ thiết bị
   Future<void> handleLoginSuccess(String email) async {
     try {
@@ -377,7 +410,6 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     }
   }
   //....END
-
 
 
   void _login() async {
