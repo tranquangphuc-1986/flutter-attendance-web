@@ -187,230 +187,385 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
 //.......
   /// ✅ Sinh Device ID hợp nhất cho Web + Mobile + Desktop
-  static Future<String> getHashedDeviceId() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    // Nếu có cache rồi → trả về luôn
-    final cachedId = prefs.getString('cached_device_id');
-    if (cachedId != null && cachedId.isNotEmpty) return cachedId;
-
-    String rawFingerprint = "unknown_device";
-
+  // static Future<String> getHashedDeviceId() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //
+  //   // Nếu có cache rồi → trả về luôn
+  //   final cachedId = prefs.getString('cached_device_id');
+  //   if (cachedId != null && cachedId.isNotEmpty) return cachedId;
+  //
+  //   String rawFingerprint = "unknown_device";
+  //
+  //   try {
+  //     final deviceInfo = DeviceInfoPlugin();
+  //
+  //     if (kIsWeb) {
+  //       // ===== WEB: Canvas + Audio Fingerprint =====
+  //       final navigator = html.window.navigator;
+  //       final screen = html.window.screen;
+  //
+  //       final platform = navigator.platform ?? '';
+  //       final userAgent = navigator.userAgent;
+  //       final language = navigator.language ?? '';
+  //       final hardwareConcurrency = navigator.hardwareConcurrency?.toString() ?? '';
+  //       final maxTouchPoints = navigator.maxTouchPoints?.toString() ?? '';
+  //       final pixelRatio = html.window.devicePixelRatio.toString();
+  //       final timezone = DateTime.now().timeZoneName;
+  //       final screenSize = '${screen?.width}x${screen?.height}';
+  //
+  //       // 🎨 Canvas fingerprint
+  //       final canvas = html.CanvasElement(width: 120, height: 40);
+  //       final ctx = canvas.context2D;
+  //       ctx.font = '16pt Arial';
+  //       ctx.fillStyle = '#f60';
+  //       ctx.fillText('FlutterFingerprint', 5, 25);
+  //       ctx.strokeStyle = '#069';
+  //       ctx.strokeRect(2, 2, 100, 30);
+  //       final canvasData = canvas.toDataUrl();
+  //
+  //       // 🎧 Audio fingerprint
+  //       // String audioHash = '';
+  //       // try {
+  //       //   final audioCtx = html.AudioContext();
+  //       //   final oscillator = audioCtx.createOscillator();
+  //       //   final analyser = audioCtx.createAnalyser();
+  //       //   final gain = audioCtx.createGain();
+  //       //
+  //       //   oscillator.connectNode(gain);
+  //       //   gain.connectNode(analyser);
+  //       //   gain.gain!.value = 0.01;
+  //       //   oscillator.frequency!.value = 440;
+  //       //   oscillator.start(0);
+  //       //   await Future.delayed(const Duration(milliseconds: 50));
+  //       //
+  //       //   final buffer = Float32List(analyser.frequencyBinCount ?? 32);
+  //       //   analyser.getFloatFrequencyData(buffer);
+  //       //   audioHash = sha1.convert(utf8.encode(buffer.join(','))).toString();
+  //       //   oscillator.stop();
+  //       //   audioCtx.close();
+  //       // } catch (_) {
+  //       //   audioHash = 'audio_error';
+  //       // }
+  //
+  //       // rawFingerprint =
+  //       // 'web|$platform|$userAgent|$language|$hardwareConcurrency|$maxTouchPoints|'
+  //       //     '$pixelRatio|$timezone|$screenSize|$canvasData|$audioHash';
+  //       rawFingerprint =
+  //       'web|$platform|$userAgent|$language|$hardwareConcurrency|$maxTouchPoints|'
+  //           '$pixelRatio|$timezone|$screenSize|$canvasData';
+  //
+  //       // Dùng LocalStorage để giữ nguyên giữa các lần mở trình duyệt
+  //       String? browserKey = html.window.localStorage['device_uuid'];
+  //       if (browserKey == null) {
+  //         browserKey = sha1.convert(utf8.encode(rawFingerprint)).toString().substring(0, 20);
+  //         html.window.localStorage['device_uuid'] = browserKey;
+  //       }
+  //       rawFingerprint += '|$browserKey';
+  //     } else if (Platform.isAndroid) {
+  //       // ===== ANDROID =====
+  //       final info = await deviceInfo.androidInfo;
+  //       String? deviceUuid = prefs.getString('android_device_uuid');
+  //       deviceUuid ??= _uuid.v4();
+  //       await prefs.setString('android_device_uuid', deviceUuid);
+  //
+  //       rawFingerprint =
+  //       'android|${info.model}|${info.manufacturer}|${info.version.sdkInt}|$deviceUuid';
+  //     } else if (Platform.isIOS) {
+  //       // ===== IOS =====
+  //       final info = await deviceInfo.iosInfo;
+  //       String? deviceUuid = prefs.getString('ios_device_uuid');
+  //       deviceUuid ??= _uuid.v4();
+  //       await prefs.setString('ios_device_uuid', deviceUuid);
+  //
+  //       rawFingerprint =
+  //       'ios|${info.model}|${info.systemName}|${info.systemVersion}|$deviceUuid';
+  //     } else {
+  //       // ===== DESKTOP =====
+  //       String? deviceUuid = prefs.getString('desktop_device_uuid');
+  //       deviceUuid ??= _uuid.v4();
+  //       await prefs.setString('desktop_device_uuid', deviceUuid);
+  //       rawFingerprint = 'desktop|$deviceUuid';
+  //     }
+  //
+  //     // ===== SHA-256 → tạo mã ngắn và bảo mật =====
+  //     final hashedId =
+  //     sha256.convert(utf8.encode(rawFingerprint)).toString().substring(0, 20);
+  //     await prefs.setString('cached_device_id', hashedId);
+  //     return hashedId;
+  //   } catch (e) {
+  //     return 'error_${e.toString()}';
+  //   }
+  // }
+  //
+  //
+  //
+  // /// 🔄 Reset device ID khi đăng xuất
+  // static Future<void> resetDeviceId() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.remove('cached_device_id');
+  //   await prefs.remove('android_device_uuid');
+  //   await prefs.remove('ios_device_uuid');
+  //   await prefs.remove('desktop_device_uuid');
+  //   if (kIsWeb) html.window.localStorage.remove('device_uuid');
+  // }
+  //
+  // /// ✅ Xử lý khi đăng nhập thành công — ràng buộc tài khoản ↔ thiết bị
+  // Future<void> handleLoginSuccess(String email) async {
+  //   try {
+  //     final hashedDeviceId = await getHashedDeviceId();
+  //     final user = _auth.currentUser;
+  //
+  //     if (user == null) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //           content: Text("Không tìm thấy người dùng. Vui lòng đăng nhập lại."),
+  //           backgroundColor: Colors.red,
+  //         ),
+  //       );
+  //       return;
+  //     }
+  //
+  //     final uid = user.uid;
+  //     final userDoc = _firestore.collection("userLogin").doc(uid);
+  //     final snapshot = await userDoc.get();
+  //
+  //     // 🔍 Kiểm tra xem thiết bị đã dùng tài khoản khác chưa
+  //     final existingDevice = await _firestore
+  //         .collection("userLogin")
+  //         .where("deviceIds", arrayContains: hashedDeviceId)
+  //         .get();
+  //
+  //     if (existingDevice.docs.isNotEmpty && existingDevice.docs.first.id != uid) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //           content: Text(
+  //               "⚠️ Thiết bị này đã đăng nhập bằng tài khoản khác. Vui lòng đăng xuất tài khoản đó trước."),
+  //           backgroundColor: Colors.redAccent,
+  //         ),
+  //       );
+  //       await _auth.signOut();
+  //       return;
+  //     }
+  //
+  //     // ✅ Nếu userDoc đã tồn tại
+  //     if (snapshot.exists) {
+  //       final data = snapshot.data()!;
+  //       final List<dynamic> devices =
+  //       (data['deviceIds'] is List) ? List.from(data['deviceIds']) : [];
+  //
+  //       if (devices.isNotEmpty && !devices.contains(hashedDeviceId)) {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           const SnackBar(
+  //             content: Text(
+  //                 "⚠️ Tài khoản này đã được đăng nhập trên thiết bị khác. Vui lòng đăng xuất thiết bị cũ."),
+  //             backgroundColor: Colors.orange,
+  //           ),
+  //         );
+  //         await _auth.signOut();
+  //         return;
+  //       }
+  //
+  //       // Nếu chưa lưu Device ID → thêm mới
+  //       if (!devices.contains(hashedDeviceId)) {
+  //         await userDoc.set({
+  //           "deviceIds": FieldValue.arrayUnion([hashedDeviceId]),
+  //           "lastLogin": FieldValue.serverTimestamp(),
+  //         }, SetOptions(merge: true));
+  //       } else {
+  //         // Cập nhật thời gian đăng nhập cuối
+  //         await userDoc.update({
+  //           "lastLogin": FieldValue.serverTimestamp(),
+  //         });
+  //       }
+  //     } else {
+  //       // 🔰 User mới → tạo bản ghi mới
+  //       await userDoc.set({
+  //         "deviceIds": [hashedDeviceId],
+  //         "createdAt": FieldValue.serverTimestamp(),
+  //         "lastLogin": FieldValue.serverTimestamp(),
+  //       });
+  //     }
+  //
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //             content: Text("✅ Đăng nhập thành công!"),
+  //           backgroundColor: Colors.green,
+  //         ),
+  //     );
+  //
+  //     // 👉 Điều hướng đến trang chính
+  //     if (context.mounted) {
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => MyPage()),
+  //       );
+  //     }
+  //
+  //   } catch (e) {
+  //     debugPrint("❌ Lỗi khi xử lý đăng nhập: $e");
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text("Đăng nhập thất bại: $e"),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //   }
+  // }
+  //....END
+// 🔑 Hàm tạo fingerprint ổn định đa nền tảng
+  static Future<String> getDeviceFingerprintHybrid() async {
     try {
-      final deviceInfo = DeviceInfoPlugin();
-
+      // 📦 Ưu tiên dùng cache (SharedPreferences hoặc localStorage)
       if (kIsWeb) {
-        // ===== WEB: Canvas + Audio Fingerprint =====
-        final navigator = html.window.navigator;
-        final screen = html.window.screen;
-
-        final platform = navigator.platform ?? '';
-        final userAgent = navigator.userAgent;
-        final language = navigator.language ?? '';
-        final hardwareConcurrency = navigator.hardwareConcurrency?.toString() ?? '';
-        final maxTouchPoints = navigator.maxTouchPoints?.toString() ?? '';
-        final pixelRatio = html.window.devicePixelRatio.toString();
-        final timezone = DateTime.now().timeZoneName;
-        final screenSize = '${screen?.width}x${screen?.height}';
-
-        // 🎨 Canvas fingerprint
-        final canvas = html.CanvasElement(width: 120, height: 40);
-        final ctx = canvas.context2D;
-        ctx.font = '16pt Arial';
-        ctx.fillStyle = '#f60';
-        ctx.fillText('FlutterFingerprint', 5, 25);
-        ctx.strokeStyle = '#069';
-        ctx.strokeRect(2, 2, 100, 30);
-        final canvasData = canvas.toDataUrl();
-
-        // 🎧 Audio fingerprint
-        // String audioHash = '';
-        // try {
-        //   final audioCtx = html.AudioContext();
-        //   final oscillator = audioCtx.createOscillator();
-        //   final analyser = audioCtx.createAnalyser();
-        //   final gain = audioCtx.createGain();
-        //
-        //   oscillator.connectNode(gain);
-        //   gain.connectNode(analyser);
-        //   gain.gain!.value = 0.01;
-        //   oscillator.frequency!.value = 440;
-        //   oscillator.start(0);
-        //   await Future.delayed(const Duration(milliseconds: 50));
-        //
-        //   final buffer = Float32List(analyser.frequencyBinCount ?? 32);
-        //   analyser.getFloatFrequencyData(buffer);
-        //   audioHash = sha1.convert(utf8.encode(buffer.join(','))).toString();
-        //   oscillator.stop();
-        //   audioCtx.close();
-        // } catch (_) {
-        //   audioHash = 'audio_error';
-        // }
-
-        // rawFingerprint =
-        // 'web|$platform|$userAgent|$language|$hardwareConcurrency|$maxTouchPoints|'
-        //     '$pixelRatio|$timezone|$screenSize|$canvasData|$audioHash';
-        rawFingerprint =
-        'web|$platform|$userAgent|$language|$hardwareConcurrency|$maxTouchPoints|'
-            '$pixelRatio|$timezone|$screenSize|$canvasData';
-
-        // Dùng LocalStorage để giữ nguyên giữa các lần mở trình duyệt
-        String? browserKey = html.window.localStorage['device_uuid'];
-        if (browserKey == null) {
-          browserKey = sha1.convert(utf8.encode(rawFingerprint)).toString().substring(0, 20);
-          html.window.localStorage['device_uuid'] = browserKey;
-        }
-        rawFingerprint += '|$browserKey';
-      } else if (Platform.isAndroid) {
-        // ===== ANDROID =====
-        final info = await deviceInfo.androidInfo;
-        String? deviceUuid = prefs.getString('android_device_uuid');
-        deviceUuid ??= _uuid.v4();
-        await prefs.setString('android_device_uuid', deviceUuid);
-
-        rawFingerprint =
-        'android|${info.model}|${info.manufacturer}|${info.version.sdkInt}|$deviceUuid';
-      } else if (Platform.isIOS) {
-        // ===== IOS =====
-        final info = await deviceInfo.iosInfo;
-        String? deviceUuid = prefs.getString('ios_device_uuid');
-        deviceUuid ??= _uuid.v4();
-        await prefs.setString('ios_device_uuid', deviceUuid);
-
-        rawFingerprint =
-        'ios|${info.model}|${info.systemName}|${info.systemVersion}|$deviceUuid';
+        final cached = html.window.localStorage['device_id'];
+        if (cached != null && cached.isNotEmpty) return cached;
       } else {
-        // ===== DESKTOP =====
-        String? deviceUuid = prefs.getString('desktop_device_uuid');
-        deviceUuid ??= _uuid.v4();
-        await prefs.setString('desktop_device_uuid', deviceUuid);
-        rawFingerprint = 'desktop|$deviceUuid';
+        final prefs = await SharedPreferences.getInstance();
+        final cached = prefs.getString('device_id');
+        if (cached != null && cached.isNotEmpty) return cached;
       }
 
-      // ===== SHA-256 → tạo mã ngắn và bảo mật =====
-      final hashedId =
-      sha256.convert(utf8.encode(rawFingerprint)).toString().substring(0, 20);
-      await prefs.setString('cached_device_id', hashedId);
-      return hashedId;
+      String rawId = "unknown_device";
+
+      if (kIsWeb) {
+        // 🧭 Web Fingerprint
+        final navigator = html.window.navigator;
+        final platform = navigator.platform ?? '';
+        final vendor = navigator.vendor ?? '';
+        final hardwareConcurrency =
+            navigator.hardwareConcurrency?.toString() ?? '';
+        final screenWidth = html.window.screen?.width.toString() ?? '';
+        final screenHeight = html.window.screen?.height.toString() ?? '';
+        final colorDepth = html.window.screen?.colorDepth?.toString() ?? '';
+        final timezone = DateTime.now().timeZoneName;
+
+        // 🧩 Base info fingerprint
+        rawId =
+        'web_${platform}|${vendor}|${hardwareConcurrency}|${screenWidth}x${screenHeight}|$colorDepth|$timezone';
+
+        // 🧂 App salt để tránh trùng giữa các app
+        const appSalt = 'THAMM_UU_APP_SALT_V1';
+        rawId += '_$appSalt';
+      } else {
+        // 📱 Mobile Fingerprint
+        final deviceInfo = DeviceInfoPlugin();
+        if (Platform.isAndroid) {
+          final info = await deviceInfo.androidInfo;
+          rawId =
+          '${info.id}_${info.model}_${info.manufacturer}_${info.device}_${info.version.sdkInt}';
+        } else if (Platform.isIOS) {
+          final info = await deviceInfo.iosInfo;
+          rawId =
+          '${info.identifierForVendor}_${info.model}_${info.systemVersion}_${info.systemName}';
+        } else if (Platform.isWindows) {
+          final info = await deviceInfo.windowsInfo;
+          rawId = '${info.deviceId}_${info.computerName}_${info.numberOfCores}';
+        } else if (Platform.isMacOS) {
+          final info = await deviceInfo.macOsInfo;
+          rawId =
+          '${info.systemGUID}_${info.computerName}_${info.arch}_${info.model}';
+        } else if (Platform.isLinux) {
+          final info = await deviceInfo.linuxInfo;
+          rawId =
+          '${info.machineId}_${info.name}_${info.version}_${info.prettyName}';
+        }
+      }
+
+      // 🔐 Hash SHA-256 → gọn & an toàn
+      final bytes = utf8.encode(rawId);
+      final digest = sha256.convert(bytes).toString();
+
+      // 💾 Lưu cache lại để dùng lần sau
+      if (kIsWeb) {
+        html.window.localStorage['device_id'] = digest;
+      } else {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('device_id', digest);
+      }
+
+      return digest;
     } catch (e) {
-      return 'error_${e.toString()}';
+      debugPrint('❌ Error fingerprint: $e');
+      return 'device_${DateTime.now().millisecondsSinceEpoch}';
     }
   }
 
-  /// 🔄 Reset device ID khi đăng xuất
+  /// 🔄 Xóa ID thiết bị khi đăng xuất / reset
   static Future<void> resetDeviceId() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('cached_device_id');
-    await prefs.remove('android_device_uuid');
-    await prefs.remove('ios_device_uuid');
-    await prefs.remove('desktop_device_uuid');
-    if (kIsWeb) html.window.localStorage.remove('device_uuid');
+    if (kIsWeb) {
+      html.window.localStorage.remove('device_id');
+    } else {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('device_id');
+    }
   }
 
-  /// ✅ Xử lý khi đăng nhập thành công — ràng buộc tài khoản ↔ thiết bị
+  /// 🧭 Xử lý đăng nhập + giới hạn 1 tài khoản / 1 thiết bị
   Future<void> handleLoginSuccess(String email) async {
-    try {
-      final hashedDeviceId = await getHashedDeviceId();
-      final user = _auth.currentUser;
+    deviceId = await getDeviceFingerprintHybrid();
 
-      if (user == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Không tìm thấy người dùng. Vui lòng đăng nhập lại."),
-            backgroundColor: Colors.red,
-          ),
-        );
+    final uid = _auth.currentUser!.uid;
+    final userDoc = _firestore.collection("userLogin").doc(uid);
+    final snapshot = await userDoc.get();
+
+    // 🔍 Kiểm tra xem deviceId này đã tồn tại ở tài khoản khác chưa
+    final existingDevice = await _firestore
+        .collection("userLogin")
+        .where("deviceIds", arrayContains: deviceId)
+        .get();
+
+    if (existingDevice.docs.isNotEmpty) {
+      final otherUserId = existingDevice.docs.first.id;
+      if (otherUserId != uid) {
+        showSnackBAR(
+            context,
+            "Thiết bị này đã được sử dụng để đăng nhập tài khoản khác.\n"
+                "Vui lòng đăng xuất tài khoản đó trước khi tiếp tục.");
+        await _auth.signOut();
         return;
       }
+    }
 
-      final uid = user.uid;
-      final userDoc = _firestore.collection("userLogin").doc(uid);
-      final snapshot = await userDoc.get();
+    // ✅ Kiểm tra tài khoản này có đăng nhập thiết bị khác không
+    if (snapshot.exists) {
+      final data = snapshot.data() ?? {};
+      final List<dynamic> devices =
+      (data['deviceIds'] is List) ? List.from(data['deviceIds']) : [];
 
-      // 🔍 Kiểm tra xem thiết bị đã dùng tài khoản khác chưa
-      final existingDevice = await _firestore
-          .collection("userLogin")
-          .where("deviceIds", arrayContains: hashedDeviceId)
-          .get();
-
-      if (existingDevice.docs.isNotEmpty && existingDevice.docs.first.id != uid) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-                "⚠️ Thiết bị này đã đăng nhập bằng tài khoản khác. Vui lòng đăng xuất tài khoản đó trước."),
-            backgroundColor: Colors.redAccent,
-          ),
-        );
+      if (devices.isNotEmpty && !devices.contains(deviceId)) {
+        showSnackBAR(context,
+            "Tài khoản này đã đăng nhập trên thiết bị khác.\nVui lòng đăng xuất thiết bị cũ trước.");
         await _auth.signOut();
         return;
       }
 
-      // ✅ Nếu userDoc đã tồn tại
-      if (snapshot.exists) {
-        final data = snapshot.data()!;
-        final List<dynamic> devices =
-        (data['deviceIds'] is List) ? List.from(data['deviceIds']) : [];
-
-        if (devices.isNotEmpty && !devices.contains(hashedDeviceId)) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                  "⚠️ Tài khoản này đã được đăng nhập trên thiết bị khác. Vui lòng đăng xuất thiết bị cũ."),
-              backgroundColor: Colors.orange,
-            ),
-          );
-          await _auth.signOut();
-          return;
-        }
-
-        // Nếu chưa lưu Device ID → thêm mới
-        if (!devices.contains(hashedDeviceId)) {
-          await userDoc.set({
-            "deviceIds": FieldValue.arrayUnion([hashedDeviceId]),
-            "lastLogin": FieldValue.serverTimestamp(),
-          }, SetOptions(merge: true));
-        } else {
-          // Cập nhật thời gian đăng nhập cuối
-          await userDoc.update({
-            "lastLogin": FieldValue.serverTimestamp(),
-          });
-        }
-      } else {
-        // 🔰 User mới → tạo bản ghi mới
+      // Nếu chưa có deviceId hoặc cùng thiết bị → cho phép login
+      if (!devices.contains(deviceId)) {
         await userDoc.set({
-          "deviceIds": [hashedDeviceId],
-          "createdAt": FieldValue.serverTimestamp(),
+          "deviceIds": FieldValue.arrayUnion([deviceId]),
+          "lastLogin": FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+      } else {
+        // Cập nhật thời gian đăng nhập cuối
+        await userDoc.update({
           "lastLogin": FieldValue.serverTimestamp(),
         });
       }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text("✅ Đăng nhập thành công!"),
-            backgroundColor: Colors.green,
-          ),
-      );
-
-      // 👉 Điều hướng đến trang chính
-      if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MyPage()),
-        );
-      }
-
-    } catch (e) {
-      debugPrint("❌ Lỗi khi xử lý đăng nhập: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Đăng nhập thất bại: $e"),
-          backgroundColor: Colors.red,
-        ),
-      );
+    } else {
+      // 🔰 User mới → tạo mới
+      await userDoc.set({
+        "deviceIds": [deviceId],
+        "lastLogin": FieldValue.serverTimestamp(),
+        "createdAt": FieldValue.serverTimestamp(),
+      });
     }
-  }
-  //....END
 
+    showSnackBAR(context, "Đăng nhập thành công!");
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MyPage()),
+    );
+  }
 
   void _login() async {
     if (!_formKey.currentState!.validate()) return;
