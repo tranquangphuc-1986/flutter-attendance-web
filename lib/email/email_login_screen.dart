@@ -8,6 +8,7 @@ import 'package:app_02/home_page/my_home_screen.dart';
 import 'package:app_02/Widgets/my_button.dart';
 import 'package:app_02/email/email_signup_screen.dart';
 import 'package:app_02/email/email_forgot_password_screen.dart';
+import 'package:app_02/phone/signup_phone.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -751,7 +752,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => EmailSignupScreen(),
+                                  builder: (context) => SignUpPhoneScreen(),//EmailSignupScreen(),
                                 ),
                               );
                             },

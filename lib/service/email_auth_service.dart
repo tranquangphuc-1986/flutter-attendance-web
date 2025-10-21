@@ -12,7 +12,9 @@ class AuthService{
     required String name,
     required String phone,
     required String role,
-}) async{
+})
+
+    async{
     String res ="Lỗi";
     try{
       if(email.isNotEmpty && password.isNotEmpty
