@@ -181,6 +181,9 @@ class _SignUpPhoneScreenState extends State<SignUpPhoneScreen> {
   void dispose() {
     nameCtrl.dispose();
     phoneCtrl.dispose();
+    classCtrl.dispose();
+    emailCtrl.dispose();
+    passwordCtrl.dispose();
     super.dispose();
   }
 
@@ -251,7 +254,7 @@ class _SignUpPhoneScreenState extends State<SignUpPhoneScreen> {
       try {
         final data = UserModel(
           id: '',//UniqueKey().toString(), // hoặc tạo ID bằng uuid
-          uid: FirebaseAuth.instance.currentUser?.uid ?? '',
+          uid: '', //FirebaseAuth.instance.currentUser?.uid ?? '',
           name: namePolice,
           phone: phone,
           email: email,
@@ -284,11 +287,6 @@ class _SignUpPhoneScreenState extends State<SignUpPhoneScreen> {
         }
         await Future.delayed(const Duration(seconds: 2));
         setState(() => _isLoading = false);
-        nameCtrl.clear();
-        phoneCtrl.clear();
-        setState(() {
-          selectedClass = null;
-        });
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

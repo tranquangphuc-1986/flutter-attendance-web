@@ -43,14 +43,14 @@ class UserModel {
   factory UserModel.fromMap(String id, Map<String, dynamic> map) {
     return UserModel(
       id: id,
-      name: map['name'],
-      phone: map['phone'],
-      className: map['className'],
-      email: map['email'],
-      password: map['password'],
-      role: map['role'],
-      uid: map['uid'],
-
+      name: map['name'] ?? '',
+      phone: map['phone'] ?? '',
+      className: map['className'] ?? '',
+      email: map['email'] ?? '',
+      password: map['password'] ?? '',
+      role: map['role'] ?? '',
+      uid: map['uid'] ?? '',
+      score: map['score'] ?? 0,
     );
   }
 //lấy toàn bộ danh sách sinh viêm từ collection ('userLogin') trong firestore - dạng list
@@ -65,6 +65,7 @@ class UserModel {
       password: data['password'],
       role: data['role'],
       uid: data['uid'],
+      score: data['score'],
     );
   }
 }
@@ -78,7 +79,7 @@ class FirebaseUserService {
 
   // ➕ Thêm user (sử dụng UID tạo bởi FirebaseAuth)
   Future<void> addUser(UserModel user) async {
-    await userCollection.doc(user.uid).set({user.toMap()});
+    await userCollection.doc(user.uid).set(user.toMap());
   }
 
   // 🔁 Cập nhật user
@@ -109,7 +110,7 @@ class FirebaseUserService {
   }
 
   //Lấy danh sách dưới dạng List
-  Future<List<UserModel>> getAllUsers() async {
+  Future<List<UserModel>> getAllUsersList() async {
     QuerySnapshot snapshot = await userCollection.get();
     return snapshot.docs
         .map((doc) => UserModel.fromFirestore(doc as DocumentSnapshot<Map<String, dynamic>>))
@@ -311,7 +312,7 @@ class AuthService {
         );
 
         final registeredUser = UserModel(
-          id: '',//user.id,
+          id: '',
           uid: credential.user!.uid,
           name: user.name,
           className: user.className,
