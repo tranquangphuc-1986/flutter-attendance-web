@@ -311,7 +311,7 @@ class AuthService {
         );
 
         final registeredUser = UserModel(
-          id: user.id,
+          id: '',//user.id,
           uid: credential.user!.uid,
           name: user.name,
           className: user.className,

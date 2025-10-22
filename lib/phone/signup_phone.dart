@@ -250,7 +250,7 @@ class _SignUpPhoneScreenState extends State<SignUpPhoneScreen> {
       setState(() => _isLoading = true);
       try {
         final data = UserModel(
-          id: UniqueKey().toString(), // hoặc tạo ID bằng uuid
+          id: '',//UniqueKey().toString(), // hoặc tạo ID bằng uuid
           uid: FirebaseAuth.instance.currentUser?.uid ?? '',
           name: namePolice,
           phone: phone,
