@@ -12,6 +12,7 @@ class UserModel {
   final String email;
   final String password;
   final String role;
+  final String uid;
   final int score;
   UserModel({
     required this.id,
@@ -21,6 +22,7 @@ class UserModel {
     required this.email,
     required this.password,
     required this.role,
+    required this.uid,
     this.score = 0,
   });
 
@@ -33,6 +35,7 @@ class UserModel {
       'email': email,
       'password': password,
       'role': role,
+      'uid': uid,
       'score': score,
     };
   }
@@ -46,6 +49,7 @@ class UserModel {
       email: map['email'],
       password: map['password'],
       role: map['role'],
+      uid: map['uid'],
 
     );
   }
@@ -60,6 +64,7 @@ class UserModel {
       email: data['email'],
       password: data['password'],
       role: data['role'],
+      uid: data['uid'],
     );
   }
 }
@@ -72,14 +77,15 @@ class FirebaseUserService {
   final CollectionReference attendanceCollectionQr = FirebaseFirestore.instance.collection('attendanceqr');
 
   // ➕ Thêm user (sử dụng UID tạo bởi FirebaseAuth)
-  Future<void> addUser(UserModel user, String uid) async {
-    await userCollection.doc(uid).set(user.toMap());
+  Future<void> addUser(UserModel user) async {
+    await userCollection.doc(user.uid).set({user.toMap()});
   }
 
   // 🔁 Cập nhật user
   Future<void> updateUser(UserModel user) async {
-    if (user.id == null) throw Exception("User ID không được để trống");
-    await userCollection.doc(user.id).update(user.toMap());
+    if (user.uid.isEmpty) throw Exception("UID không được để trống");
+   // if (user.id.isEmpty) throw Exception("User ID không được để trống");
+    await userCollection.doc(user.uid).update(user.toMap());
   }
 
   // ❌ Xóa user
@@ -304,7 +310,19 @@ class AuthService {
           password: user.password,
         );
 
-        await _userService.addUser(user, credential.user!.uid);
+        final registeredUser = UserModel(
+          id: user.id,
+          uid: credential.user!.uid,
+          name: user.name,
+          className: user.className,
+          email: user.email,
+          phone: user.phone,
+          role: user.role,
+          password: user.password,
+          score: user.score,
+        );
+
+        await _userService.addUser(registeredUser);
         res = "Thành công";
       } else {
         res = "Thiếu thông tin";

@@ -134,6 +134,7 @@ import 'package:app_02/phone/login_phone.dart';
 import 'package:app_02/service/qr_firebase_service.dart';
 import 'package:app_02/student_screens/students_list_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:app_02/Widgets/my_button.dart';
@@ -249,7 +250,8 @@ class _SignUpPhoneScreenState extends State<SignUpPhoneScreen> {
       setState(() => _isLoading = true);
       try {
         final data = UserModel(
-          id: '',
+          id: UniqueKey().toString(), // hoặc tạo ID bằng uuid
+          uid: FirebaseAuth.instance.currentUser?.uid ?? '',
           name: namePolice,
           phone: phone,
           email: email,
