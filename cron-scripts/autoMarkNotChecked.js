@@ -59,9 +59,9 @@ async function autoMarkNotChecked() {
       await firestore.collection("attendanceqr").add({
         phone: userData.phone,
         name: userData.name || null,
-        status: "NOT_CHECKED",
+        status: "Chưa điểm danh",
         note: "Quá giờ điểm danh",
-        method: "AUTO",
+        method: "Tự động",
         timestamp: Timestamp.now(),
       });
       updatedCount++;

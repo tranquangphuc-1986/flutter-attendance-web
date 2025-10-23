@@ -2,7 +2,6 @@ import 'package:app_02/cax/cax_home_screen.dart';
 import 'package:app_02/chart/area_chart.dart';
 import 'package:app_02/chart/chart_screen.dart';
 import 'package:app_02/data_diaban/diaban_page_home.dart';
-import 'package:app_02/phone/login_phone.dart';
 import 'package:app_02/phone/signup_phone.dart';
 import 'package:app_02/student_screens/AdminCloseAttendanceScreen.dart';
 import 'package:app_02/student_screens/scan_Qrcode.dart';

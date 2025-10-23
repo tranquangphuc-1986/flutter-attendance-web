@@ -1,10 +1,8 @@
-import 'package:app_02/models/police.dart';
-import 'package:app_02/service/qr_firebase_service.dart';
+import 'package:app_02/phone/phone_model_service.dart';
 import 'package:app_02/student_screens/students_attendance_screen3_1.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:app_02/models/student.dart';
 
 class QrSummaryScreenResult extends StatefulWidget {
   const QrSummaryScreenResult({Key? key}) : super(key: key);
@@ -12,7 +10,7 @@ class QrSummaryScreenResult extends StatefulWidget {
   _QrSummaryScreenResultState createState() => _QrSummaryScreenResultState();
 }
 class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
-  final FirebaseService service = FirebaseService();
+  final FirebaseUserService service = FirebaseUserService();
   String? selectedStatus; //Trạng thái đang chọn để lọc
   //phân quyền truy cập
   String currentRole = '';
@@ -86,29 +84,6 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
     );
   }
 
-  // Widget buildStatusIcon(String status) {
-  //   switch (status) {
-  //     case 'Có mặt':
-  //       return const Icon(Icons.check_circle, color: Colors.green);
-  //     case 'Vắng mặt':
-  //       return const Icon(Icons.healing, color: Colors.orange);
-  //     case 'Vắng do công tác':
-  //       return const Icon(Icons.work, color: Colors.orange);
-  //     case "Nghỉ phép":
-  //       return const Icon(Icons.healing, color: Colors.orange);
-  //     case "Vắng do đi học":
-  //       return const Icon(Icons.edit_outlined, color: Colors.orange);
-  //     case "Vắng việc cá nhân":
-  //       return const Icon(Icons.person, color: Colors.yellow);
-  //     case "Vắng không lý do":
-  //       return const Icon(Icons.close, color: Colors.red);
-  //     case "Đi trễ":
-  //       return const Icon(Icons.healing, color: Colors.red);
-  //     default:
-  //       return const Icon(Icons.help_outline);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,9 +96,9 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
       body: Column(
         children: [
           Expanded(
-            child: StreamBuilder<List<Police>>(
+            child: StreamBuilder<List<UserModel>>(
               //dùng để lấy danh sách cán bộ
-              stream: service.getPolice(),
+              stream: service.getAllUsersStream(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());
@@ -180,7 +155,7 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
                     }
 
                     //Danh sách sinh viên được lọc theo selectedStatus
-                    List<Police> filteredPolice =
+                    List<UserModel> filteredPolice =
                     police.where((s) {
                       final status = attendance[s.id] ?? "Chưa điểm danh";
                       return selectedStatus == null ||

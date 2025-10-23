@@ -330,7 +330,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           "✅ Bạn ở vị trí hợp lệ (${distance.toStringAsFixed(1)} m). Gửi điểm danh...";
         });
         final success = await _saveAttendanceToFirebase(
-          status: "PRESENT",
+          status: "Có mặt",
           method: "GPS_QR",
           qrLat: qrLat,
           qrLng: qrLng,
@@ -463,8 +463,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       statusMessage = "Đang gửi trạng thái $statusLabel...";
     });
     final success = await _saveAttendanceToFirebase(
-      status: statusLabel == "Vắng mặt" ? "ABSENT" : "LEAVE",
-      method: "MANUAL",
+      status: statusLabel == "Vắng mặt" ? "ABSENT_vắng mặt" : "LEAVE_Rời khỏi",
+      method: "Tự chọn",
       note: statusLabel,
     );
     setState(() {

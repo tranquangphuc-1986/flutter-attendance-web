@@ -130,8 +130,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:app_02/Widgets/snackbar.dart';
 import 'package:app_02/email/email_login_screen.dart';
-import 'package:app_02/phone/login_phone.dart';
-import 'package:app_02/service/qr_firebase_service.dart';
+import 'package:app_02/phone/phone_model_service.dart';
 import 'package:app_02/student_screens/students_list_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -146,7 +145,6 @@ class SignUpPhoneScreen extends StatefulWidget {
 }
 
 class _SignUpPhoneScreenState extends State<SignUpPhoneScreen> {
-  final FirebaseService service = FirebaseService();
   final AuthService _authService = AuthService();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nameCtrl = TextEditingController();

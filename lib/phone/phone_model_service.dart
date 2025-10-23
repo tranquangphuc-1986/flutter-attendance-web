@@ -225,17 +225,17 @@ class FirebaseUserService {
 
         if (status == 'Có mặt') {
           statisticsMap[phone]!['present'] += 1;
-        } else if (status == 'Vắng do công tác') {
+        } else if (status == 'Công tác') {
           statisticsMap[phone]!['work'] += 1;
-        } else if (status == 'Vắng mặt') {
+        } else if (status == 'Bị ốm') {
           statisticsMap[phone]!['sick'] += 1;
         } else if (status == 'Nghỉ phép') {
           statisticsMap[phone]!['np'] += 1;
-        } else if (status == 'Vắng do đi học') {
+        } else if (status == 'Đi học') {
           statisticsMap[phone]!['dh'] += 1;
-        } else if (status == 'Vắng việc cá nhân') {
+        } else if (status == 'Việc riêng') {
           statisticsMap[phone]!['vcn'] += 1;
-        } else if (status == 'Vắng không lý do') {
+        } else if (status == 'Không lý do') {
           statisticsMap[phone]!['kld'] += 1;
         } else {
           statisticsMap[phone]!['dt'] += 1;
