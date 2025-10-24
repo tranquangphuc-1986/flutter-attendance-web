@@ -32,8 +32,13 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   String studentClass = "";
   String uID = "";
   Timer? _deadlineTimer;
-  final int CHECKIN_START_HOUR = 7; // 07:00
-  final int CHECKIN_END_HOUR = 23; // 09:00
+
+  final int CHECKIN_START_HOUR = 13;
+  final int CHECKIN_START_MINUTE = 0;
+
+  final int CHECKIN_END_HOUR = 13;
+  final int CHECKIN_END_MINUTE = 15;
+
 
   @override
   void initState() {
@@ -76,7 +81,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       now.month,
       now.day,
       CHECKIN_END_HOUR,
-      0,
+      CHECKIN_END_MINUTE,
     );
 
     //Kiểm tra thứ 7, chủ nhật
@@ -110,8 +115,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   // Kiểm tra thời gian hợp lệ
   bool _isWithinTimeWindow() {
     final now = DateTime.now();
-    final start = DateTime(now.year, now.month, now.day, CHECKIN_START_HOUR, 0);
-    final end = DateTime(now.year, now.month, now.day, CHECKIN_END_HOUR, 0);
+    final start = DateTime(now.year, now.month, now.day, CHECKIN_START_HOUR, CHECKIN_START_MINUTE);
+    final end = DateTime(now.year, now.month, now.day, CHECKIN_END_HOUR, CHECKIN_END_MINUTE);
 
     return !now.isBefore(start) && !now.isAfter(end) && (now.weekday >= 1 && now.weekday <= 5);
   }
@@ -434,7 +439,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   // Manual chọn trạng thái còn lại (ngoài Có mặt)
   Future<void> _onManualStatus(String statusLabel) async {
     if (!_isWithinTimeWindow()) {
-      _showAlert("Ngoài khung giờ điểm danh.", "Khung giờ điểm danh: 7h - 9h từ Thứ 2 - Thứ 6.");
+      _showAlert("Ngoài khung giờ điểm danh.", "Khung giờ điểm danh: 6h - 7h15 từ Thứ 2 - Thứ 6.");
       return;
     }
     // Confirm dialog
@@ -627,11 +632,11 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                   // Student info
                   Card(
                     child: ListTile(
-                      // title: Text("Thông tin cán bộ điểm danh"
-                      // ),
-                      subtitle: Text(
-                        "Tên: ${studentName.isEmpty ? '-' : studentName} - SĐT: ${studentPhone.isEmpty ? '-' : studentPhone}",
+                      title: Text("Tên: ${studentName.isEmpty ? '-' : studentName} - SĐT: ${studentPhone.isEmpty ? '-' : studentPhone}",
                       ),
+                      // subtitle: Text(
+                      //   "Tên: ${studentName.isEmpty ? '-' : studentName} - SĐT: ${studentPhone.isEmpty ? '-' : studentPhone}",
+                      // ),
                       isThreeLine: true,
                       trailing:
                           hasCheckedIn
@@ -651,7 +656,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                     ),
                   const SizedBox(height: 4),
                   Text(
-                    "Khung giờ: ${CHECKIN_START_HOUR.toString().padLeft(2, '0')}:00 - ${CHECKIN_END_HOUR.toString().padLeft(2, '0')}:00",
+                    "Khung giờ: ${CHECKIN_START_HOUR.toString().padLeft(2, '0')}:00 - ${CHECKIN_END_HOUR.toString().padLeft(2, '0')}:15",
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
 
