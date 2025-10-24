@@ -218,7 +218,7 @@ class FirebaseUserService {
             'np': 0,
             'dh': 0,
             'vcn': 0,
-            'kld': 0,
+            'cdd': 0,
             'dt': 0,
           };
         }
@@ -235,8 +235,8 @@ class FirebaseUserService {
           statisticsMap[phone]!['dh'] += 1;
         } else if (status == 'Việc riêng') {
           statisticsMap[phone]!['vcn'] += 1;
-        } else if (status == 'Không lý do') {
-          statisticsMap[phone]!['kld'] += 1;
+        } else if (status == 'Chưa điểm danh') {
+          statisticsMap[phone]!['cdd'] += 1;
         } else {
           statisticsMap[phone]!['dt'] += 1;
         }
@@ -254,7 +254,7 @@ class FirebaseUserService {
 
         final policeData = policeDoc.data()!;
         final policeName = policeData['name']?.toString().toLowerCase() ?? '';
-        final policeClass = policeData['email'] ?? '';
+        final policeClass = policeData['className'] ?? '';
 
         // Lọc theo tên
         if (nameKeyword != null && nameKeyword.isNotEmpty) {
@@ -271,7 +271,7 @@ class FirebaseUserService {
         result.add({
           'phone': stat['phone'],
           'name': policeData['name'],
-          'email': policeClass,
+          'className': policeClass,
           'present': stat['present'],
           'work': stat['work'],
           'sick': stat['sick'],
