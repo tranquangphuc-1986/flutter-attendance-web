@@ -462,8 +462,19 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       loading = true;
       statusMessage = "Đang gửi trạng thái $statusLabel...";
     });
+
+    final status = switch (statusLabel) {
+      "Công tác" => "Công tác",
+      "Nghỉ phép" => "Nghỉ phép",
+      "Bị ốm" => "Bị ốm",
+      "Đi học" => "Đi học",
+      "Việc riêng" => "Việc riêng",
+      "Đi trễ" => "Đi trễ",
+      _ => "UNKNOWN",
+    };
+
     final success = await _saveAttendanceToFirebase(
-      status: statusLabel == "Vắng mặt" ? "ABSENT_vắng mặt" : "LEAVE_Rời khỏi",
+      status: status, //statusLabel == "Công tác" ? "Công tác" : statusLabel == "Nghỉ phép" ? "Nghỉ phép",
       method: "Tự chọn",
       note: statusLabel,
     );
@@ -616,10 +627,10 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                   // Student info
                   Card(
                     child: ListTile(
-                      title: Text("Thông tin cán bộ điểm danh"
-                      ),
+                      // title: Text("Thông tin cán bộ điểm danh"
+                      // ),
                       subtitle: Text(
-                        "Tên: ${studentName.isEmpty ? '-' : studentName}\nSĐT: ${studentPhone.isEmpty ? '-' : studentPhone}",
+                        "Tên: ${studentName.isEmpty ? '-' : studentName} - SĐT: ${studentPhone.isEmpty ? '-' : studentPhone}",
                       ),
                       isThreeLine: true,
                       trailing:
@@ -657,13 +668,12 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                     ],
                   ),
                   const SizedBox(height: 8),
-
                   Row(
                     children: [
                       Expanded(
                         child: OutlinedButton(
-                          onPressed: () => _onManualStatus("Vắng mặt"),
-                          child: const Text("Vắng mặt"),
+                          onPressed: () => _onManualStatus("Công tác"),
+                          child: const Text("Công tác"),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -687,8 +697,26 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: OutlinedButton(
-                          onPressed: () => _onManualStatus("Công tác"),
-                          child: const Text("Công tác"),
+                          onPressed: () => _onManualStatus("Đi học"),
+                          child: const Text("Đi học"),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => _onManualStatus("Việc riêng"),
+                          child: const Text("Việc riêng"),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => _onManualStatus("Đi trễ"),
+                          child: const Text("Đi trễ"),
                         ),
                       ),
                     ],
