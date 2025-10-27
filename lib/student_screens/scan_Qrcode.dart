@@ -36,8 +36,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   final int CHECKIN_START_HOUR = 18;
   final int CHECKIN_START_MINUTE = 0;
 
-  final int CHECKIN_END_HOUR = 19;
-  final int CHECKIN_END_MINUTE = 35;
+  final int CHECKIN_END_HOUR = 20;
+  final int CHECKIN_END_MINUTE = 00;
 
 
   @override
