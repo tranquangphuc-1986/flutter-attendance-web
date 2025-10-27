@@ -146,7 +146,7 @@ class FirebaseUserService {
     await attendanceCollectionQr.doc('$today-$phone').set({
       'phone': phone,
       'status': status,
-      'date': timestampToday,
+      'timestamp': timestampToday,
     });
   }
 
@@ -155,7 +155,7 @@ class FirebaseUserService {
     DateTime today = DateTime(now.year, now.month, now.day);
     Timestamp timestampToday = Timestamp.fromDate(today);
     return attendanceCollectionQr
-        .where('date', isEqualTo: timestampToday)
+        .where('timestamp', isEqualTo: timestampToday)
         .snapshots()
         .map(
           (snapshot) => {
