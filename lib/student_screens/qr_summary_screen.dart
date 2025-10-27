@@ -127,7 +127,7 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
                     };
 
                     for (var _police in police) {
-                      final status = attendance[_police.id];
+                      final status = attendance[_police.phone];
                       if (status == 'Có mặt') {
                         total['Có mặt'] = total['Có mặt']! + 1;
                       } else if (status == 'Công tác') {
@@ -153,7 +153,7 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
                     //Danh sách sinh viên được lọc theo selectedStatus
                     List<UserModel> filteredPolice =
                     police.where((s) {
-                      final status = attendance[s.id] ?? "Chưa điểm danh";
+                      final status = attendance[s.phone] ?? "Chưa điểm danh";
                       return selectedStatus == null ||
                           status == selectedStatus;
                     }).toList();
@@ -216,7 +216,7 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
                             children:
                             filteredPolice.map((s) {
                               final status =
-                                  attendance[s.id] ?? "Chưa điểm danh";
+                                  attendance[s.phone] ?? "Chưa điểm danh";
                               return ListTile(
                                 title: Text(s.name),
                                 subtitle: Text("Đơn vị: ${s.className}"),
