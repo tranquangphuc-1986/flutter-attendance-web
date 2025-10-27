@@ -27,7 +27,7 @@ const firestore = new Firestore({
 
 async function autoMarkNotChecked() {
   const today = new Date();
-  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 13, 0, 0);
+  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0);
   const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 13, 30, 15);
 
   const startTs = Timestamp.fromDate(startOfDay);

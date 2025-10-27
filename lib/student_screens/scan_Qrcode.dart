@@ -33,7 +33,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   String uID = "";
   Timer? _deadlineTimer;
 
-  final int CHECKIN_START_HOUR = 13;
+  final int CHECKIN_START_HOUR = 12;
   final int CHECKIN_START_MINUTE = 0;
 
   final int CHECKIN_END_HOUR = 13;
@@ -85,7 +85,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     );
 
     //Kiểm tra thứ 7, chủ nhật
-    if(now.weekday>=5){
+    if(now.weekday>5){
       setState(() {
         statusMessage = "⏰ Thứ 7 và Chủ nhật không điểm danh.";
       });
@@ -117,7 +117,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     final now = DateTime.now();
     final start = DateTime(now.year, now.month, now.day, CHECKIN_START_HOUR, CHECKIN_START_MINUTE);
     final end = DateTime(now.year, now.month, now.day, CHECKIN_END_HOUR, CHECKIN_END_MINUTE);
-
     return !now.isBefore(start) && !now.isAfter(end) && (now.weekday >= 1 && now.weekday <= 5);
   }
 

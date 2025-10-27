@@ -133,20 +133,17 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
                         total['Có mặt'] = total['Có mặt']! + 1;
                       } else if (status == 'Vắng do công tác') {
                         total['Vắng do công tác'] =
-                            total['Vắng do công tác']! + 1;
+                            total['Công tác']! + 1;
                       } else if (status == 'Vắng do ốm') {
-                        total['Vắng do ốm'] = total['Vắng do ốm']! + 1;
+                        total['Vắng do ốm'] = total['Bị ốm']! + 1;
                       } else if (status == 'Vắng do nghỉ phép') {
                         total['Vắng do nghỉ phép'] =
-                            total['Vắng do nghỉ phép']! + 1;
+                            total['Nghỉ phép']! + 1;
                       } else if (status == 'Vắng do đi học') {
-                        total['Vắng do đi học'] = total['Vắng do đi học']! + 1;
+                        total['Vắng do đi học'] = total['Đi học']! + 1;
                       } else if (status == 'Vắng việc cá nhân') {
                         total['Vắng việc cá nhân'] =
-                            total['Vắng việc cá nhân']! + 1;
-                      } else if (status == 'Vắng không lý do') {
-                        total['Vắng không lý do'] =
-                            total['Vắng không lý do']! + 1;
+                            total['Việc riêng']! + 1;
                       } else if (status == 'Đi trễ') {
                         total['Đi trễ'] = total['Đi trễ']! + 1;
                       } else {
