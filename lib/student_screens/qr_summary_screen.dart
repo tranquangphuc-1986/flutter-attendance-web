@@ -117,14 +117,13 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
                     //Tổng hợp kết quả
                     final total = {
                       'Có mặt': 0,
-                      'Vắng do công tác': 0,
-                      'Vắng mặt': 0,
-                      'Chưa điểm danh': 0,
+                      'Công tác': 0,
+                      'Bị ốm': 0,
                       "Nghỉ phép": 0,
-                      "Vắng do đi học": 0,
-                      "Vắng việc cá nhân": 0,
-                      "Vắng không lý do": 0,
+                      "Đi học": 0,
+                      "Việc riêng": 0,
                       "Đi trễ": 0,
+                      'Chưa điểm danh': 0,
                     };
 
                     for (var _police in police) {
@@ -132,17 +131,17 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
                       if (status == 'Có mặt') {
                         total['Có mặt'] = total['Có mặt']! + 1;
                       } else if (status == 'Vắng do công tác') {
-                        total['Vắng do công tác'] =
+                        total['Công tác'] =
                             total['Công tác']! + 1;
                       } else if (status == 'Vắng do ốm') {
-                        total['Vắng do ốm'] = total['Bị ốm']! + 1;
+                        total['Bị ốm'] = total['Bị ốm']! + 1;
                       } else if (status == 'Vắng do nghỉ phép') {
-                        total['Vắng do nghỉ phép'] =
+                        total['Nghỉ phép'] =
                             total['Nghỉ phép']! + 1;
                       } else if (status == 'Vắng do đi học') {
-                        total['Vắng do đi học'] = total['Đi học']! + 1;
+                        total['Đi học'] = total['Đi học']! + 1;
                       } else if (status == 'Vắng việc cá nhân') {
-                        total['Vắng việc cá nhân'] =
+                        total['Việc riêng'] =
                             total['Việc riêng']! + 1;
                       } else if (status == 'Đi trễ') {
                         total['Đi trễ'] = total['Đi trễ']! + 1;
@@ -185,27 +184,23 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
                               _buildStatItem('Có mặt', total['Có mặt']!),
                               _buildStatItem(
                                 'Vắng do công tác',
-                                total['Vắng do công tác']!,
+                                total['Công tác']!,
                               ),
                               _buildStatItem(
                                 'Vắng do ốm',
-                                total['Vắng do ốm']!,
+                                total['Bị ốm']!,
                               ),
                               _buildStatItem(
                                 'Vắng do nghỉ phép',
-                                total['Vắng do nghỉ phép']!,
+                                total['Nghỉ phép']!,
                               ),
                               _buildStatItem(
                                 'Vắng do đi học',
-                                total['Vắng do đi học']!,
+                                total['Đi học']!,
                               ),
                               _buildStatItem(
                                 'Vắng việc cá nhân',
-                                total['Vắng việc cá nhân']!,
-                              ),
-                              _buildStatItem(
-                                'Vắng không lý do',
-                                total['Vắng không lý do']!,
+                                total['Việc riêng']!,
                               ),
                               _buildStatItem('Đi trễ', total['Đi trễ']!),
                               _buildStatItem(
