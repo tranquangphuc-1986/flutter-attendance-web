@@ -2,7 +2,7 @@ name: Auto Mark Not Checked
 
 on:
   schedule:
-    - cron: "40 18 * * 1-5"   # chạy 11:05 UTC = 18:05 VN, từ Thứ 2 -> Thứ 6
+    - cron: "01 12 * * 1-5"   # chạy 12:01 UTC = 19:01 VN, từ Thứ 2 -> Thứ 6
   workflow_dispatch:          # cho phép chạy tay
 
 jobs:
