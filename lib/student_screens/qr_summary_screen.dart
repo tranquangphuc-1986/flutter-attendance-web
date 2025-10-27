@@ -130,17 +130,17 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
                       final status = attendance[_police.id];
                       if (status == 'Có mặt') {
                         total['Có mặt'] = total['Có mặt']! + 1;
-                      } else if (status == 'Vắng do công tác') {
+                      } else if (status == 'Công tác') {
                         total['Công tác'] =
                             total['Công tác']! + 1;
-                      } else if (status == 'Vắng do ốm') {
+                      } else if (status == 'Bị ốm') {
                         total['Bị ốm'] = total['Bị ốm']! + 1;
-                      } else if (status == 'Vắng do nghỉ phép') {
+                      } else if (status == 'Nghỉ phép') {
                         total['Nghỉ phép'] =
                             total['Nghỉ phép']! + 1;
-                      } else if (status == 'Vắng do đi học') {
+                      } else if (status == 'Đi học') {
                         total['Đi học'] = total['Đi học']! + 1;
-                      } else if (status == 'Vắng việc cá nhân') {
+                      } else if (status == 'Việc riêng') {
                         total['Việc riêng'] =
                             total['Việc riêng']! + 1;
                       } else if (status == 'Đi trễ') {
