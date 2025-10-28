@@ -19,7 +19,7 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
   @override
   void initState() {
     super.initState();
-    fetchUserInfo();
+    //fetchUserInfo();
   }
 
   Future<void> fetchUserInfo() async {
