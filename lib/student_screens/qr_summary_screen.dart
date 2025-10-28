@@ -183,23 +183,23 @@ class _QrSummaryScreenResultState extends State<QrSummaryScreenResult> {
                               const SizedBox(height: 8),
                               _buildStatItem('Có mặt', total['Có mặt']!),
                               _buildStatItem(
-                                'Vắng do công tác',
+                                'Công tác',
                                 total['Công tác']!,
                               ),
                               _buildStatItem(
-                                'Vắng do ốm',
+                                'Bị ốm',
                                 total['Bị ốm']!,
                               ),
                               _buildStatItem(
-                                'Vắng do nghỉ phép',
+                                'Nghỉ phép',
                                 total['Nghỉ phép']!,
                               ),
                               _buildStatItem(
-                                'Vắng do đi học',
+                                'Đi học',
                                 total['Đi học']!,
                               ),
                               _buildStatItem(
-                                'Vắng việc cá nhân',
+                                'Việc riêng',
                                 total['Việc riêng']!,
                               ),
                               _buildStatItem('Đi trễ', total['Đi trễ']!),

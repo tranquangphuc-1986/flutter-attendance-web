@@ -171,7 +171,7 @@ class FirebaseUserService {
     Timestamp timestampToday = Timestamp.fromDate(today);
     final querySnapshot = await FirebaseFirestore.instance
         .collection('attendanceqr')
-        .where('phone', isEqualTo: phone)
+        .where('timestamp', isEqualTo: phone)
         .where('date', isEqualTo: timestampToday)
         .limit(1)
         .get();
@@ -197,10 +197,10 @@ class FirebaseUserService {
       await _firestore
           .collection('attendanceqr')
           .where(
-        'date',
+        'timestamp',
         isGreaterThanOrEqualTo: Timestamp.fromDate(fromDate),
       )
-          .where('date',
+          .where('timestamp',
           isLessThanOrEqualTo: Timestamp.fromDate(toDate))
           .get();
 
