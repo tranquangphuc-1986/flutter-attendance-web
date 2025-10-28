@@ -36,8 +36,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   final int CHECKIN_START_HOUR = 8;
   final int CHECKIN_START_MINUTE = 35;
 
-  final int CHECKIN_END_HOUR = 11;
-  final int CHECKIN_END_MINUTE = 45;
+  final int CHECKIN_END_HOUR = 13;
+  final int CHECKIN_END_MINUTE = 20;
 
 
   @override
@@ -114,48 +114,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     final end = DateTime(now.year, now.month, now.day, CHECKIN_END_HOUR, CHECKIN_END_MINUTE);
     return !now.isBefore(start) && !now.isAfter(end) && (now.weekday >= 1 && now.weekday <= 5);
   }
-
-  //Kiem tra GPS
-  // ---------- Permissions & GPS ----------
-  //
-  //   Future<void> _checkGpsAndPermissions() async {
-  //   try {
-  //     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //     if (!serviceEnabled) {
-  //       setState(() {
-  //         //statusMessage = "Vui lòng bật GPS để điểm danh.";
-  //         _showSnackbar('Vui lòng bật GPS để điểm danh.');
-  //       });
-  //       return;
-  //     }
-  //
-  //     LocationPermission permission = await Geolocator.checkPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       permission = await Geolocator.requestPermission();
-  //       if (permission == LocationPermission.denied) {
-  //         setState(() {
-  //           statusMessage = "Ứng dụng cần quyền GPS. Vui lòng cho phép.";
-  //         });
-  //         return;
-  //       }
-  //     }
-  //     if (permission == LocationPermission.deniedForever) {
-  //       setState(() {
-  //         statusMessage =
-  //         "Quyền GPS bị chặn vĩnh viễn. Mở cài đặt để cấp quyền.";
-  //       });
-  //       return;
-  //     }
-  //
-  //     setState(() {
-  //       statusMessage = "Sẵn sàng quét QR để điểm danh.";
-  //     });
-  //   } catch (e) {
-  //     setState(() {
-  //       statusMessage = "Lỗi quyền/GPS: $e";
-  //     });
-  //   }
-  // }
 
   Future<bool> _checkGpsAndPermissions(BuildContext context) async {
     // 1. Kiểm tra GPS (Location Services) đã bật chưa
@@ -259,12 +217,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   }
 
   Future<void> _onDetect(BarcodeCapture capture) async {
-    // if (isProcessingScan || hasCheckedIn) return;
-    // final raw = capture.barcodes.first.rawValue;
-    // if (raw == null) return;
-    // isProcessingScan = true;
-
-    //test code cu khi lam SQL.....
     if (isProcessingScan || hasCheckedIn) return;
     final List<Barcode> barcodes = capture.barcodes;
     if (barcodes.isEmpty) return;
@@ -476,7 +428,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     if (success) {
       setState(() {
         hasCheckedIn = true;
-        lastAction = statusLabel;
+        //lastAction = statusLabel;
+        lastAction=status;
         statusMessage = "$statusLabel đã lưu";
       });
       _showCheckinResultDialog(statusLabel);
@@ -617,14 +570,9 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
               child: Column(
                 children: [
                   // Student info
-                  if (lastAction.isNotEmpty)
                   Card(
                     child: ListTile(
                       title: Text("Tên: ${studentName.isEmpty ? '-' : studentName} - SĐT: ${studentPhone.isEmpty ? '-' : studentPhone}"),
-                      subtitle:
-                        Text("Trạng thái gần nhất: $lastAction",
-                        style: const TextStyle(fontStyle: FontStyle.italic),
-                      ),
                       isThreeLine: true,
                       trailing:
                           hasCheckedIn
@@ -637,12 +585,12 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                   ),
                   const SizedBox(height: 8),
                   // Last action
-                  // if (lastAction.isNotEmpty)
-                  //   Text(
-                  //     "Trạng thái gần nhất: $lastAction",
-                  //     style: const TextStyle(fontStyle: FontStyle.italic),
-                  //   ),
-                  // const SizedBox(height: 4),
+                  if (lastAction.isNotEmpty)
+                    Text(
+                      "Trạng thái gần nhất: $lastAction",
+                      style: const TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  const SizedBox(height: 4),
                   Text(
                     "Khung giờ: ${CHECKIN_START_HOUR.toString().padLeft(2, '0')}:00 - ${CHECKIN_END_HOUR.toString().padLeft(2, '0')}:15",
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
