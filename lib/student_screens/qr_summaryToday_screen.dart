@@ -14,16 +14,17 @@ class _QrSummaryTodayScreenResultState extends State<QrSummaryTodayScreenResult>
 
   /// 🔹 Stream danh sách điểm danh hôm nay
   Stream<List<Map<String, dynamic>>> getTodayAttendanceStream() {
-    // DateTime now = DateTime.now();
-    // DateTime today = DateTime(now.year, now.month, now.day);
-    // Timestamp timestampToday = Timestamp.fromDate(today);
     final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final timestampToday = Timestamp.fromDate(today);
+    //final today = DateTime(now.year, now.month, now.day);
+   // final timestampToday = Timestamp.fromDate(today); kiêu 00:00:00
+    final startOfDay = Timestamp.fromDate(DateTime(now.year, now.month, now.day));
+    final endOfDay = Timestamp.fromDate(DateTime(now.year, now.month, now.day, 23, 59, 59, 999),);
 
     return _firestore
         .collection('attendanceqr')
-        .where('timestamp', isEqualTo: timestampToday)
+       // .where('timestamp', isEqualTo: timestampToday)
+        .where('timestamp', isGreaterThanOrEqualTo: startOfDay)
+        .where('timestamp', isLessThanOrEqualTo: endOfDay)
         .snapshots()
         .map((snapshot) =>
         snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList());

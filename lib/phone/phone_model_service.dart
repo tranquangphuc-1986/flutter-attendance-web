@@ -152,10 +152,14 @@ class FirebaseUserService {
 
   Stream<Map<String, String>> getTodayAttendanceQr() {
     DateTime now = DateTime.now();
-    DateTime today = DateTime(now.year, now.month, now.day);
-    Timestamp timestampToday = Timestamp.fromDate(today);
+    //DateTime today = DateTime(now.year, now.month, now.day);
+   // Timestamp timestampToday = Timestamp.fromDate(today);
+    final startOfDay = Timestamp.fromDate(DateTime(now.year, now.month, now.day));
+    final endOfDay = Timestamp.fromDate(DateTime(now.year, now.month, now.day, 23, 59, 59, 999),);
     return attendanceCollectionQr
-        .where('timestamp', isEqualTo: timestampToday)
+       // .where('timestamp', isEqualTo: timestampToday)
+        .where('timestamp', isGreaterThanOrEqualTo: startOfDay)
+        .where('timestamp', isLessThanOrEqualTo: endOfDay)
         .snapshots()
         .map(
           (snapshot) => {
