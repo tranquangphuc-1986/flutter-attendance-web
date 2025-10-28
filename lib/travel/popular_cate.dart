@@ -210,7 +210,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (context) => SignUpPhoneScreen(),//CAXScreen(),
+                              (context) => QrSummaryScreenResult(),///SignUpPhoneScreen(),//CAXScreen(),
                         ),
                       );
                     },

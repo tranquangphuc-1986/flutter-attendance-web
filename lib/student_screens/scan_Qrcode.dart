@@ -235,6 +235,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       setState(() {
         studentName = doc['name'];
         studentPhone = doc['phone'];
+        studentClass = doc['className'];
         uID = doc['uid'];
       });
     } catch (_) {
@@ -242,6 +243,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       setState(() {
         studentName = "";
         studentPhone = "";
+        studentClass = "";
       });
     }
   }
@@ -397,6 +399,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
         .set({
           "phone": phoneValue,
           "name": studentName,
+          "className": studentClass,
           "status": status, // PRESENT | ABSENT | LEAVE | NOT_CHECKED
           "method": method, // GPS_QR | MANUAL | AUTO
           "timestamp": FieldValue.serverTimestamp(),
@@ -422,6 +425,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
         loading = false;
         studentName = doc['name'];
         studentPhone = doc['phone'];
+        studentClass = doc['className'];
       });
     } catch (_) {}
     ScaffoldMessenger.of(
