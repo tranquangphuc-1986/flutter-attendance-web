@@ -33,11 +33,11 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   String uID = "";
   Timer? _deadlineTimer;
 
-  final int CHECKIN_START_HOUR = 18;
-  final int CHECKIN_START_MINUTE = 0;
+  final int CHECKIN_START_HOUR = 8;
+  final int CHECKIN_START_MINUTE = 35;
 
-  final int CHECKIN_END_HOUR = 20;
-  final int CHECKIN_END_MINUTE = 15;
+  final int CHECKIN_END_HOUR = 8;
+  final int CHECKIN_END_MINUTE = 45;
 
 
   @override
