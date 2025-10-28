@@ -617,9 +617,13 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
               child: Column(
                 children: [
                   // Student info
+                  if (lastAction.isNotEmpty)
                   Card(
                     child: ListTile(
-                      title: Text("Tên: ${studentName.isEmpty ? '-' : studentName} - SĐT: ${studentPhone.isEmpty ? '-' : studentPhone}",
+                      title: Text("Tên: ${studentName.isEmpty ? '-' : studentName} - SĐT: ${studentPhone.isEmpty ? '-' : studentPhone}"),
+                      subtitle:
+                        Text("Trạng thái gần nhất: $lastAction",
+                        style: const TextStyle(fontStyle: FontStyle.italic),
                       ),
                       isThreeLine: true,
                       trailing:
@@ -633,12 +637,12 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                   ),
                   const SizedBox(height: 8),
                   // Last action
-                  if (lastAction.isNotEmpty)
-                    Text(
-                      "Trạng thái gần nhất: $lastAction",
-                      style: const TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  const SizedBox(height: 4),
+                  // if (lastAction.isNotEmpty)
+                  //   Text(
+                  //     "Trạng thái gần nhất: $lastAction",
+                  //     style: const TextStyle(fontStyle: FontStyle.italic),
+                  //   ),
+                  // const SizedBox(height: 4),
                   Text(
                     "Khung giờ: ${CHECKIN_START_HOUR.toString().padLeft(2, '0')}:00 - ${CHECKIN_END_HOUR.toString().padLeft(2, '0')}:15",
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
