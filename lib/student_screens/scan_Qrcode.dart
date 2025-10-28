@@ -37,7 +37,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   final int CHECKIN_START_MINUTE = 35;
 
   final int CHECKIN_END_HOUR = 11;
-  final int CHECKIN_END_MINUTE = 00;
+  final int CHECKIN_END_MINUTE = 45;
 
 
   @override
@@ -46,19 +46,19 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     _setupDeadlineTimerForToday();
     _checkGpsAndPermissions(context);
     _fetchStudentInfo();
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   bool ok = await _checkGpsAndPermissions(context);
-    //   if (!ok) {
-    //     // Nếu thiếu quyền -> thoát hoặc show cảnh báo
-    //     setState(() {
-    //       statusMessage = "Cần quyền Camera + GPS để điểm danh.";
-    //     });
-    //   } else {
-    //     setState(() {
-    //       statusMessage = "Sẵn sàng quét QR để điểm danh.";
-    //     });
-    //   }
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bool ok = await _checkGpsAndPermissions(context);
+      if (!ok) {
+        // Nếu thiếu quyền -> thoát hoặc show cảnh báo
+        setState(() {
+          statusMessage = "Cần quyền Camera + GPS để điểm danh.";
+        });
+      } else {
+        setState(() {
+          statusMessage = "Sẵn sàng quét QR để điểm danh.";
+        });
+      }
+    });
   }
 
   @override
@@ -68,11 +68,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     super.dispose();
   }
 
-  Future<void> _initFlow() async {
-    //await _checkGpsAndPermissions();
-    // await _fetchStudentInfo();
-    //_setupDeadlineTimerForToday();
-  }
 
   void _setupDeadlineTimerForToday() {
     final now = DateTime.now();
@@ -96,7 +91,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       // đã quá hạn hôm nay
       if (!hasCheckedIn) {
          setState(() {
-      statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
+      statusMessage = "⏰ Hết thời hạn điểm danh.";
         });
       }
       return;
@@ -106,7 +101,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     _deadlineTimer = Timer(duration, () async {
       if (!hasCheckedIn) {
           setState(() {
-          statusMessage = "⏰ Hết hạn điểm danh. Ghi 'Chưa điểm danh'.";
+          statusMessage = "⏰ Hết thời hạn điểm danh.";
         });
       }
     });
@@ -193,34 +188,32 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       await openAppSettings();
       return false;
     }
-
-    if (status.isGranted) {
-      return true; // Có quyền và GPS bật
+    // if (status.isGranted) {
+    //   return true; // Có quyền và GPS bật
+    // }
+    //return false;
+    if (!status.isGranted) {
+      return false; // Không có quyền và GPS
     }
-    return false;
-
-    // if (!status.isGranted) {
-    //   return false; // Không có quyền và GPS
-    // }
-    // // 3. Kiểm tra quyền Camera
-    // var camStatus = await Permission.camera.status;
-    // if (camStatus.isDenied) {
-    //   camStatus = await Permission.camera.request();
-    // }
-    // if (camStatus.isPermanentlyDenied) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(
-    //       content: Text("Quyền Camera bị chặn vĩnh viễn. Vui lòng bật lại trong Cài đặt."),
-    //     ),
-    //   );
-    //   await openAppSettings();
-    //   return false;
-    // }
-    // if (!camStatus.isGranted) {
-    //   return false;
-    // }
-    // // Nếu cả GPS & Camera đều OK
-    // return true;
+    // 3. Kiểm tra quyền Camera
+    var camStatus = await Permission.camera.status;
+    if (camStatus.isDenied) {
+      camStatus = await Permission.camera.request();
+    }
+    if (camStatus.isPermanentlyDenied) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Quyền Camera bị chặn vĩnh viễn. Vui lòng bật lại trong Cài đặt."),
+        ),
+      );
+      await openAppSettings();
+      return false;
+    }
+    if (!camStatus.isGranted) {
+      return false;
+    }
+    // Nếu cả GPS & Camera đều OK
+    return true;
   }
 
   Future<void> _fetchStudentInfo() async {
@@ -257,7 +250,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     }
     return null;
   }
-
   double? _extractDouble(dynamic value) {
     if (value == null) return null;
     if (value is double) return value;
@@ -290,15 +282,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
       // double qrLat = (obj["latitude"] ?? obj["lat"]).toDouble();
       // double qrLng = (obj["longitude"] ?? obj["lng"]).toDouble();
       // double allowedRadius = (obj["allowed_radius"] ?? 50).toDouble();
-
       //Cach 2
-      // double? qrLat = _extractDouble(
-      //     obj['lat'] ?? obj['latitude'] ?? obj['class_lat']);
-      // double? qrLng = _extractDouble(
-      //     obj['lng'] ?? obj['longitude'] ?? obj['class_lng']);
-      // double allowedRadius = _extractDouble(obj['allowed_radius']) ?? 50.0;
-
-      //Cach 3
       double qrLat =
           _extractDoubleFromJson(obj, ['lat', 'latitude', 'class_lat']) ??
               (throw Exception("null lat"));
@@ -400,7 +384,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           "phone": phoneValue,
           "name": studentName,
           "className": studentClass,
-          "status": status, // PRESENT | ABSENT | LEAVE | NOT_CHECKED
+          "status": status, // "Có mặt" | "Ngh phép" | "Bị ốm" | "Chưa điểm danh"...
           "method": method, // GPS_QR | MANUAL | AUTO
           "timestamp": FieldValue.serverTimestamp(),
           "qrLat": qrLat,
@@ -482,7 +466,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
     };
 
     final success = await _saveAttendanceToFirebase(
-      status: status, //statusLabel == "Công tác" ? "Công tác" : statusLabel == "Nghỉ phép" ? "Nghỉ phép",
+      status: status, //hoặc statusLabel == "Công tác" ? "Công tác" : statusLabel == "Nghỉ phép" ? "Nghỉ phép",
       method: "Tự chọn",
       note: statusLabel,
     );
@@ -637,9 +621,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                     child: ListTile(
                       title: Text("Tên: ${studentName.isEmpty ? '-' : studentName} - SĐT: ${studentPhone.isEmpty ? '-' : studentPhone}",
                       ),
-                      // subtitle: Text(
-                      //   "Tên: ${studentName.isEmpty ? '-' : studentName} - SĐT: ${studentPhone.isEmpty ? '-' : studentPhone}",
-                      // ),
                       isThreeLine: true,
                       trailing:
                           hasCheckedIn
@@ -659,7 +640,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                     ),
                   const SizedBox(height: 4),
                   Text(
-                    "Khung giờ: ${CHECKIN_START_HOUR.toString().padLeft(2, '0')}:00 - ${CHECKIN_END_HOUR.toString().padLeft(2, '0')}:00",
+                    "Khung giờ: ${CHECKIN_START_HOUR.toString().padLeft(2, '0')}:00 - ${CHECKIN_END_HOUR.toString().padLeft(2, '0')}:15",
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
 
