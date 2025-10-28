@@ -36,8 +36,8 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
   final int CHECKIN_START_HOUR = 8;
   final int CHECKIN_START_MINUTE = 35;
 
-  final int CHECKIN_END_HOUR = 8;
-  final int CHECKIN_END_MINUTE = 45;
+  final int CHECKIN_END_HOUR = 11;
+  final int CHECKIN_END_MINUTE = 00;
 
 
   @override
@@ -655,7 +655,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
                     ),
                   const SizedBox(height: 4),
                   Text(
-                    "Khung giờ: ${CHECKIN_START_HOUR.toString().padLeft(2, '0')}:00 - ${CHECKIN_END_HOUR.toString().padLeft(2, '0')}:15",
+                    "Khung giờ: ${CHECKIN_START_HOUR.toString().padLeft(2, '0')}:00 - ${CHECKIN_END_HOUR.toString().padLeft(2, '0')}:00",
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
 

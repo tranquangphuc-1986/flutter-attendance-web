@@ -14,6 +14,9 @@ class _QrSummaryTodayScreenResultState extends State<QrSummaryTodayScreenResult>
 
   /// 🔹 Stream danh sách điểm danh hôm nay
   Stream<List<Map<String, dynamic>>> getTodayAttendanceStream() {
+    // DateTime now = DateTime.now();
+    // DateTime today = DateTime(now.year, now.month, now.day);
+    // Timestamp timestampToday = Timestamp.fromDate(today);
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final timestampToday = Timestamp.fromDate(today);
