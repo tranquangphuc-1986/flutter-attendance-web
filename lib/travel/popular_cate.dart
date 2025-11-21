@@ -4,6 +4,7 @@ import 'package:app_02/chart/chart_screen.dart';
 import 'package:app_02/data_diaban/diaban_page_home.dart';
 import 'package:app_02/phone/signup_phone.dart';
 import 'package:app_02/student_screens/AdminCloseAttendanceScreen.dart';
+import 'package:app_02/student_screens/importExcelScreen.dart';
 import 'package:app_02/student_screens/qr_summaryToday_screen.dart';
 import 'package:app_02/student_screens/qr_summary_screen.dart';
 import 'package:app_02/student_screens/scan_Qrcode.dart';
@@ -210,7 +211,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (context) => CAXScreen(),//QrSummaryScreenResult(),///SignUpPhoneScreen(),//CAXScreen(),
+                              (context) => ImportExcelScreen(),//CAXScreen(),//QrSummaryScreenResult(),///SignUpPhoneScreen(),//CAXScreen(),
                         ),
                       );
                     },
@@ -238,7 +239,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                   ),
 
                   GestureDetector(
-                    onTap: _map,
+                   // onTap: _map,
                     // onTap: () {
                     //   Navigator.push(
                     //     context,

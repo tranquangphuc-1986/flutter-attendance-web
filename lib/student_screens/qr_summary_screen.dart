@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+// Thống kê điểm danh ngày kết hợp từ 2 bảng Studen và userlogin => Tốn lượt đọc
 class QrSummaryScreenResult extends StatefulWidget {
   const QrSummaryScreenResult({Key? key}) : super(key: key);
   @override

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+//THỐNG KÊ ĐIỂM DANH NGÀY TRỰC TIẾP TỪ BẢNG ĐIỂM DANH ATTENDANCEQR
 class QrSummaryTodayScreenResult extends StatefulWidget {
   const QrSummaryTodayScreenResult({Key? key}) : super(key: key);
 
@@ -81,7 +81,7 @@ class _QrSummaryTodayScreenResultState extends State<QrSummaryTodayScreenResult>
       case 'Bị ốm':
       case 'Đi học':
       case 'Việc riêng':
-        statusColor = Colors.blueGrey;
+        statusColor = Colors.green;
         break;
       default:
         statusColor = Colors.grey;
