@@ -1,20 +1,22 @@
 import 'package:app_02/phone/phone_model_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:app_02/models/student.dart';
-import 'package:app_02/service/students_firebase_service.dart';
-class EditDataScreen extends StatefulWidget {
-  final Student student;
-  const EditDataScreen({super.key, required this.student});
+
+class EditTaphuanScreen extends StatefulWidget {
+  final UserModel student;
+  const EditTaphuanScreen({super.key, required this.student});
   @override
-  State<EditDataScreen> createState() => _EditDataScreenState();
+  State<EditTaphuanScreen> createState() => _EditTaphuanScreenState();
 }
 
-class _EditDataScreenState extends State<EditDataScreen> {
+class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController nameCtrl;
   late TextEditingController phoneCtrl;
   late TextEditingController classCtrl;
+  late TextEditingController emailCtrl;
+  late TextEditingController roleCtrl;
+  late TextEditingController passCtrl;
   bool _isLoading = false;
   final List<String> classList = [
     'TMCS',
@@ -27,7 +29,10 @@ class _EditDataScreenState extends State<EditDataScreen> {
     'TTCH',
     'LĐ',
   ];
+  final List<String> roleList = ['Admin','Người dùng'];
+
   String? selectedClass;
+  String? selectedRole;
 
   @override
   void initState() {
@@ -35,7 +40,10 @@ class _EditDataScreenState extends State<EditDataScreen> {
     nameCtrl = TextEditingController(text: widget.student.name);
     phoneCtrl = TextEditingController(text: widget.student.phone);
     classCtrl = TextEditingController(text: widget.student.className);
+    emailCtrl = TextEditingController(text: widget.student.email);
+    roleCtrl = TextEditingController(text: widget.student.role);
     selectedClass = widget.student.className;
+    selectedRole = widget.student.role;
   }
 
   @override
@@ -69,7 +77,7 @@ class _EditDataScreenState extends State<EditDataScreen> {
   Future<bool> checkphone(String phone) async {
     final querySnapshot =
     await FirebaseFirestore.instance
-        .collection('students')
+        .collection('userLogin')
         .where("phone", isEqualTo: phone)
         .get();
     for (var doc in querySnapshot.docs){
@@ -94,13 +102,17 @@ class _EditDataScreenState extends State<EditDataScreen> {
     }
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
-      final updatedData = Student(
+      final updatedData = UserModel(
         id: widget.student.id,
         name: nameCtrl.text.trim(),
         phone: phoneCtrl.text.trim(),
+        email: emailCtrl.text.trim(),
+        password: passCtrl.text.trim(),
+        role: selectedRole!,
+        uid: widget.student.uid,
         className: selectedClass!,
       );
-      await FirebaseService().updateData(updatedData);
+      await FirebaseUserService().updateUser(updatedData);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Đã sửa dữ liệu"), backgroundColor: Colors.green,),
@@ -165,20 +177,53 @@ class _EditDataScreenState extends State<EditDataScreen> {
                   }
                 },
               ),
+
+              //Tạo hàng Vai trò
+              DropdownButtonFormField<String>(
+                value: selectedRole,
+                decoration: const InputDecoration(
+                  labelText: "Vai trò",
+                  border: OutlineInputBorder(),
+                ),
+                items:
+                roleList
+                    .map(
+                      (rls) => DropdownMenuItem(
+                    value: rls,
+                    child: Text(rls),
+                  ),
+                )
+                    .toList(),
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) {
+                    return "Chọn vai trò";
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      selectedRole = value;
+                      roleCtrl.text = value;
+                    });
+                  }
+                },
+              ),
+
               const SizedBox(height: 50),
               //tạo một vòng tròn xoay loading - cách 1
-
               ElevatedButton(
                 onPressed: _isLoading ? null : _updateStudent,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                 ),
                 child:
-                    _isLoading
-                        ? CircularProgressIndicator(color: Colors.red)
-                        : const Text("Cập nhật", style: TextStyle(color: Colors.white)),
+                _isLoading
+                    ? CircularProgressIndicator(color: Colors.red)
+                    : const Text("Cập nhật", style: TextStyle(color: Colors.white)),
               ),
             ],
+
           ),
         ),
       ),

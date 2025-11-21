@@ -1,22 +1,19 @@
-import 'package:app_02/service/students_firebase_service.dart';
-import 'package:app_02/student_screens/students_add_screen.dart';
-import 'package:app_02/student_screens/students_attendance_screen3_1.dart';
-import 'package:app_02/student_screens/students_edit_screen.dart';
+import 'package:app_02/phone/phone_model_service.dart';
+import 'package:app_02/taphuan/taphuan_edit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:app_02/models/student.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class StudentsListScreen extends StatefulWidget {
-  const StudentsListScreen({super.key});
+class TaphuanListScreen extends StatefulWidget {
+  const TaphuanListScreen({super.key});
 
   @override
-  State<StudentsListScreen> createState() => _StudentsListScreenState();
+  State<TaphuanListScreen> createState() => _TaphuanListScreenState();
 }
 
-class _StudentsListScreenState extends State<StudentsListScreen> {
-  final FirebaseService service = FirebaseService();
+class _TaphuanListScreenState extends State<TaphuanListScreen> {
+  final FirebaseUserService service = FirebaseUserService();
   final TextEditingController nameCtrl = TextEditingController();
   final TextEditingController phoneCtrl = TextEditingController();
   final TextEditingController classCtrl = TextEditingController();
@@ -35,18 +32,13 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
     try {
       final uid = FirebaseAuth.instance.currentUser!.uid;
       final doc =
-          await FirebaseFirestore.instance
-              .collection('userLogin')
-              .doc(uid)
-              .get();
-      final doc_student =
-          await FirebaseFirestore.instance
-              .collection('students')
-              .doc(uid)
-              .get();
-      setState(() {
+      await FirebaseFirestore.instance
+          .collection('userLogin')
+          .doc(uid)
+          .get();
+         setState(() {
         currentRole = doc['role'];
-        currentClass = doc_student['className'];
+        currentClass = doc['className'];
         isLoading = false;
       });
     } catch (e) {
@@ -57,54 +49,54 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
     }
   }
 
-  void _confirmDelete(BuildContext context, Student student) async {
+  void _confirmDelete(BuildContext context, UserModel userlogin) async {
     final confirm = await showDialog<bool>(
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text("Xác nhận xoá"),
-            content: Text("Bạn có chắc muốn xoá dữ liệu '${student.name}'?"),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text("Huỷ"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-                child: const Text("Xoá", style: TextStyle(color: Colors.red)),
-              ),
-            ],
+        title: const Text("Xác nhận xoá"),
+        content: Text("Bạn có chắc muốn xoá dữ liệu '${userlogin.name}'?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Huỷ"),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+            child: const Text("Xoá", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
     );
     if (confirm == true) {
-      await FirebaseService().deleteData(student.id);
+      await FirebaseUserService().deleteUser(userlogin.id);
       await showDialog(
         context: context,
         builder:
             (context) => AlertDialog(
-              title: Text(
-                "Thông báo",
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              content: Text(
-                "Đã xoá dữ liệu '${student.name}'",
-                style: TextStyle(color: Colors.red),
-                textAlign: TextAlign.center,
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Đóng'),
-                ),
-              ],
+          title: Text(
+            "Thông báo",
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+            "Đã xoá dữ liệu '${userlogin.name}'",
+            style: TextStyle(color: Colors.red),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Đóng'),
+            ),
+          ],
+        ),
       );
     }
   }
@@ -137,8 +129,8 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
 
           //const Divider(),
           Expanded(
-            child: StreamBuilder<List<Student>>(
-              stream: service.getStudents(),
+            child: StreamBuilder<List<UserModel>>(
+              stream: service.getAllUsersStream(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());
@@ -148,19 +140,19 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                 }
                 final students = snapshot.data!;
                 final filteredStudents =
-                    filter.isEmpty
-                        ? students
-                        : students
-                            .where(
-                              (s) =>
-                                  s.name.toLowerCase().contains(
-                                    filter.toLowerCase(),
-                                  ) ||
-                                  s.className.toLowerCase().contains(
-                                    filter.toLowerCase(),
-                                  ),
-                            )
-                            .toList();
+                filter.isEmpty
+                    ? students
+                    : students
+                    .where(
+                      (s) =>
+                  s.name.toLowerCase().contains(
+                    filter.toLowerCase(),
+                  ) ||
+                      s.className.toLowerCase().contains(
+                        filter.toLowerCase(),
+                      ),
+                )
+                    .toList();
 
                 return SlidableAutoCloseBehavior(
                   child: ListView.separated(
@@ -191,7 +183,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder:
-                                          (_) => EditDataScreen(student: st),
+                                          (_) => EditTaphuanScreen(student: st),
                                     ),
                                   );
                                 },
@@ -231,59 +223,13 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                     },
                     separatorBuilder:
                         (context, index) => Divider(
-                          thickness: 0.4,
-                          color: Colors.blue.shade400,
-                        ), //đường kẻ ngang
+                      thickness: 0.4,
+                      color: Colors.blue.shade400,
+                    ), //đường kẻ ngang
                   ),
                 );
               },
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            tooltip: "Điểm danh",
-            heroTag: "attendance",
-            onPressed:
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => AttendanceScreen3_1(
-                          currentRole: currentRole,
-                          currentClass: currentClass,
-                        ),
-                  ),
-                ),
-            child: const Icon(Icons.how_to_reg),
-          ),
-          const SizedBox(height: 10),
-
-          FloatingActionButton(
-            tooltip: "Thêm mới",
-            heroTag: "Thêm mới",
-            onPressed: () {
-              if (currentRole == 'Admin') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const AddNewstudens()),
-                );
-              } else {
-                if (!mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Bạn không có quyền truy cập.'),
-                    duration: Duration(seconds: 1),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-                return;
-              }
-            },
-            child: const Icon(Icons.add),
           ),
         ],
       ),

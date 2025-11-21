@@ -13,6 +13,7 @@ import 'package:app_02/check/students_attendance_screen3_2.dart';
 import 'package:app_02/student_screens/students_statistics_page.dart';
 import 'package:app_02/student_screens/students_list_screen.dart';
 import 'package:app_02/student_screens/students_summary_screen.dart';
+import 'package:app_02/taphuan/taphuan_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +97,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => StudentsListScreen(),
+                          builder: (context) => TaphuanListScreen(),//StudentsListScreen(),
                         ),
                       );
                     },

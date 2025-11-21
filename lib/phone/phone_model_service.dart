@@ -53,7 +53,7 @@ class UserModel {
       score: map['score'] ?? 0,
     );
   }
-//lấy toàn bộ danh sách sinh viêm từ collection ('userLogin') trong firestore - dạng list
+//lấy toàn bộ danh sách tài khoản từ collection ('userLogin') trong firestore - dạng list
   factory UserModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data()!;
     return UserModel(
