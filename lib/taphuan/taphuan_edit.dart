@@ -88,7 +88,7 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
     return false;
   }
 
-  void _updateStudent() async {
+  void _updateData() async {
     _capitalizeFullName();
     final nameStudent = nameCtrl.text.trim();
     final phone = phoneCtrl.text.trim();
@@ -117,7 +117,7 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
       await FirebaseUserService().updateUser(updatedData);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Đã sửa dữ liệu"), backgroundColor: Colors.green,),
+        SnackBar(content: Text("Cập nhật thành công"), backgroundColor: Colors.green,),
       );
       await Future.delayed(const Duration(seconds: 2));
       Navigator.pop(context); // Quay lại màn hình trước
@@ -127,7 +127,7 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Sửa thông tin")),
+      appBar: AppBar(title: const Text("Cập nhật thông tin")),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -187,7 +187,7 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
                 value: selectedRole,
                 decoration: const InputDecoration(
                   labelText: "Vai trò",
-                  border: OutlineInputBorder(),
+                  //border: OutlineInputBorder(),
                 ),
                 items:
                 roleList
@@ -208,7 +208,7 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
                   if (value != null) {
                     setState(() {
                       selectedRole = value;
-                      roleCtrl.text = value;
+                      //roleCtrl.text = value;
                     });
                   }
                 },
@@ -217,7 +217,7 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
               const SizedBox(height: 50),
               //tạo một vòng tròn xoay loading - cách 1
               ElevatedButton(
-                onPressed: _isLoading ? null : _updateStudent,
+                onPressed: _isLoading ? null : _updateData,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                 ),
