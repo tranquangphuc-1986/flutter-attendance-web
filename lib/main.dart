@@ -1,4 +1,5 @@
 import 'package:app_02/email/email_signup_screen.dart';
+import 'package:app_02/phone/signup_phone.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:app_02/email/email_login_screen.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
       home: const EmailLoginScreen(),
       // initialRoute: '/',
       routes: {
-        '/signup': (context) => EmailSignupScreen(),
+        '/signup': (context) => SignUpPhoneScreen(),//EmailSignupScreen(),
         //'/myhome':(context)=>MyPage(),
       },
       // giữ đăng nhập cho đến khi đăng xuất

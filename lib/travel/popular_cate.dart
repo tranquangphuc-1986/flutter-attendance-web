@@ -131,7 +131,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SummaryScreenResult(),
+                          builder: (context) => QrSummaryTodayScreenResult(),//SummaryScreenResult(),
                         ),
                       );
                     },
@@ -210,7 +210,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (context) => QrSummaryScreenResult(),///SignUpPhoneScreen(),//CAXScreen(),
+                              (context) => CAXScreen(),//QrSummaryScreenResult(),///SignUpPhoneScreen(),//CAXScreen(),
                         ),
                       );
                     },
