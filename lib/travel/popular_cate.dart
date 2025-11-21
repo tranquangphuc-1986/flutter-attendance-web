@@ -193,7 +193,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => QrSummaryTodayScreenResult(),//HomeScreenCAX(),
+                          builder: (context) => QrSummaryScreenResult(),//HomeScreenCAX(),//QrSummaryTodayScreenResult(),
                         ),
                       );
                     },
