@@ -41,6 +41,7 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
     phoneCtrl = TextEditingController(text: widget.student.phone);
     classCtrl = TextEditingController(text: widget.student.className);
     emailCtrl = TextEditingController(text: widget.student.email);
+    passCtrl= TextEditingController(text: widget.student.password);
     roleCtrl = TextEditingController(text: widget.student.role);
     selectedClass = widget.student.className;
     selectedRole = widget.student.role;
