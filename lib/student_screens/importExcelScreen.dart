@@ -38,12 +38,17 @@ class _ImportExcelScreenState extends State<ImportExcelScreen> {
 
       previewData.clear();
 
+      String safeCell(dynamic cell) {
+        if (cell == null) return "";
+        return cell.value.toString().trim();
+      }
+
       for (int i = 1; i < sheet.maxRows; i++) {
         final row = sheet.row(i);
 
-        String name = row[0]?.value?.toString().trim() ?? "";
-        String unit = row[1]?.value?.toString().trim() ?? "";
-        String phone = row[2]?.value?.toString().trim() ?? "";
+        String name = safeCell(row[0]);
+        String unit = safeCell(row[1]);
+        String phone = safeCell(row[2]);
 
         if (name.isEmpty || unit.isEmpty || phone.isEmpty) continue;
 
@@ -100,19 +105,19 @@ class _ImportExcelScreenState extends State<ImportExcelScreen> {
             if (isLoading) const CircularProgressIndicator(),
     if (previewData.isNotEmpty)
     Expanded(
-    child: ListView.builder(
-      itemCount: previewData.length,
-      itemBuilder: (context, index) {
-        final item = previewData[index];
-        return ListTile(
-          leading: const Icon(Icons.person),
-          title: Text(item['name']),
-          subtitle: Text(
-            "Đơn vị: ${item['unit']}\nSDT: ${item['phone']}",
-          ),
-        );
-      },
-    ),
+      child: ListView.builder(
+        itemCount: previewData.length,
+        itemBuilder: (context, index) {
+          final item = previewData[index];
+          return ListTile(
+            leading: const Icon(Icons.person),
+            title: Text(item['name']),
+            subtitle: Text(
+              "Đơn vị: ${item['unit']}\nSDT: ${item['phone']}",
+            ),
+          );
+        },
+      ),
     ),
               ],
             ),
