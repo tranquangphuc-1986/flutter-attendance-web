@@ -29,7 +29,7 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
     'TTCH',
     'LĐ',
   ];
-  final List<String> roleList = ['Admin','Người dùng'];
+  final List<String> roleList = ['Admin', 'Cán bộ'];
 
   String? selectedClass;
   String? selectedRole;
@@ -92,6 +92,8 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
     _capitalizeFullName();
     final nameStudent = nameCtrl.text.trim();
     final phone = phoneCtrl.text.trim();
+    final email = emailCtrl.text.trim();
+    final password = passCtrl.text.trim();
     if (await checkphone(phone)) {
       ScaffoldMessenger.of(
         context,
@@ -104,13 +106,13 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
       setState(() => _isLoading = true);
       final updatedData = UserModel(
         id: widget.student.id,
-        name: nameCtrl.text.trim(),
-        phone: phoneCtrl.text.trim(),
-        email: emailCtrl.text.trim(),
-        password: passCtrl.text.trim(),
-        role: selectedRole!,
         uid: widget.student.uid,
-        className: selectedClass!,
+        name: nameStudent,//nameCtrl.text.trim(),
+        phone: phone, //phoneCtrl.text.trim(),
+        email: email, //emailCtrl.text.trim(),
+        password: password, //passCtrl.text.trim(),
+        role: selectedRole ?? "", //selectedRole!,
+        className: selectedClass ?? "", //selectedClass!,
       );
       await FirebaseUserService().updateUser(updatedData);
       if (!mounted) return;
@@ -137,6 +139,7 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
                 decoration: const InputDecoration(labelText: "Họ tên"),
                 validator: (v) => v!.isEmpty ? "Nhập họ tên" : null,
               ),
+              const SizedBox(height: 16,),
               TextFormField(
                 controller: phoneCtrl,
                 decoration: const InputDecoration(labelText: "Số điện thoại"),
@@ -149,6 +152,7 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16,),
               DropdownButtonFormField<String>(
                 value: selectedClass,
                 decoration: const InputDecoration(
@@ -177,7 +181,7 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
                   }
                 },
               ),
-
+              const SizedBox(height: 16,),
               //Tạo hàng Vai trò
               DropdownButtonFormField<String>(
                 value: selectedRole,
