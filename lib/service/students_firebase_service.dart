@@ -4,7 +4,8 @@ import 'package:app_02/models/student.dart';
 
 class FirebaseService {
   final CollectionReference studentCollection = FirebaseFirestore.instance
-      .collection('students');
+     // .collection('students');
+      .collection('cax');
   final CollectionReference attendanceCollection = FirebaseFirestore.instance
       .collection('attendance');
 

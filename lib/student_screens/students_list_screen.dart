@@ -41,7 +41,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
               .get();
       final doc_student =
           await FirebaseFirestore.instance
-              .collection('students')
+              .collection('cax')
               .doc(uid)
               .get();
       setState(() {
