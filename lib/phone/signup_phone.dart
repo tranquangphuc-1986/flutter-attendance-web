@@ -247,6 +247,7 @@ class _SignUpPhoneScreenState extends State<SignUpPhoneScreen> {
       setState(() => _isLoading = false);
       return;
     }
+
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       try {

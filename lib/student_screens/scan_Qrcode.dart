@@ -526,8 +526,7 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           ),
         ],
       ),
-      body: //SingleChildScrollView(
-     Column(
+      body: Column(
         children: [
           Expanded(
             flex: 3,
@@ -570,19 +569,19 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
               child: Column(
                 children: [
                   // Student info
-                  Card(
-                    child: ListTile(
-                      title: Text("Tên: ${studentName.isEmpty ? '-' : studentName} - SĐT: ${studentPhone.isEmpty ? '-' : studentPhone}"),
-                      isThreeLine: true,
-                      trailing:
-                          hasCheckedIn
-                              ? const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                              )
-                              : null,
-                    ),
-                  ),
+                  // Card(
+                  //   child: ListTile(
+                  //     title: Text("Tên: ${studentName.isEmpty ? '-' : studentName} - SĐT: ${studentPhone.isEmpty ? '-' : studentPhone}"),
+                  //     isThreeLine: true,
+                  //     trailing:
+                  //         hasCheckedIn
+                  //             ? const Icon(
+                  //               Icons.check_circle,
+                  //               color: Colors.green,
+                  //             )
+                  //             : null,
+                  //   ),
+                  // ),
                   const SizedBox(height: 8),
                   // Last action
                   if (lastAction.isNotEmpty)
@@ -668,7 +667,6 @@ class _AttendanceQRScreenState extends State<AttendanceQRScreen> {
           ),
         ],
       ),
-     // ),
     );
   }
 }
