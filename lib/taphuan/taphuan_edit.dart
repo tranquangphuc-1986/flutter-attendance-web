@@ -111,8 +111,8 @@ class _EditTaphuanScreenState extends State<EditTaphuanScreen> {
         phone: phone, //phoneCtrl.text.trim(),
         email: email, //emailCtrl.text.trim(),
         password: password, //passCtrl.text.trim(),
-        role: selectedRole ?? "", //selectedRole!,
-        className: selectedClass ?? "", //selectedClass!,
+        role: selectedRole!, //selectedRole!,
+        className: selectedClass!, //selectedClass!,
       );
       await FirebaseUserService().updateUser(updatedData);
       if (!mounted) return;
