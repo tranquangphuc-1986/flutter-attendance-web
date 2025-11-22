@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() => loading = false);
 
-    if (error == null) {
+    if (error == "Thành công") {
       setState(() => message = "Đăng nhập thành công!");
       Navigator.pushReplacement(
         context,
