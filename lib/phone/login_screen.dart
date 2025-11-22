@@ -1,7 +1,8 @@
 import 'package:app_02/home_page/my_home_screen.dart';
+import 'package:app_02/phone/auth_service.dart';
 import 'package:app_02/phone/signup_screen.dart';
 import 'package:flutter/material.dart';
-import 'auth_service.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final phoneController = TextEditingController();
   final passController = TextEditingController();
 
-  final auth = AuthService();
+  final auth = AuthServicePhone();
 
   bool loading = false;
   String message = "";
@@ -25,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final phone = phoneController.text.trim();
     final pass = passController.text.trim();
 
-    final error = await auth.login(phone: phone, password: pass);
+    final error = await auth.loginUser(phone: phone, password: pass);
 
     setState(() => loading = false);
 
@@ -97,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SignupScreen(),
+                          builder: (context) => SignUpPhoneScreen(),
                         ),
                       );
                     },
