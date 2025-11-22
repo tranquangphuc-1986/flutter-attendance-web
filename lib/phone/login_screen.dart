@@ -1,4 +1,5 @@
 import 'package:app_02/home_page/my_home_screen.dart';
+import 'package:app_02/phone/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'auth_service.dart';
 
@@ -73,6 +74,37 @@ class _LoginScreenState extends State<LoginScreen> {
                 message,
                 style: const TextStyle(color: Colors.red),
               ),
+              const SizedBox(height: 100),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Bạn chưa có tài khoản?",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  GestureDetector(
+                    child: Text(
+                      " Đăng ký",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                        letterSpacing: -1,
+                      ),
+                    ),
+                    onTap: () {
+                      //xử lý khi click vào chữ đăng ký, sẽ ra form đăng ký
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignupScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+
             ],
           ),
         ),
