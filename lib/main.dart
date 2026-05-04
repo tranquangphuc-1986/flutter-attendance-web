@@ -1,4 +1,5 @@
 import 'package:app_02/email/email_signup_screen.dart';
+import 'package:app_02/home_page/page_first.dart';
 import 'package:app_02/phone/login_screen.dart';
 import 'package:app_02/phone/signup_phone.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         //textTheme: GoogleFonts.playfairDisplayTextTheme(),
         fontFamily: 'Roboto',
             ),
-      home: const LoginScreen(),//const EmailLoginScreen(),
+      home: const PageFirst(),//const EmailLoginScreen(),
       // initialRoute: '/',
       routes: {
         '/signup': (context) => SignUpPhoneScreen(),//SignUpPhoneScreen(),//EmailSignupScreen(),
