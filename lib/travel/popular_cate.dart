@@ -195,7 +195,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => QrSummaryScreenResult(),//HomeScreenCAX(),//QrSummaryTodayScreenResult(),
+                          builder: (context) => HomeScreenCAX(), //QrSummaryScreenResult(),//QrSummaryTodayScreenResult(),
                         ),
                       );
                     },
@@ -212,7 +212,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (context) => ImportExcelScreen(),//CAXScreen(),//QrSummaryScreenResult(),///SignUpPhoneScreen(),//CAXScreen(),
+                              (context) => CAXScreen(), //ImportExcelScreen(),
                         ),
                       );
                     },
@@ -240,17 +240,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                   ),
 
                   GestureDetector(
-                   // onTap: _map,
-                    // onTap: () {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => AttendanceScreen3_2(
-                    //           currentRole: currentRole,
-                    //           currentClass: currentClass),
-                    //     ),
-                    //   );
-                    // },
+                   onTap: _map,
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFFFacdcc),
