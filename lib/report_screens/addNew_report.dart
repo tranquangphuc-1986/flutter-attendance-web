@@ -20,7 +20,7 @@ class _AddnewReportState extends State<AddnewReport> {
   final TextEditingController contentCtrl = TextEditingController();
   final TextEditingController createdAtCtrl = TextEditingController();
   final TextEditingController fullNameCtrl = TextEditingController();
-  DateTime? reportDay;
+
   bool _isLoading = false;
 
   @override
@@ -31,12 +31,12 @@ class _AddnewReportState extends State<AddnewReport> {
     super.dispose();
   }
 
-  //Hàm viết hoa chữ cái đầu mỗi từ
+  //Hàm viết hoa chữ toàn bộ
   void _capitalizeFullName() {
     String input = fullNameCtrl.text;
     //Tách từng từ theo dấu cách
     List<String> words = input.trim().split('');
-    //Viết hoa chữ cái đầu mỗi từ
+    //Viết hoa
     List<String> capitalizeWords =
     words.map((word) {
       if (word.isEmpty) return '';
@@ -64,7 +64,7 @@ class _AddnewReportState extends State<AddnewReport> {
           title: titleCtrl.text.trim(),
           fullName: fullNameCtrl.text.trim(),
           content: contentCtrl.text.trim(),
-          createdAt: FieldValue.serverTimestamp() as Timestamp,
+          createdAt: timestampToday, //FieldValue.serverTimestamp() as Timestamp,
         );
         await service.addReport(report);
 
@@ -106,6 +106,7 @@ class _AddnewReportState extends State<AddnewReport> {
                 child: Column(
                   children: [
                     SizedBox(height: 30),
+
                     TextFormField(
                       controller: titleCtrl,
                       decoration: const InputDecoration(
