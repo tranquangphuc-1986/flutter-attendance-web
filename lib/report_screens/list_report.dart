@@ -22,6 +22,8 @@ class _ReportListScreenState extends State<ReportListScreen> {
   final TextEditingController createdAtCtrl = TextEditingController();
   final TextEditingController searchCtrl = TextEditingController();
 
+  String currentRole = '';
+  String currentClass = '';
   String filter = "";
   bool isLoading = true;
 
@@ -160,7 +162,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
                     itemBuilder: (context, index) {
                       final st = filteredReport[index];
 
-                      //if (currentRole == 'Admin') { //vai trò admin được quyền xóa, sửa
+                      if (currentRole == 'Admin') { //vai trò admin được quyền xóa, sửa
 
                         return Slidable(
                           key: ValueKey(st.id),
@@ -208,19 +210,19 @@ class _ReportListScreenState extends State<ReportListScreen> {
                             ),
                           ),
                         );
-                      // } else {
-                      //   return ListTile(
-                      //     leading: CircleAvatar(
-                      //       backgroundColor: Colors.blue.shade100,
-                      //       backgroundImage: null,
-                      //       child: Text(st.title[0]), //Hình ảnh Avarta
-                      //     ),
-                      //     title: Text(st.title),
-                      //     subtitle: Text(
-                      //       "Ngày báo cáo: ${st.createdAt.toString().substring(0, 10)}",
-                      //     ),
-                      //   );
-                      // }
+                      } else {
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.blue.shade100,
+                            backgroundImage: null,
+                            child: Text(st.title[0]), //Hình ảnh Avarta
+                          ),
+                          title: Text(st.title),
+                          subtitle: Text(
+                            "Ngày báo cáo: ${st.createdAt.toString().substring(0, 10)}",
+                          ),
+                        );
+                      }
                       //-----------------end--------------------
                     },
                     separatorBuilder:
