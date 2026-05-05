@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class DailyReport {
   final String id;
   final String content;
-  final String createdAt;
+  final Timestamp createdAt;
   final String fullName;
   DailyReport({
     required this.id,

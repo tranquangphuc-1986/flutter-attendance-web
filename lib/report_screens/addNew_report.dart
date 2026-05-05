@@ -60,7 +60,7 @@ class _AddnewReportState extends State<AddnewReport> {
           id: '',
           fullName: fullNameCtrl.text.trim(),
           content: contentCtrl.text.trim(),
-          createdAt: timestampToday.toString(),
+          createdAt: timestampToday,
         );
         await service.addReport(report);
 
