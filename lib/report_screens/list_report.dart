@@ -1,12 +1,11 @@
-import 'package:app_02/service/students_firebase_service.dart';
-import 'package:app_02/student_screens/students_add_screen.dart';
-import 'package:app_02/student_screens/students_attendance_screen3_1.dart';
-import 'package:app_02/student_screens/students_edit_screen.dart';
+import 'package:app_02/models/dailyReport.dart';
+import 'package:app_02/report_screens/edit_report.dart';
+import 'package:app_02/service/report_firebase_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:app_02/models/student.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
 
 class ReportListScreen extends StatefulWidget {
   const ReportListScreen({super.key});
@@ -16,10 +15,11 @@ class ReportListScreen extends StatefulWidget {
 }
 
 class _ReportListScreenState extends State<ReportListScreen> {
-  final FirebaseService service = FirebaseService();
-  final TextEditingController nameCtrl = TextEditingController();
-  final TextEditingController phoneCtrl = TextEditingController();
-  final TextEditingController classCtrl = TextEditingController();
+  final ReportFirebaseService service = ReportFirebaseService();
+
+  final TextEditingController titleCtrl = TextEditingController();
+  final TextEditingController contentCtrl = TextEditingController();
+  final TextEditingController createdAtCtrl = TextEditingController();
   final TextEditingController searchCtrl = TextEditingController();
   String filter = "";
   String currentRole = '';
@@ -28,25 +28,18 @@ class _ReportListScreenState extends State<ReportListScreen> {
   @override
   void initState() {
     super.initState();
-    fetchUserInfo();
+    fetchReportInfo();
   }
 
-  Future<void> fetchUserInfo() async {
+  Future<void> fetchReportInfo() async {
     try {
       final uid = FirebaseAuth.instance.currentUser!.uid;
-      final doc =
-      await FirebaseFirestore.instance
-          .collection('userLogin')
-          .doc(uid)
-          .get();
-      final doc_student =
-      await FirebaseFirestore.instance
-          .collection('students')
+
+      final doc_report = await FirebaseFirestore.instance
+          .collection('report')
           .doc(uid)
           .get();
       setState(() {
-        currentRole = doc['role'];
-        currentClass = doc_student['className'];
         isLoading = false;
       });
     } catch (e) {
@@ -57,13 +50,13 @@ class _ReportListScreenState extends State<ReportListScreen> {
     }
   }
 
-  void _confirmDelete(BuildContext context, Student student) async {
+  void _confirmDelete(BuildContext context, DailyReport report) async {
     final confirm = await showDialog<bool>(
       context: context,
       builder:
           (context) => AlertDialog(
         title: const Text("Xác nhận xoá"),
-        content: Text("Bạn có chắc muốn xoá dữ liệu '${student.name}'?"),
+        content: Text("Bạn có chắc muốn xoá dữ liệu '${report.title}'?"),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -79,7 +72,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
       ),
     );
     if (confirm == true) {
-      await FirebaseService().deleteData(student.id);
+      await ReportFirebaseService().deleteReport(report.id);
       await showDialog(
         context: context,
         builder:
@@ -94,7 +87,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
             textAlign: TextAlign.center,
           ),
           content: Text(
-            "Đã xoá dữ liệu '${student.name}'",
+            "Đã xoá dữ liệu '${report.title}'",
             style: TextStyle(color: Colors.red),
             textAlign: TextAlign.center,
           ),
@@ -115,7 +108,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.cyan,
-        title: const Text("Danh sách cán bộ"),
+        title: const Text("Danh sách báo cáo"),
         automaticallyImplyLeading: true,
       ),
       body: Column(
@@ -125,7 +118,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
             child: TextField(
               controller: searchCtrl,
               decoration: const InputDecoration(
-                labelText: "Tìm kiếm theo đơn vị hoặc tên",
+                labelText: "Tìm kiếm báo cáo",
               ),
               onChanged: (value) {
                 setState(() {
@@ -137,26 +130,26 @@ class _ReportListScreenState extends State<ReportListScreen> {
 
           //const Divider(),
           Expanded(
-            child: StreamBuilder<List<Student>>(
-              stream: service.getStudents(),
+            child: StreamBuilder<List<DailyReport>>(
+              stream: service.getReports(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text("Chưa có danh sách cán bộ"));
+                  return const Center(child: Text("Chưa có danh sách báo cáo"));
                 }
-                final students = snapshot.data!;
-                final filteredStudents =
+                final report = snapshot.data!;
+                final filteredReport =
                 filter.isEmpty
-                    ? students
-                    : students
+                    ? report
+                    : report
                     .where(
                       (s) =>
-                  s.name.toLowerCase().contains(
+                  s.title.toLowerCase().contains(
                     filter.toLowerCase(),
                   ) ||
-                      s.className.toLowerCase().contains(
+                      s.createdAt.toString().toLowerCase().contains(
                         filter.toLowerCase(),
                       ),
                 )
@@ -164,9 +157,9 @@ class _ReportListScreenState extends State<ReportListScreen> {
 
                 return SlidableAutoCloseBehavior(
                   child: ListView.separated(
-                    itemCount: filteredStudents.length,
+                    itemCount: filteredReport.length,
                     itemBuilder: (context, index) {
-                      final st = filteredStudents[index];
+                      final st = filteredReport[index];
                       if (currentRole == 'Admin') {
                         //vai trò admin được quyền xóa, sửa
                         return Slidable(
@@ -191,7 +184,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder:
-                                          (_) => EditDataScreen(student: st),
+                                          (_) => EditReport(report: st),
                                     ),
                                   );
                                 },
@@ -206,11 +199,11 @@ class _ReportListScreenState extends State<ReportListScreen> {
                             leading: CircleAvatar(
                               backgroundColor: Colors.blue.shade100,
                               backgroundImage: null,
-                              child: Text(st.name[0]), //Hình ảnh Avarta
+                              child: Text(st.title[0]), //Hình ảnh Avarta
                             ),
-                            title: Text(st.name),
+                            title: Text(st.title),
                             subtitle: Text(
-                              "Đơn vị: ${st.className} | SĐT: ${st.phone}",
+                              "Ngày báo cáo: ${st.createdAt} | SĐT: ${st.fullName}",
                             ),
                           ),
                         );
@@ -219,11 +212,11 @@ class _ReportListScreenState extends State<ReportListScreen> {
                           leading: CircleAvatar(
                             backgroundColor: Colors.blue.shade100,
                             backgroundImage: null,
-                            child: Text(st.name[0]), //Hình ảnh Avarta
+                            child: Text(st.title[0]), //Hình ảnh Avarta
                           ),
-                          title: Text(st.name),
+                          title: Text(st.title),
                           subtitle: Text(
-                            "Đơn vị: ${st.className} | SĐT: ${st.phone}",
+                            "Ngày báo cáo: ${st.createdAt} | SĐT: ${st.fullName}",
                           ),
                         );
                       }
@@ -238,52 +231,6 @@ class _ReportListScreenState extends State<ReportListScreen> {
                 );
               },
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            tooltip: "Điểm danh",
-            heroTag: "attendance",
-            onPressed:
-                () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:
-                    (context) => AttendanceScreen3_1(
-                  currentRole: currentRole,
-                  currentClass: currentClass,
-                ),
-              ),
-            ),
-            child: const Icon(Icons.how_to_reg),
-          ),
-          const SizedBox(height: 10),
-
-          FloatingActionButton(
-            tooltip: "Thêm mới",
-            heroTag: "Thêm mới",
-            onPressed: () {
-              if (currentRole == 'Admin') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const AddNewstudens()),
-                );
-              } else {
-                if (!mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Bạn không có quyền truy cập.'),
-                    duration: Duration(seconds: 1),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-                return;
-              }
-            },
-            child: const Icon(Icons.add),
           ),
         ],
       ),

@@ -1,54 +1,50 @@
-import 'package:app_02/phone/phone_model_service.dart';
+import 'package:app_02/models/dailyReport.dart';
+import 'package:app_02/service/report_firebase_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:app_02/models/student.dart';
-import 'package:app_02/service/students_firebase_service.dart';
-class EditDataScreen extends StatefulWidget {
-  final Student student;
-  const EditDataScreen({super.key, required this.student});
+
+
+
+class EditReport extends StatefulWidget {
+  final DailyReport report;
+  const EditReport({super.key, required this.report});
   @override
-  State<EditDataScreen> createState() => _EditDataScreenState();
+  State<EditReport> createState() => _EditReportState();
 }
 
-class _EditDataScreenState extends State<EditDataScreen> {
+class _EditReportState extends State<EditReport> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController nameCtrl;
-  late TextEditingController phoneCtrl;
-  late TextEditingController classCtrl;
+
+  late TextEditingController titleCtrl;
+  late TextEditingController contentCtrl;
+  late TextEditingController createdAtCtrl;
+  late TextEditingController fullNameCtrl;
+
   bool _isLoading = false;
-  final List<String> classList = [
-    'TMCS',
-    'TMAN',
-    'TMTH',
-    'CNTT',
-    'XDPT',
-    'PC',
-    'CY',
-    'TTCH',
-    'LĐ',
-  ];
-  String? selectedClass;
+
+  // String? selectedClass;
 
   @override
   void initState() {
     super.initState();
-    nameCtrl = TextEditingController(text: widget.student.name);
-    phoneCtrl = TextEditingController(text: widget.student.phone);
-    classCtrl = TextEditingController(text: widget.student.className);
-    selectedClass = widget.student.className;
+    titleCtrl = TextEditingController(text: widget.report.title);
+    contentCtrl = TextEditingController(text: widget.report.content);
+    createdAtCtrl = TextEditingController(text: widget.report.createdAt.toDate().toString());
+    fullNameCtrl = TextEditingController(text: widget.report.fullName);
   }
 
   @override
   void dispose() {
-    nameCtrl.dispose();
-    phoneCtrl.dispose();
-    //classCtrl.dispose();
+    titleCtrl.dispose();
+    contentCtrl.dispose();
+    createdAtCtrl.dispose();
+    fullNameCtrl.dispose();
     super.dispose();
   }
 
   //Hàm viết hoa chữ cái đầu mỗi từ
   void _capitalizeFullName() {
-    String input = nameCtrl.text;
+    String input = fullNameCtrl.text;
     //Tách từng từ theo dấu cách
     List<String> words = input.trim().split('');
     //Viết hoa chữ cái đầu mỗi từ
@@ -60,47 +56,24 @@ class _EditDataScreenState extends State<EditDataScreen> {
     //Ghép lại chuỗi
     String capitalizeName = capitalizeWords.join('');
     //Gán lại vào controller mà không làm nhảy con trỏ
-    nameCtrl.value = nameCtrl.value.copyWith(
+    fullNameCtrl.value = fullNameCtrl.value.copyWith(
       text: capitalizeName,
       selection: TextSelection.collapsed(offset: capitalizeName.length),
     );
   }
-  //Hàm kiểm tra số điện thoại bị trùng
-  Future<bool> checkphone(String phone) async {
-    final querySnapshot =
-    await FirebaseFirestore.instance
-        .collection('students')
-        .where("phone", isEqualTo: phone)
-        .get();
-    for (var doc in querySnapshot.docs){
-      if(doc.id!=widget.student.id){
-        return true;
-      }
-    }
-    return false;
-  }
 
-  void _updateStudent() async {
+  void _updateReport() async {
     _capitalizeFullName();
-    final nameStudent = nameCtrl.text.trim();
-    final phone = phoneCtrl.text.trim();
-    if (await checkphone(phone)) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Số điện thoại đã được đăng ký"),
-          backgroundColor: Colors.red));
-      setState(() => _isLoading = false);
-      return;
-    }
-    if (_formKey.currentState!.validate()) {
+     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
-      final updatedData = Student(
-        id: widget.student.id,
-        name: nameCtrl.text.trim(),
-        phone: phoneCtrl.text.trim(),
-        className: selectedClass!,
+      final updatedData = DailyReport(
+        id: widget.report.id,
+        title: titleCtrl.text.trim(),
+        content: contentCtrl.text.trim(),
+        createdAt: Timestamp.fromDate(DateTime.now()),
+        fullName: fullNameCtrl.text.trim(),
       );
-      await FirebaseService().updateData(updatedData);
+      await ReportFirebaseService().updateReport(updatedData);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Đã sửa dữ liệu"), backgroundColor: Colors.green,),
@@ -120,56 +93,60 @@ class _EditDataScreenState extends State<EditDataScreen> {
           key: _formKey,
           child: Column(
             children: [
+
+              SizedBox(height: 30),
+
               TextFormField(
-                controller: nameCtrl,
-                decoration: const InputDecoration(labelText: "Họ tên"),
-                validator: (v) => v!.isEmpty ? "Nhập họ tên" : null,
-              ),
-              TextFormField(
-                controller: phoneCtrl,
-                decoration: const InputDecoration(labelText: "Số điện thoại"),
-                validator: (v) {
-                  if (v == null || v.trim().isEmpty) {
-                    return "Nhập số điện thoại";
-                  } else if (!RegExp(r'^[0-9]{10}$').hasMatch(v)) {
-                    return 'Số điện thoại không hợp lệ';
-                  }
-                  return null;
-                },
-              ),
-              DropdownButtonFormField<String>(
-                value: selectedClass,
+                controller: titleCtrl,
                 decoration: const InputDecoration(
-                  labelText: "Đơn vị",
+                  labelText: "Tiêu đề báo cáo",
+                  border: OutlineInputBorder(),
                 ),
-                items:
-                classList
-                    .map(
-                      (cls) => DropdownMenuItem(
-                    value: cls,
-                    child: Text(cls),
-                  ),
-                )
-                    .toList(),
                 validator: (v) {
                   if (v == null || v.trim().isEmpty) {
-                    return "Nhập đơn vị";
+                    return "Nhập tiêu đề";
                   }
                   return null;
                 },
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      selectedClass = value;
-                    });
+              ),
+              const SizedBox(height: 16),
+
+              TextFormField(
+                controller: contentCtrl,
+                maxLines: 19,
+                decoration: const InputDecoration(
+                  labelText: "Nội dung báo cáo",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) {
+                    return "Nhập nội dung";
                   }
+                  return null;
                 },
               ),
+              const SizedBox(height: 16),
+
+              TextFormField(
+                controller: fullNameCtrl,
+                decoration: const InputDecoration(
+                  labelText: "Cán bộ báo cáo",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) {
+                    return "Nhập họ tên";
+                  }
+                  return null;
+                },
+              ),
+
+
               const SizedBox(height: 50),
               //tạo một vòng tròn xoay loading - cách 1
 
               ElevatedButton(
-                onPressed: _isLoading ? null : _updateStudent,
+                onPressed: _isLoading ? null : _updateReport,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                 ),
