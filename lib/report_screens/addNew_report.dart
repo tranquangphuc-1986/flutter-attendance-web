@@ -16,18 +16,18 @@ class AddnewReport extends StatefulWidget {
 class _AddnewReportState extends State<AddnewReport> {
   final ReportFirebaseService service = ReportFirebaseService();
   final _formKey = GlobalKey<FormState>();
-  // final TextEditingController reportTimeCtrl = TextEditingController();
+  final TextEditingController titleCtrl = TextEditingController();
   final TextEditingController contentCtrl = TextEditingController();
   final TextEditingController createdAtCtrl = TextEditingController();
   final TextEditingController fullNameCtrl = TextEditingController();
-  DateTime? reportTime;
+  DateTime? reportDay;
   bool _isLoading = false;
 
   @override
   void dispose() {
     contentCtrl.dispose();
     fullNameCtrl.dispose();
-    // reportTimeCtrl.dispose();
+    titleCtrl.dispose();
     super.dispose();
   }
 
@@ -61,7 +61,7 @@ class _AddnewReportState extends State<AddnewReport> {
       try {
         final report = DailyReport(
           id: '',
-          reportTime: reportTime!,
+          title: titleCtrl.text.trim(),
           fullName: fullNameCtrl.text.trim(),
           content: contentCtrl.text.trim(),
           createdAt: FieldValue.serverTimestamp() as Timestamp,
@@ -88,26 +88,6 @@ class _AddnewReportState extends State<AddnewReport> {
     }
   }
 
-  Future<void> pickDate(BuildContext context, bool isFrom) async {
-    DateTime initialDate =
-    isFrom ? reportTime ?? DateTime.now() : reportTime ?? DateTime.now();
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: DateTime(2024),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null) {
-      setState(() {
-        if (isFrom) {
-          reportTime = picked;
-        } else {
-          reportTime = picked;
-        }
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,32 +105,25 @@ class _AddnewReportState extends State<AddnewReport> {
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   children: [
-                    // SizedBox(height: 40),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => pickDate(context, true),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 12,
-                            horizontal: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Text(
-                            reportTime == null
-                                ? 'Tình hình ngày'
-                                : DateFormat('dd/MM/yyyy').format(reportTime!),
-                          ),
-                        ),
+                    SizedBox(height: 30),
+                    TextFormField(
+                      controller: titleCtrl,
+                      decoration: const InputDecoration(
+                        labelText: "Tiêu đề báo cáo",
+                        border: OutlineInputBorder(),
                       ),
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) {
+                          return "Nhập tiêu đề";
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 16),
 
                     TextFormField(
                       controller: contentCtrl,
-                      maxLines: 50,
+                      maxLines: 25,
                       decoration: const InputDecoration(
                         labelText: "Nội dung báo cáo",
                         border: OutlineInputBorder(),

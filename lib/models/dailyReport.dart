@@ -4,13 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DailyReport {
   final String id;
-  final DateTime reportTime;
+  final String title;
   final String content;
   final Timestamp createdAt;
   final String fullName;
   DailyReport({
     required this.id,
-    required this.reportTime,
+    required this.title,
     required this.content,
     required this.createdAt,
     required this.fullName});
@@ -18,7 +18,7 @@ class DailyReport {
   //Chuyển thành Map để lưu vào Firestore
   Map<String, dynamic> toMap() {
     return {
-      'reportTime': reportTime,
+      'title': title,
       'content': content,
       'createdAt': createdAt,
       'fullName': fullName,
@@ -28,7 +28,7 @@ class DailyReport {
   factory DailyReport.fromMap(String id, Map<String, dynamic> map) {
     return DailyReport(
       id: id,
-      reportTime: map['reportTime'],
+      title: map['title'],
       content: map['content'],
       createdAt: map['createdAt'],
       fullName: map['fullName'],
@@ -39,7 +39,7 @@ class DailyReport {
     final data = doc.data()!;
     return DailyReport(
       id: doc.id,
-      reportTime: data['reportTime'],
+      title: data['title'],
       content: data['content'],
       createdAt: data['createdAt'],
       fullName: data['fullName'],
