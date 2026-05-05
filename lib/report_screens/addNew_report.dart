@@ -53,7 +53,7 @@ class _AddnewReportState extends State<AddnewReport> {
 
   void _addReport() async {
     DateTime now = DateTime.now();
-    DateTime today = DateTime(now.year, now.month, now.day);
+    //DateTime today = DateTime(now.year, now.month, now.day);
     Timestamp timestampToday = Timestamp.fromDate(now);
     _capitalizeFullName();
     if (_formKey.currentState!.validate()) {
@@ -77,7 +77,7 @@ class _AddnewReportState extends State<AddnewReport> {
         setState(() => _isLoading = false);
         fullNameCtrl.clear();
         contentCtrl.clear();
-        // createdAtCtrl.clear();
+        titleCtrl.clear();
       } catch (e) {
         ScaffoldMessenger.of(
           context,
@@ -201,7 +201,7 @@ class _AddnewReportState extends State<AddnewReport> {
               context,
               MaterialPageRoute(builder: (_) => const ReportListScreen()),
             ),
-            child: const Icon(Icons.groups),
+            child: const Icon(Icons.library_books),
             tooltip: "Tổng hợp",
           ),
         ],

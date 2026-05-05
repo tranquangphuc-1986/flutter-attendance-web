@@ -34,8 +34,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
   Future<void> fetchReportInfo() async {
     try {
       final uid = FirebaseAuth.instance.currentUser!.uid;
-
-      final doc_report = await FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('report')
           .doc(uid)
           .get();
@@ -160,8 +159,9 @@ class _ReportListScreenState extends State<ReportListScreen> {
                     itemCount: filteredReport.length,
                     itemBuilder: (context, index) {
                       final st = filteredReport[index];
-                      if (currentRole == 'Admin') {
-                        //vai trò admin được quyền xóa, sửa
+
+                      //if (currentRole == 'Admin') { //vai trò admin được quyền xóa, sửa
+
                         return Slidable(
                           key: ValueKey(st.id),
                           startActionPane: ActionPane(
@@ -203,23 +203,23 @@ class _ReportListScreenState extends State<ReportListScreen> {
                             ),
                             title: Text(st.title),
                             subtitle: Text(
-                              "Ngày báo cáo: ${st.createdAt} | SĐT: ${st.fullName}",
+                              "Ngày báo cáo: ${st.createdAt.toString().substring(0, 10)}",
                             ),
                           ),
                         );
-                      } else {
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.blue.shade100,
-                            backgroundImage: null,
-                            child: Text(st.title[0]), //Hình ảnh Avarta
-                          ),
-                          title: Text(st.title),
-                          subtitle: Text(
-                            "Ngày báo cáo: ${st.createdAt} | SĐT: ${st.fullName}",
-                          ),
-                        );
-                      }
+                      // } else {
+                      //   return ListTile(
+                      //     leading: CircleAvatar(
+                      //       backgroundColor: Colors.blue.shade100,
+                      //       backgroundImage: null,
+                      //       child: Text(st.title[0]), //Hình ảnh Avarta
+                      //     ),
+                      //     title: Text(st.title),
+                      //     subtitle: Text(
+                      //       "Ngày báo cáo: ${st.createdAt.toString().substring(0, 10)}",
+                      //     ),
+                      //   );
+                      // }
                       //-----------------end--------------------
                     },
                     separatorBuilder:
