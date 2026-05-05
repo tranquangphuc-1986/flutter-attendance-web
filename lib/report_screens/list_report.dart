@@ -148,7 +148,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
                   s.title.toLowerCase().contains(
                     filter.toLowerCase(),
                   ) ||
-                      s.createdAt.toString().toLowerCase().contains(
+                      s.fullName.toLowerCase().contains(
                         filter.toLowerCase(),
                       ),
                 )

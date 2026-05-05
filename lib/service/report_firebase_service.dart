@@ -36,6 +36,7 @@ class ReportFirebaseService {
           .toList();
     });
   }
+
 //Lấy danh sách dưới dạng List
   Future<List<DailyReport>> fetchReports() async {
     QuerySnapshot snapshot = await reportCollection.get();
