@@ -201,7 +201,7 @@ class _AddnewReportState extends State<AddnewReport> {
               context,
               MaterialPageRoute(builder: (_) => const ReportListScreen()),
             ),
-            child: const Icon(Icons.library_books),
+            child: const Icon(Icons.list),
             tooltip: "Tổng hợp",
           ),
         ],

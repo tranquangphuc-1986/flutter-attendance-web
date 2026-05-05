@@ -21,10 +21,10 @@ class _ReportListScreenState extends State<ReportListScreen> {
   final TextEditingController contentCtrl = TextEditingController();
   final TextEditingController createdAtCtrl = TextEditingController();
   final TextEditingController searchCtrl = TextEditingController();
+
   String filter = "";
-  String currentRole = '';
-  String currentClass = '';
   bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +33,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
 
   Future<void> fetchReportInfo() async {
     try {
-      final uid = FirebaseAuth.instance.currentUser!.uid;
+     final uid = FirebaseAuth.instance.currentUser!.uid;
       await FirebaseFirestore.instance
           .collection('report')
           .doc(uid)
@@ -203,7 +203,8 @@ class _ReportListScreenState extends State<ReportListScreen> {
                             ),
                             title: Text(st.title),
                             subtitle: Text(
-                              "Ngày báo cáo: ${st.createdAt.toString().substring(0, 10)}",
+                              "Cán bộ báo cáo: ${st.fullName}",
+                             // "Ngày báo cáo: ${st.createdAt.toDate().toString().substring(0, 10)}",
                             ),
                           ),
                         );

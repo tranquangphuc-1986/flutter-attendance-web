@@ -91,7 +91,8 @@ class _EditReportState extends State<EditReport> {
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: SingleChildScrollView(
+          child:  Column(
             children: [
 
               SizedBox(height: 30),
@@ -113,7 +114,7 @@ class _EditReportState extends State<EditReport> {
 
               TextFormField(
                 controller: contentCtrl,
-                maxLines: 19,
+                maxLines: 15,
                 decoration: const InputDecoration(
                   labelText: "Nội dung báo cáo",
                   border: OutlineInputBorder(),
@@ -156,6 +157,7 @@ class _EditReportState extends State<EditReport> {
                     : const Text("Cập nhật", style: TextStyle(color: Colors.white)),
               ),
             ],
+          ),
           ),
         ),
       ),
