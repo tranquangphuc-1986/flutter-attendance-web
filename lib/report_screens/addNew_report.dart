@@ -54,7 +54,7 @@ class _AddnewReportState extends State<AddnewReport> {
   void _addReport() async {
     DateTime now = DateTime.now();
     DateTime today = DateTime(now.year, now.month, now.day);
-    Timestamp timestampToday = Timestamp.fromDate(today);
+    Timestamp timestampToday = Timestamp.fromDate(now);
     _capitalizeFullName();
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
@@ -124,7 +124,7 @@ class _AddnewReportState extends State<AddnewReport> {
 
                     TextFormField(
                       controller: contentCtrl,
-                      maxLines: 25,
+                      maxLines: 19,
                       decoration: const InputDecoration(
                         labelText: "Nội dung báo cáo",
                         border: OutlineInputBorder(),
