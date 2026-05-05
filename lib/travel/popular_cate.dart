@@ -3,6 +3,7 @@ import 'package:app_02/chart/area_chart.dart';
 import 'package:app_02/chart/chart_screen.dart';
 import 'package:app_02/data_diaban/diaban_page_home.dart';
 import 'package:app_02/phone/signup_phone.dart';
+import 'package:app_02/report_screens/addNew_report.dart';
 import 'package:app_02/student_screens/AdminCloseAttendanceScreen.dart';
 import 'package:app_02/student_screens/importExcelScreen.dart';
 import 'package:app_02/student_screens/qr_summaryToday_screen.dart';
@@ -149,7 +150,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AdminCloseAttendanceScreen(),//StudentsStatisticsPage(),
+                          builder: (context) => AddnewReport(),//AdminCloseAttendanceScreen(),//StudentsStatisticsPage(),
                         ),
                       );
                     },
