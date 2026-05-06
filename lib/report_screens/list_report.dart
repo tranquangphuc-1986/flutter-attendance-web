@@ -27,6 +27,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
   String filter = "";
   bool isLoading = true;
 
+
   @override
   void initState() {
     super.initState();
@@ -102,6 +103,59 @@ class _ReportListScreenState extends State<ReportListScreen> {
       );
     }
   }
+
+  /// 🔹 Widget hiển thị 1 dòng danh sách người điểm danh
+  // Widget _buildAttendanceTile(Map<String, dynamic> item) {
+  //   final name = item['name'] ?? 'Không rõ tên';
+  //   final className = item['className'] ?? 'Không rõ đơn vị';
+  //   final phone = item['phone'] ?? 'Không rõ số';
+  //   final status = item['status'] ?? 'Chưa điểm danh';
+  //
+  //   Color statusColor;
+  //   switch (status) {
+  //     case 'Có mặt':
+  //       statusColor = Colors.green;
+  //       break;
+  //     case 'Đi trễ':
+  //       statusColor = Colors.orange;
+  //       break;
+  //     case 'Nghỉ phép':
+  //     case 'Công tác':
+  //     case 'Bị ốm':
+  //     case 'Đi học':
+  //     case 'Việc riêng':
+  //       statusColor = Colors.green;
+  //       break;
+  //     default:
+  //       statusColor = Colors.grey;
+  //   }
+  //
+  //   return Card(
+  //     margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+  //     elevation: 1,
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  //     child: ListTile(
+  //       contentPadding:
+  //       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  //       leading: CircleAvatar(
+  //         backgroundColor: statusColor.withOpacity(0.1),
+  //         child: Icon(Icons.person, color: statusColor),
+  //       ),
+  //       title: Text(
+  //         name,
+  //         style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+  //       ),
+  //       subtitle: Text('Đơn vị: $className\nSĐT: $phone'),
+  //       trailing: Text(
+  //         status,
+  //         style: TextStyle(
+  //           color: statusColor,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -199,17 +253,28 @@ class _ReportListScreenState extends State<ReportListScreen> {
                           ),
                           child: ListTile(
                             leading: CircleAvatar(
+                              radius: 35,
                               backgroundColor: Colors.blue.shade100,
                               backgroundImage: null,
-                              child: Text(st.title[0]), //Hình ảnh Avarta
+                              child: Image.asset("img/logocand.png", height: 40),
                             ),
-                            title: Text(st.title),
-                            subtitle: Text(
-                              "Cán bộ báo cáo: ${st.fullName}",
-                             // "Ngày báo cáo: ${st.createdAt.toDate().toString().substring(0, 10)}",
+                            title: Text(st.title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),),
+                            subtitle: Text("Cán bộ báo cáo: ${st.fullName}\n"
+                                " Ngày báo cáo: ${st.createdAt.toDate().toString().substring(0, 10)}",),
+                            trailing: ElevatedButton(
+                              onPressed: () => EditReport(report: st),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                              ),
+                              child:
+                              isLoading
+                                  ? CircularProgressIndicator(color: Colors.red)
+                                  : const Text("Xem", style: TextStyle(color: Colors.white)),
                             ),
                           ),
                         );
+
+
                       // } else {
                       //   return ListTile(
                       //     leading: CircleAvatar(
