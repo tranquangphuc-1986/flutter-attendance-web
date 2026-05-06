@@ -1,4 +1,5 @@
 import 'package:app_02/email/email_signup_screen.dart';
+import 'package:app_02/home_page/my_home_screen.dart';
 import 'package:app_02/home_page/page_first.dart';
 import 'package:app_02/phone/login_screen.dart';
 import 'package:app_02/phone/signup_phone.dart';
@@ -22,16 +23,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner:
           false, //là một thuộc tính được sử dụng để ẩn biểu ngữ “DEBUG” màu đỏ ở góc trên bên phải của ứng dụng khi chạy ở chế độ debug.
-      title: 'Ứng dụng điểm danh',
+      title: 'Thông tin, báo cáo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         //textTheme: GoogleFonts.playfairDisplayTextTheme(),
         fontFamily: 'Roboto',
             ),
-      home: const PageFirst(),//const EmailLoginScreen(),
+      home: const MyPage(),//const PageFirst(),//const EmailLoginScreen(),
       // initialRoute: '/',
       routes: {
-        '/signup': (context) => SignUpPhoneScreen(),//SignUpPhoneScreen(),//EmailSignupScreen(),
+        '/signup': (context) => SignUpPhoneScreen(),//EmailSignupScreen(),
         //'/myhome':(context)=>MyPage(),
       },
       // giữ đăng nhập cho đến khi đăng xuất

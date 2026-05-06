@@ -44,16 +44,24 @@ class _ViewReportState extends State<ViewReport> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 16),
+                SizedBox(height: 12),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset("img/logocand.png", height: 35),
+                    Image.asset("img/logocand.png", height: 40),
+                  ],
+                ),
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     const Text("CÔNG AN TỈNH QUẢNG NGÃI"),
                   ],
                 ),
-                SizedBox(height: 20),
+
+                SizedBox(height: 25),
 
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
