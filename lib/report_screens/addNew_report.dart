@@ -51,11 +51,32 @@ class _AddnewReportState extends State<AddnewReport> {
     );
   }
 
+  //Hàm viết hoa chữ toàn bộ
+  void _capitalizeTitle() {
+    String input = titleCtrl.text;
+    //Tách từng từ theo dấu cách
+    List<String> words = input.trim().split('');
+    //Viết hoa
+    List<String> capitalizeWords =
+    words.map((word) {
+      if (word.isEmpty) return '';
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).toList();
+    //Ghép lại chuỗi
+    String capitalizeName = capitalizeWords.join('');
+    //Gán lại vào controller mà không làm nhảy con trỏ
+    titleCtrl.value = titleCtrl.value.copyWith(
+      text: capitalizeName,
+      selection: TextSelection.collapsed(offset: capitalizeName.length),
+    );
+  }
+
   void _addReport() async {
     DateTime now = DateTime.now();
     //DateTime today = DateTime(now.year, now.month, now.day);
     Timestamp timestampToday = Timestamp.fromDate(now);
     _capitalizeFullName();
+    _capitalizeTitle();
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       try {
@@ -177,14 +198,14 @@ class _AddnewReportState extends State<AddnewReport> {
         children: [
           const SizedBox(height: 10),
           FloatingActionButton(
-            heroTag: "Tổng hợp",
+            heroTag: "Danh sách",
             onPressed:
                 () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const ReportListScreen()),
             ),
             child: const Icon(Icons.list),
-            tooltip: "Tổng hợp",
+            tooltip: "Danh sách",
           ),
         ],
       ),

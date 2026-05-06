@@ -1,6 +1,4 @@
 import 'package:app_02/models/dailyReport.dart';
-import 'package:app_02/service/report_firebase_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ViewReport extends StatefulWidget {
@@ -27,18 +25,18 @@ class _ViewReportState extends State<ViewReport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: null,
-              backgroundImage: null,
-              child: Image.asset("img/logocand.png", height: 20),
-            ),
-            const Text("Nội dung báo cáo"),
-          ],
-        ),
-        centerTitle: true,
+        // title: Row(
+        //   children: [
+        //     CircleAvatar(
+        //       radius: 20,
+        //       backgroundColor: null,
+        //       backgroundImage: null,
+        //       child: Image.asset("img/logocand.png", height: 20),
+        //     ),
+        //     const Text("Nội dung báo cáo"),
+        //   ],
+        // ),
+        // centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -46,7 +44,17 @@ class _ViewReportState extends State<ViewReport> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 30),
+                SizedBox(height: 16),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset("img/logocand.png", height: 35),
+                    const Text("CÔNG AN TỈNH QUẢNG NGÃI"),
+                  ],
+                ),
+                SizedBox(height: 20),
+
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -83,14 +91,15 @@ class _ViewReportState extends State<ViewReport> {
 
                 //Nội dung
                 Text(
-                      "     ${widget.report.content}",
+                      "${widget.report.content}",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(width: 20),
+
+                SizedBox(height: 16),
 
                 //Cán bộ báo cáo
                 Row(

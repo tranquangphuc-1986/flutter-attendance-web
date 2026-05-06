@@ -246,17 +246,6 @@ class _ReportListScreenState extends State<ReportListScreen> {
         children: [
           const SizedBox(height: 10),
           FloatingActionButton(
-            heroTag: "Danh sách",
-            onPressed:
-                () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ReportListScreen()),
-            ),
-            child: const Icon(Icons.list),
-            tooltip: "Danh sách",
-          ),
-
-          FloatingActionButton(
             heroTag: "Thêm mới",
             onPressed:
                 () => Navigator.push(
