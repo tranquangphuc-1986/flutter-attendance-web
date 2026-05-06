@@ -33,6 +33,8 @@ class _PopularCategoriesState extends State<PopularCategories> {
   String currentClass = '';
   String phone = '';
   bool isLoading = true;
+  bool isPasswordHidden = true;
+
   @override
   void initState() {
     super.initState();
@@ -82,16 +84,37 @@ class _PopularCategoriesState extends State<PopularCategories> {
       builder: (context) {
         return AlertDialog(
           title: Text("Xác thực"),
-          content: TextField(
+
+          content: TextFormField(
             controller: pinController,
             keyboardType: TextInputType.number,
             maxLength: 4,
-            obscureText: true, // ẩn số
+            //obscureText: true, // ẩn số
+            obscureText: isPasswordHidden,
+            obscuringCharacter: '*',
             decoration: InputDecoration(
+              border: OutlineInputBorder(),
               hintText: "Nhập 4 số",
               counterText: "",
+              suffixIcon: IconButton(
+                icon: Icon(
+                  isPasswordHidden ? Icons.visibility : Icons.visibility_off,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isPasswordHidden = !isPasswordHidden;
+                  });
+                },
+              ),
             ),
+            validator: (v) {
+              if (v == null || v.trim().isEmpty || v.length < 4) {
+                return "Mật khẩu phải đủ 4 số";
+              }
+              return null;
+            },
           ),
+
           actions: [
             TextButton(
               onPressed: () {
@@ -101,7 +124,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (pinController.text == "1234") {
+                if (pinController.text == "7979") {
                   Navigator.pop(context, true); // đúng
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -212,11 +235,11 @@ class _PopularCategoriesState extends State<PopularCategories> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Cán bộ",
+                      "Xem báo cáo",
                       style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
                     ),
                     Text(
-                      "Điểm danh",
+                      "Nhập báo cáo",
                       style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
                     ),
                     Text(

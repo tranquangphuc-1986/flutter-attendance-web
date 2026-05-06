@@ -44,7 +44,6 @@ class _ViewReportState extends State<ViewReport> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 12),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,

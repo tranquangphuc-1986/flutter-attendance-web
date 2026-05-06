@@ -1,8 +1,6 @@
-import 'package:app_02/chart/chart_screen.dart';
 import 'package:app_02/home_page/page_first.dart';
 import 'package:app_02/home_page/setting.dart';
 import 'package:app_02/student_screens/students_list_screen.dart';
-import 'package:app_02/travel/myhome_page.dart';
 import 'package:flutter/material.dart';
 
 class MyPage extends StatefulWidget {

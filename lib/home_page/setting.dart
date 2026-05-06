@@ -122,40 +122,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
           //   title: const Text('Thay đổi hình nền'),
           //   onTap: () => Navigator.pushNamed(context, '/wallpaper'),
           // ),
-          ListTile(
-            leading: const Icon(Icons.logout, color: Colors.red),
-            title: const Text('Đăng xuất', style: TextStyle(color: Colors.red)),
-            onTap: () {
-              showDialog(
-                context: context,
-                builder:
-                    (_) => AlertDialog(
-                      title: const Text('Xác nhận'),
-                      content: const Text(
-                        'Bạn có chắc chắn muốn đăng xuất không?',
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Huỷ'),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            await _authService.signOut();
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (context) => const EmailLoginScreen(),
-                              ), //PhoneLoginScreen()),
-                              (Route<dynamic> route) => false,
-                            );
-                          },
-                          child: const Text('Đăng xuất'),
-                        ),
-                      ],
-                    ),
-              );
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(Icons.logout, color: Colors.red),
+          //   title: const Text('Đăng xuất', style: TextStyle(color: Colors.red)),
+          //   onTap: () {
+          //     showDialog(
+          //       context: context,
+          //       builder:
+          //           (_) => AlertDialog(
+          //             title: const Text('Xác nhận'),
+          //             content: const Text(
+          //               'Bạn có chắc chắn muốn đăng xuất không?',
+          //             ),
+          //             actions: [
+          //               TextButton(
+          //                 onPressed: () => Navigator.pop(context),
+          //                 child: const Text('Huỷ'),
+          //               ),
+          //               TextButton(
+          //                 onPressed: () async {
+          //                   await _authService.signOut();
+          //                   Navigator.of(context).pushAndRemoveUntil(
+          //                     MaterialPageRoute(
+          //                       builder: (context) => const EmailLoginScreen(),
+          //                     ), //PhoneLoginScreen()),
+          //                     (Route<dynamic> route) => false,
+          //                   );
+          //                 },
+          //                 child: const Text('Đăng xuất'),
+          //               ),
+          //             ],
+          //           ),
+          //     );
+          //   },
+          // ),
         ],
       ),
     );
