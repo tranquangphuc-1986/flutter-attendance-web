@@ -49,43 +49,54 @@ class _ViewReportState extends State<ViewReport> {
             child:  Column(
               children: [
                 SizedBox(height: 30),
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                Row(crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                   Text("Kính gửi: Lãnh đạo Công an tỉnh", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                   SizedBox(width: 16),
                 ],
                 ),
                 SizedBox(height: 16),
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  Text("Ngày: ${widget.report.createdAt.toDate().day}/${widget.report.createdAt.toDate().month}/${widget.report.createdAt.toDate().year}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+
+                //Tiêu đề
+                Row(crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  Text("${widget.report.title}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),),
                   SizedBox(width: 16),
                 ],
                 ),
                 SizedBox(height: 16),
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  Text("Số: ${widget.report.id}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+
+                //Nội dung
+                Row(crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                  Text("${widget.report.content}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                   SizedBox(width: 16),
                 ],
                 ),
                 SizedBox(height: 16),
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  Text("Tiêu đề: ${widget.report.title}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+
+                //Cán bộ báo cáo
+                Row(crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                  Text("Cán bộ báo cáo: ${widget.report.fullName}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
                   SizedBox(width: 16),
                 ],
                 ),
-                SizedBox(height: 16),
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  Text("Nội dung: ${widget.report.content}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                SizedBox(height: 8),
+
+                Row(crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                  Text("Số: ${widget.report.id}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
                   SizedBox(width: 16),
                 ],
                 ),
-                SizedBox(height: 16),
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  Text("Cán bộ báo cáo: ${widget.report.fullName}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                  SizedBox(width: 16),
-                ],
-                ),
-                SizedBox(height: 16),
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                SizedBox(height: 8),
+
+                Row(crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
                   Text("Ngày tạo: ${widget.report.createdAt.toDate().day}/${widget.report.createdAt.toDate().month}/${widget.report.createdAt.toDate().year}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                   SizedBox(width: 16),
                 ],
