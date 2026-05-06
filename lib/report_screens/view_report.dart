@@ -93,10 +93,10 @@ class _ViewReportState extends State<ViewReport> {
                 SizedBox(height: 16),
 
                 //Nội dung
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
+                // Row(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: [
+                Text(
                       "${widget.report.content}",
                       style: TextStyle(
                         fontSize: 16,
@@ -104,8 +104,8 @@ class _ViewReportState extends State<ViewReport> {
                       ),
                     ),
                     SizedBox(width: 16),
-                  ],
-                ),
+                  //],
+                //),
                 SizedBox(height: 16),
 
                 //Cán bộ báo cáo
