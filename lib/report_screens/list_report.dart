@@ -204,7 +204,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
                   s.title.toLowerCase().contains(
                     filter.toLowerCase(),
                   ) ||
-                      s.fullName.toLowerCase().contains(
+                      s.createdAt.toDate().toString().contains(
                         filter.toLowerCase(),
                       ),
                 )
@@ -260,9 +260,15 @@ class _ReportListScreenState extends State<ReportListScreen> {
                             ),
                             title: Text(st.title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),),
                             subtitle: Text("Cán bộ báo cáo: ${st.fullName}\n"
-                                " Ngày báo cáo: ${st.createdAt.toDate().toString().substring(0, 10)}",),
+                                " Ngày báo cáo: ${st.createdAt.toDate().day}/${st.createdAt.toDate().month}/${st.createdAt.toDate().year}",),
                             trailing: ElevatedButton(
-                              onPressed: () => EditReport(report: st),
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (_) => EditReport(report: st),
+                                ),
+                              ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
                               ),
