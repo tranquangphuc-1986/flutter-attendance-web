@@ -152,25 +152,6 @@ class _AddnewReportState extends State<AddnewReport> {
                       },
                     ),
 
-                    // const SizedBox(height: 16),
-                    // TextFormField(
-                    //   controller: createdAtCtrl,
-                    //   decoration: const InputDecoration(
-                    //     labelText: "Ngày tạo (dd/MM/yyyy)",
-                    //     border: OutlineInputBorder(),
-                    //   ),
-                    //   validator: (v) {
-                    //     if (v == null || v.trim().isEmpty) {
-                    //       return "Nhập ngày tạo";
-                    //     }
-                    //     // Kiểm tra định dạng ngày
-                    //     if (!RegExp(r'^\d{2}/\d{2}/\d{4}$').hasMatch(v)) {
-                    //       return "Định dạng ngày không hợp lệ";
-                    //     }
-                    //     return null;
-                    //   },
-                    // ),
-
                     const SizedBox(height: 50),
 
                     ElevatedButton(
@@ -190,6 +171,7 @@ class _AddnewReportState extends State<AddnewReport> {
           ],
         ),
       ),
+
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

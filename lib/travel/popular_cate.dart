@@ -4,6 +4,8 @@ import 'package:app_02/chart/chart_screen.dart';
 import 'package:app_02/data_diaban/diaban_page_home.dart';
 import 'package:app_02/phone/signup_phone.dart';
 import 'package:app_02/report_screens/addNew_report.dart';
+import 'package:app_02/report_screens/list_report.dart';
+import 'package:app_02/report_screens/list_view_report.dart';
 import 'package:app_02/student_screens/AdminCloseAttendanceScreen.dart';
 import 'package:app_02/student_screens/importExcelScreen.dart';
 import 'package:app_02/student_screens/qr_summaryToday_screen.dart';
@@ -70,6 +72,52 @@ class _PopularCategoriesState extends State<PopularCategories> {
     }
   }
 
+  /// Hiển thị dialog yêu cầu nhập mã PIN
+  Future<bool> _showPinDialog(BuildContext context) async {
+    final TextEditingController pinController = TextEditingController();
+
+    return await showDialog<bool>(
+      context: context,
+      barrierDismissible: false, // không cho bấm ra ngoài để tắt
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Xác thực"),
+          content: TextField(
+            controller: pinController,
+            keyboardType: TextInputType.number,
+            maxLength: 4,
+            obscureText: true, // ẩn số
+            decoration: InputDecoration(
+              hintText: "Nhập 4 số",
+              counterText: "",
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false); // thoát
+              },
+              child: Text("Thoát"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (pinController.text == "1234") {
+                  Navigator.pop(context, true); // đúng
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Sai mã xác thực")),
+                  );
+                }
+              },
+              child: Text("Xác nhận"),
+            ),
+          ],
+        );
+      },
+    ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -82,10 +130,6 @@ class _PopularCategoriesState extends State<PopularCategories> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Tiện ích", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blueAccent)),
-                  // Text(
-                  //   "Mở rộng",
-                  //   style: TextStyle(fontSize: 14, color: Color(0xFFA36C88)),
-                  // ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -94,18 +138,21 @@ class _PopularCategoriesState extends State<PopularCategories> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => StudentsListScreen(),//TaphuanListScreen(),
-                        ),
-                      );
+                    onTap: () async {
+                      bool isValid = await _showPinDialog(context);
+                      if (isValid) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReportListViewScreen(),//StudentsListScreen(),
+                          ),
+                        );
+                      }
                     },
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFFF8CDEC),
-                      child: Image.asset("img/person.png", height: 40),
+                      child: Image.asset("img/word.png", height: 40),
                     ),
                   ),
 
@@ -115,17 +162,14 @@ class _PopularCategoriesState extends State<PopularCategories> {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (context) => AttendanceQRScreen (phone: phone, //AttendanceScreen3_1(
-                           // currentRole: currentRole,
-                            //currentClass: currentClass,
-                          ),
+                              (context) => ReportListScreen(),//AttendanceQRScreen (phone: phone),
                         ),
                       );
                     },
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFF9ED2F7),
-                      child: Image.asset("img/word.png", height: 40),
+                      child: Image.asset("img/folder.png", height: 40),
                     ),
                   ),
 
@@ -220,7 +264,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFF9ED2F7),
-                      child: Image.asset("img/folder.png", height: 40),
+                      child: Image.asset("img/person.png", height: 40),
                     ),
                   ),
 

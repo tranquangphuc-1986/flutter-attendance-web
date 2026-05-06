@@ -11,26 +11,15 @@ class ViewReport extends StatefulWidget {
 }
 
 class _ViewReportState extends State<ViewReport> {
-  // late TextEditingController titleCtrl;
-  // late TextEditingController contentCtrl;
-  // late TextEditingController createdAtCtrl;
-  // late TextEditingController fullNameCtrl;
+
 
   @override
   void initState() {
     super.initState();
-    // titleCtrl = TextEditingController(text: widget.report.title);
-    // contentCtrl = TextEditingController(text: widget.report.content);
-    // createdAtCtrl = TextEditingController(text: widget.report.createdAt.toDate().toString());
-    // fullNameCtrl = TextEditingController(text: widget.report.fullName);
-  }
+      }
 
   @override
   void dispose() {
-    // titleCtrl.dispose();
-    // contentCtrl.dispose();
-    // createdAtCtrl.dispose();
-    // fullNameCtrl.dispose();
     super.dispose();
   }
 
@@ -93,20 +82,15 @@ class _ViewReportState extends State<ViewReport> {
                 SizedBox(height: 16),
 
                 //Nội dung
-                // Row(
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   children: [
                 Text(
-                      "${widget.report.content}",
+                      "     ${widget.report.content}",
+                      textAlign: TextAlign.justify,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(width: 16),
-                  //],
-                //),
-                SizedBox(height: 16),
+                    SizedBox(width: 20),
 
                 //Cán bộ báo cáo
                 Row(

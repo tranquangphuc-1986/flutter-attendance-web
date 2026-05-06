@@ -1,4 +1,5 @@
 import 'package:app_02/models/dailyReport.dart';
+import 'package:app_02/report_screens/addNew_report.dart';
 import 'package:app_02/report_screens/edit_report.dart';
 import 'package:app_02/report_screens/view_report.dart';
 import 'package:app_02/service/report_firebase_service.dart';
@@ -105,59 +106,6 @@ class _ReportListScreenState extends State<ReportListScreen> {
     }
   }
 
-  /// 🔹 Widget hiển thị 1 dòng danh sách người điểm danh
-  // Widget _buildAttendanceTile(Map<String, dynamic> item) {
-  //   final name = item['name'] ?? 'Không rõ tên';
-  //   final className = item['className'] ?? 'Không rõ đơn vị';
-  //   final phone = item['phone'] ?? 'Không rõ số';
-  //   final status = item['status'] ?? 'Chưa điểm danh';
-  //
-  //   Color statusColor;
-  //   switch (status) {
-  //     case 'Có mặt':
-  //       statusColor = Colors.green;
-  //       break;
-  //     case 'Đi trễ':
-  //       statusColor = Colors.orange;
-  //       break;
-  //     case 'Nghỉ phép':
-  //     case 'Công tác':
-  //     case 'Bị ốm':
-  //     case 'Đi học':
-  //     case 'Việc riêng':
-  //       statusColor = Colors.green;
-  //       break;
-  //     default:
-  //       statusColor = Colors.grey;
-  //   }
-  //
-  //   return Card(
-  //     margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-  //     elevation: 1,
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-  //     child: ListTile(
-  //       contentPadding:
-  //       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-  //       leading: CircleAvatar(
-  //         backgroundColor: statusColor.withOpacity(0.1),
-  //         child: Icon(Icons.person, color: statusColor),
-  //       ),
-  //       title: Text(
-  //         name,
-  //         style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-  //       ),
-  //       subtitle: Text('Đơn vị: $className\nSĐT: $phone'),
-  //       trailing: Text(
-  //         status,
-  //         style: TextStyle(
-  //           color: statusColor,
-  //           fontWeight: FontWeight.bold,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -216,9 +164,6 @@ class _ReportListScreenState extends State<ReportListScreen> {
                     itemCount: filteredReport.length,
                     itemBuilder: (context, index) {
                       final st = filteredReport[index];
-
-                      // if (currentRole == 'Admin') { //vai trò admin được quyền xóa, sửa
-
                         return Slidable(
                           key: ValueKey(st.id),
                           startActionPane: ActionPane(
@@ -281,20 +226,6 @@ class _ReportListScreenState extends State<ReportListScreen> {
                           ),
                         );
 
-
-                      // } else {
-                      //   return ListTile(
-                      //     leading: CircleAvatar(
-                      //       backgroundColor: Colors.blue.shade100,
-                      //       backgroundImage: null,
-                      //       child: Text(st.title[0]), //Hình ảnh Avarta
-                      //     ),
-                      //     title: Text(st.title),
-                      //     subtitle: Text(
-                      //       "Ngày báo cáo: ${st.createdAt.toString().substring(0, 10)}",
-                      //     ),
-                      //   );
-                      // }
                       //-----------------end--------------------
                     },
                     separatorBuilder:
@@ -306,6 +237,34 @@ class _ReportListScreenState extends State<ReportListScreen> {
                 );
               },
             ),
+          ),
+        ],
+      ),
+
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          const SizedBox(height: 10),
+          FloatingActionButton(
+            heroTag: "Danh sách",
+            onPressed:
+                () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ReportListScreen()),
+            ),
+            child: const Icon(Icons.list),
+            tooltip: "Danh sách",
+          ),
+
+          FloatingActionButton(
+            heroTag: "Thêm mới",
+            onPressed:
+                () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AddnewReport()),
+            ),
+            child: const Icon(Icons.add),
+            tooltip: "Thêm mới",
           ),
         ],
       ),
