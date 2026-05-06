@@ -1,5 +1,6 @@
 import 'package:app_02/models/dailyReport.dart';
 import 'package:app_02/report_screens/edit_report.dart';
+import 'package:app_02/report_screens/view_report.dart';
 import 'package:app_02/service/report_firebase_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -266,7 +267,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder:
-                                      (_) => EditReport(report: st),
+                                      (_) => ViewReport(report: st),
                                 ),
                               ),
                               style: ElevatedButton.styleFrom(
