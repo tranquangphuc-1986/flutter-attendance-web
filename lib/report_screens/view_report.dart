@@ -1,0 +1,109 @@
+import 'package:app_02/models/dailyReport.dart';
+import 'package:app_02/service/report_firebase_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+
+
+
+class ViewReport extends StatefulWidget {
+  final DailyReport report;
+  const ViewReport({super.key, required this.report});
+  @override
+  State<ViewReport> createState() => _ViewReportState();
+}
+
+class _ViewReportState extends State<ViewReport> {
+
+  // late TextEditingController titleCtrl;
+  // late TextEditingController contentCtrl;
+  // late TextEditingController createdAtCtrl;
+  // late TextEditingController fullNameCtrl;
+
+
+  @override
+  void initState() {
+    super.initState();
+    // titleCtrl = TextEditingController(text: widget.report.title);
+    // contentCtrl = TextEditingController(text: widget.report.content);
+    // createdAtCtrl = TextEditingController(text: widget.report.createdAt.toDate().toString());
+    // fullNameCtrl = TextEditingController(text: widget.report.fullName);
+  }
+
+  @override
+  void dispose() {
+    // titleCtrl.dispose();
+    // contentCtrl.dispose();
+    // createdAtCtrl.dispose();
+    // fullNameCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Nội dung báo cáo")),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          child: SingleChildScrollView(
+            child:  Column(
+              children: [
+                SizedBox(height: 30),
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Text("Kính gửi: Lãnh đạo Công an tỉnh", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  SizedBox(width: 16),
+                ],
+                ),
+                SizedBox(height: 16),
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Text("Ngày: ${widget.report.createdAt.toDate().day}/${widget.report.createdAt.toDate().month}/${widget.report.createdAt.toDate().year}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  SizedBox(width: 16),
+                ],
+                ),
+                SizedBox(height: 16),
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Text("Số: ${widget.report.id}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  SizedBox(width: 16),
+                ],
+                ),
+                SizedBox(height: 16),
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Text("Tiêu đề: ${widget.report.title}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  SizedBox(width: 16),
+                ],
+                ),
+                SizedBox(height: 16),
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Text("Nội dung: ${widget.report.content}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  SizedBox(width: 16),
+                ],
+                ),
+                SizedBox(height: 16),
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Text("Cán bộ báo cáo: ${widget.report.fullName}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  SizedBox(width: 16),
+                ],
+                ),
+                SizedBox(height: 16),
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Text("Ngày tạo: ${widget.report.createdAt.toDate().day}/${widget.report.createdAt.toDate().month}/${widget.report.createdAt.toDate().year}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  SizedBox(width: 16),
+                ],
+                ),
+
+                const SizedBox(height: 50),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                  ),
+                  child: const Text('Đóng', style: TextStyle(color: Colors.white,)),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
