@@ -18,13 +18,8 @@ class ReportListViewScreen extends StatefulWidget {
 class _ReportListViewScreenState extends State<ReportListViewScreen> {
   final ReportFirebaseService service = ReportFirebaseService();
 
-  // final TextEditingController titleCtrl = TextEditingController();
-  // final TextEditingController contentCtrl = TextEditingController();
-  // final TextEditingController createdAtCtrl = TextEditingController();
   final TextEditingController searchCtrl = TextEditingController();
 
-  // String currentRole = '';
-  // String currentClass = '';
   String filter = "";
   bool isLoading = true;
 
