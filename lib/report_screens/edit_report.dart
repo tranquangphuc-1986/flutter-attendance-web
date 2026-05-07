@@ -104,7 +104,7 @@ class _EditReportState extends State<EditReport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.yellow,
           title: const Text("Sửa báo cáo")),
       body: Padding(
         padding: const EdgeInsets.all(16),

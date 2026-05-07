@@ -117,37 +117,27 @@
   });
 
   // --PHẦN 2: Kiểm tra cập nhật Service Worker (Bản vá lỗi lặp thông báo)--
+ let newServiceWorker;
 
-  if ('serviceWorker' in navigator) {
-    window.isUpdatePromptVisible = false; // Biến chặn
-
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('flutter_service_worker.js')
-        .then(reg => {
-          reg.onupdatefound = () => {
-            const worker = reg.installing;
-            worker.onstatechange = () => {
-              if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                // CHẶN: Nếu đang hiện thông báo thì không hiện thêm cái thứ 2
-                if (window.isUpdatePromptVisible) return;
-
-                window.isUpdatePromptVisible = true;
-                if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {
-                  worker.postMessage({ type: 'SKIP_WAITING' });
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('flutter_service_worker.js?v=' + new Date().getTime())
+          .then(reg => {
+            reg.addEventListener('updatefound', () => {
+              newServiceWorker = reg.installing;
+              newServiceWorker.addEventListener('statechange', () => {
+                if (newServiceWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // Khi đã tải xong bản mới, thông báo cho người dùng
+                  if (confirm("Đã có phiên bản mới! Bạn có muốn cập nhật ngay không?")) {
+                    window.location.reload();
+                  }
                 }
-              }
-            };
-          };
-        });
-    });
+              });
+            });
+          });
+      });
+    }
 
-    let refreshing = false;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (refreshing) return;
-      refreshing = true;
-      window.location.reload();
-    });
-  }
 
 </script>
 </body>
@@ -193,4 +183,36 @@
           });
       });
     }
+
+
+    if ('serviceWorker' in navigator) {
+    window.isUpdatePromptVisible = false; // Biến chặn
+
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('flutter_service_worker.js')
+        .then(reg => {
+          reg.onupdatefound = () => {
+            const worker = reg.installing;
+            worker.onstatechange = () => {
+              if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                // CHẶN: Nếu đang hiện thông báo thì không hiện thêm cái thứ 2
+                if (window.isUpdatePromptVisible) return;
+
+                window.isUpdatePromptVisible = true;
+                if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {
+                  worker.postMessage({ type: 'SKIP_WAITING' });
+                }
+              }
+            };
+          };
+        });
+    });
+
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+  }
     -->
