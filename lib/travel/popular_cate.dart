@@ -180,6 +180,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Image.asset("img/word.png", height: 40),
+                          SizedBox(height: 8),
                           Text("Báo cáo"),
                         ],
                     ),
@@ -236,6 +237,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                   ),
                 ],
               ),
+
               // const Padding(
               //   padding: EdgeInsets.only(top: 13, right: 15, left: 10),
               //   child: Row(
