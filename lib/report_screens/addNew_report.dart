@@ -113,7 +113,7 @@ class _AddnewReportState extends State<AddnewReport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.cyan,
+        backgroundColor: Colors.blue,
         title: const Text("Thêm mới báo cáo"),
         centerTitle: true,
       ),
