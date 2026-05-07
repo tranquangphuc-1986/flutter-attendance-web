@@ -116,38 +116,58 @@
     }, 1000);
   });
 
-  // --PHẦN 2: Kiểm tra cập nhật Service Worker--
+  // --PHẦN 2: Kiểm tra cập nhật Service Worker (Bản vá lỗi lặp thông báo)--
 
   if ('serviceWorker' in navigator) {
+    let refreshing = false;
+    let updateConfirmed = false; // Cờ chặn việc hiện confirm liên tục
+
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('flutter_service_worker.js?v=' + new Date().getTime())
+      navigator.serviceWorker.register('flutter_service_worker.js', { scope: '.' }) // Bỏ ?v= ở đây để ổn định định danh
         .then(reg => {
-          // Kiểm tra nếu có bản update mới
-          reg.onupdatefound = () => {
-            const installingWorker = reg.installing;
-            installingWorker.onstatechange = () => {
-              if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                // Chỉ hiện thông báo một lần duy nhất
+
+          // Hàm xử lý khi phát hiện có bản mới
+          const prepareUpdate = (worker) => {
+            if (updateConfirmed) return; // Nếu đã hiện rồi thì thôi
+
+            worker.addEventListener('statechange', () => {
+              if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                updateConfirmed = true;
                 if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {
-                  if (reg.waiting) {
-                    reg.waiting.postMessage({type: 'SKIP_WAITING'});
-                  }
+                  worker.postMessage({type: 'SKIP_WAITING'});
                 }
               }
-            };
+            });
           };
+
+          // 1. Nếu có bản cài đặt đang chạy ngầm
+          if (reg.installing) {
+            prepareUpdate(reg.installing);
+          }
+
+          // 2. Nếu có bản mới đã tải xong và đang chờ (thường gặp khi reload)
+          if (reg.waiting) {
+            if (!updateConfirmed) {
+              updateConfirmed = true;
+              if (confirm("Bản cập nhật đã sẵn sàng. Kích hoạt ngay?")) {
+                reg.waiting.postMessage({type: 'SKIP_WAITING'});
+              }
+            }
+          }
+
+          // 3. Lắng nghe các bản cập nhật phát sinh trong tương lai
+          reg.addEventListener('updatefound', () => {
+            prepareUpdate(reg.installing);
+          });
         });
     });
 
-    // Lắng nghe sự kiện thay đổi controller để reload trang
-    let refreshing = false;
+    // Sự kiện quan trọng nhất: Khi Service Worker mới chiếm quyền, tải lại trang 1 lần duy nhất
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (!refreshing) {
-        window.location.reload();
-        refreshing = true;
-      }
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
     });
-
   }
 
 </script>

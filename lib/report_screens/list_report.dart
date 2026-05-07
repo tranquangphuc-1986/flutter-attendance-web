@@ -111,7 +111,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.red,
         title: const Text("Danh sách báo cáo"),
         automaticallyImplyLeading: true,
       ),
