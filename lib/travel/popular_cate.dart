@@ -175,8 +175,15 @@ class _PopularCategoriesState extends State<PopularCategories> {
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFFF8CDEC),
-                      child: Image.asset("img/word.png", height: 40),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset("img/word.png", height: 40),
+                          Text("Báo cáo"),
+                        ],
                     ),
+                  ),
                   ),
 
                   GestureDetector(
@@ -229,30 +236,30 @@ class _PopularCategoriesState extends State<PopularCategories> {
                   ),
                 ],
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 13, right: 15, left: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Xem báo cáo",
-                      style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-                    ),
-                    Text(
-                      "Nhập báo cáo",
-                      style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-                    ),
-                    Text(
-                      "Thống kê",
-                      style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-                    ),
-                    Text(
-                      "Tổng hợp",
-                      style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-                    ),
-                  ],
-                ),
-              ),
+              // const Padding(
+              //   padding: EdgeInsets.only(top: 13, right: 15, left: 10),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Text(
+              //         "Xem báo cáo",
+              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
+              //       ),
+              //       Text(
+              //         "Nhập báo cáo",
+              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
+              //       ),
+              //       Text(
+              //         "Thống kê",
+              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
+              //       ),
+              //       Text(
+              //         "Tổng hợp",
+              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
+              //       ),
+              //     ],
+              //   ),
+              // ),
          //..................Dãy Icon hàng thứ 2 'thông tin CAX'.......
               const SizedBox(height: 20),
               Row(

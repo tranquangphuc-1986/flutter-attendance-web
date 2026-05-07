@@ -22,8 +22,6 @@ class _EditReportState extends State<EditReport> {
 
   bool _isLoading = false;
 
-  // String? selectedClass;
-
   @override
   void initState() {
     super.initState();
@@ -42,7 +40,7 @@ class _EditReportState extends State<EditReport> {
     super.dispose();
   }
 
-  //Hàm viết hoa chữ cái đầu mỗi từ
+  //Hàm viết hoa toàn bộ chữ cái
   void _capitalizeFullName() {
     String input = fullNameCtrl.text;
     //Tách từng từ theo dấu cách
@@ -61,9 +59,28 @@ class _EditReportState extends State<EditReport> {
       selection: TextSelection.collapsed(offset: capitalizeName.length),
     );
   }
+  void _capitalizeTitle() {
+    String input = titleCtrl.text;
+    //Tách từng từ theo dấu cách
+    List<String> words = input.trim().split('');
+    //Viết hoa chữ cái đầu mỗi từ
+    List<String> capitalizeWords =
+    words.map((word) {
+      if (word.isEmpty) return '';
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).toList();
+    //Ghép lại chuỗi
+    String capitalizeName = capitalizeWords.join('');
+    //Gán lại vào controller mà không làm nhảy con trỏ
+    titleCtrl.value = titleCtrl.value.copyWith(
+      text: capitalizeName,
+      selection: TextSelection.collapsed(offset: capitalizeName.length),
+    );
+  }
 
   void _updateReport() async {
     _capitalizeFullName();
+    _capitalizeTitle();
      if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       final updatedData = DailyReport(
@@ -114,6 +131,7 @@ class _EditReportState extends State<EditReport> {
 
               TextFormField(
                 controller: contentCtrl,
+                textAlign: TextAlign.justify,
                 maxLines: 15,
                 decoration: const InputDecoration(
                   labelText: "Nội dung báo cáo",

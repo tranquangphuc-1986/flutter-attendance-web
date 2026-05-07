@@ -145,6 +145,7 @@ class _AddnewReportState extends State<AddnewReport> {
 
                     TextFormField(
                       controller: contentCtrl,
+                      textAlign: TextAlign.justify,
                       maxLines: 19,
                       decoration: const InputDecoration(
                         labelText: "Nội dung báo cáo",

@@ -25,18 +25,8 @@ class _ViewReportState extends State<ViewReport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // title: Row(
-        //   children: [
-        //     CircleAvatar(
-        //       radius: 20,
-        //       backgroundColor: null,
-        //       backgroundImage: null,
-        //       child: Image.asset("img/logocand.png", height: 20),
-        //     ),
-        //     const Text("Nội dung báo cáo"),
-        //   ],
-        // ),
-        // centerTitle: true,
+        title: const Text("Chi tiết báo cáo"),
+        backgroundColor: Colors.blue,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
