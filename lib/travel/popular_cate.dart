@@ -22,6 +22,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/check/students_statistics_page_2.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 class PopularCategories extends StatefulWidget {
   const PopularCategories({super.key});
   @override
@@ -67,8 +68,11 @@ class _PopularCategoriesState extends State<PopularCategories> {
       }); // Cập nhật giao diện
     }
   }
+
   Future<void> _map() async {
-    final url = Uri.parse('https://sapnhap.bando.com.vn/?zarsrc=31&utm_source=zalo&utm_medium=zalo&utm_campaign=zalo');
+    final url = Uri.parse(
+      'https://sapnhap.bando.com.vn/?zarsrc=31&utm_source=zalo&utm_medium=zalo&utm_campaign=zalo',
+    );
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       throw 'Không thể mở URL: $url';
     }
@@ -79,65 +83,67 @@ class _PopularCategoriesState extends State<PopularCategories> {
     final TextEditingController pinController = TextEditingController();
 
     return await showDialog<bool>(
-      context: context,
-      barrierDismissible: false, // không cho bấm ra ngoài để tắt
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Xác thực"),
+          context: context,
+          barrierDismissible: false, // không cho bấm ra ngoài để tắt
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Xác thực"),
 
-          content: TextFormField(
-            controller: pinController,
-            keyboardType: TextInputType.number,
-            maxLength: 4,
-            //obscureText: true, // ẩn số
-            obscureText: isPasswordHidden,
-            obscuringCharacter: '*',
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: "Nhập 4 số",
-              counterText: "",
-              suffixIcon: IconButton(
-                icon: Icon(
-                  isPasswordHidden ? Icons.visibility : Icons.visibility_off,
+              content: TextFormField(
+                controller: pinController,
+                keyboardType: TextInputType.number,
+                maxLength: 4,
+                //obscureText: true, // ẩn số
+                obscureText: isPasswordHidden,
+                obscuringCharacter: '*',
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Nhập 4 số",
+                  counterText: "",
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isPasswordHidden
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isPasswordHidden = !isPasswordHidden;
+                      });
+                    },
+                  ),
                 ),
-                onPressed: () {
-                  setState(() {
-                    isPasswordHidden = !isPasswordHidden;
-                  });
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty || v.length < 4) {
+                    return "Mật khẩu phải đủ 4 số";
+                  }
+                  return null;
                 },
               ),
-            ),
-            validator: (v) {
-              if (v == null || v.trim().isEmpty || v.length < 4) {
-                return "Mật khẩu phải đủ 4 số";
-              }
-              return null;
-            },
-          ),
 
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, false); // thoát
-              },
-              child: Text("Thoát"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (pinController.text == "7979") {
-                  Navigator.pop(context, true); // đúng
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Sai mã xác thực")),
-                  );
-                }
-              },
-              child: Text("Xác nhận"),
-            ),
-          ],
-        );
-      },
-    ) ??
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false); // thoát
+                  },
+                  child: Text("Thoát"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (pinController.text == "7979") {
+                      Navigator.pop(context, true); // đúng
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Sai mã xác thực")),
+                      );
+                    }
+                  },
+                  child: Text("Xác nhận"),
+                ),
+              ],
+            );
+          },
+        ) ??
         false;
   }
 
@@ -152,7 +158,14 @@ class _PopularCategoriesState extends State<PopularCategories> {
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Tiện ích", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blueAccent)),
+                  Text(
+                    "Tiện ích",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -160,6 +173,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+
                   Column(
                     children: [
                       GestureDetector(
@@ -169,7 +183,9 @@ class _PopularCategoriesState extends State<PopularCategories> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ReportListViewScreen(),//StudentsListScreen(),
+                                builder:
+                                    (context) =>
+                                        ReportListViewScreen(), //StudentsListScreen(),
                               ),
                             );
                           }
@@ -179,62 +195,102 @@ class _PopularCategoriesState extends State<PopularCategories> {
                           backgroundColor: const Color(0xFfcbb8ef),
                           child: Image.asset("img/word.png", height: 40),
                         ),
-
                       ),
-                        Text("Xem báo cáo",
-                              style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-                            ),
+                      Text(
+                        "Xem báo cáo",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
                     ],
                   ),
 
-
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) => ReportListScreen(),//AttendanceQRScreen (phone: phone),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      ReportListScreen(), //AttendanceQRScreen (phone: phone),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: const Color(0xFF9ED2F7),
+                          child: Image.asset("img/folder.png", height: 40),
                         ),
-                      );
-                    },
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundColor: const Color(0xFF9ED2F7),
-                      child: Image.asset("img/folder.png", height: 40),
-                    ),
+                      ),
+                      Text(
+                        "Nhập báo cáo",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
+                    ],
                   ),
 
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => QrSummaryTodayScreenResult(),//SummaryScreenResult(),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      QrSummaryTodayScreenResult(), //SummaryScreenResult(),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: const Color(0xFfcbb8ef),
+                          child: Image.asset("img/anlystatis.png", height: 40),
                         ),
-                      );
-                    },
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundColor: const Color(0xFfcbb8ef),
-                      child: Image.asset("img/anlystatis.png", height: 40),
-                    ),
+                      ),
+                      const Text(
+                        "Thống kê",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
+                    ],
                   ),
 
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddnewReport(),//AdminCloseAttendanceScreen(),//StudentsStatisticsPage(),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      AddnewReport(), //AdminCloseAttendanceScreen(),//StudentsStatisticsPage(),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: const Color(0xFFFacdcc),
+                          child: Image.asset("img/pie-chart.png", height: 40),
                         ),
-                      );
-                    },
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundColor: const Color(0xFFFacdcc),
-                      child: Image.asset("img/pie-chart.png", height: 40),
-                    ),
+                      ),
+                      const Text(
+                        "Tổng hợp",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -263,94 +319,148 @@ class _PopularCategoriesState extends State<PopularCategories> {
               //     ],
               //   ),
               // ),
-         //..................Dãy Icon hàng thứ 2 'thông tin CAX'.......
+              //..................Dãy Icon hàng thứ 2 'thông tin CAX'.......
+
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomeScreenCAX(), //QrSummaryScreenResult(),//QrSummaryTodayScreenResult(),
+
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      HomeScreenCAX(), //QrSummaryScreenResult(),//QrSummaryTodayScreenResult(),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: const Color(0xFFF8CDEC),
+                          child: Image.asset("img/logocand.png", height: 40),
                         ),
-                      );
-                    },
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundColor: const Color(0xFFF8CDEC),
-                      child: Image.asset("img/logocand.png", height: 40),
-                    ),
+                      ),
+                      const Text(
+                        "Công an xã",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
+                    ],
                   ),
 
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) => CAXScreen(), //ImportExcelScreen(),
+
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      CAXScreen(), //ImportExcelScreen(),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: const Color(0xFF9ED2F7),
+                          child: Image.asset("img/person.png", height: 40),
                         ),
-                      );
-                    },
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundColor: const Color(0xFF9ED2F7),
-                      child: Image.asset("img/person.png", height: 40),
-                    ),
+                      ),
+                      const Text(
+                        "Danh bạ",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
+                      ],
                   ),
 
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChartScreen(),
+
+                    Column(
+                      children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChartScreen(),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: const Color(0xFfcbb8ef),
+                          child: Image.asset("img/statistical.png", height: 40),
                         ),
-                      );
-                    },
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundColor: const Color(0xFfcbb8ef),
-                      child: Image.asset("img/statistical.png", height: 40),
-                    ),
+                      ),
+
+                      const Text(
+                        "Sáp nhập",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
+                    ],
                   ),
 
+                  Column(
+                    children: [
                   GestureDetector(
-                   onTap: _map,
+                    onTap: _map,
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFFFacdcc),
                       child: Image.asset("img/search.png", height: 40),
                     ),
                   ),
+                      const Text(
+                        "Tra cứu",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 13, right: 15, left: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Công an xã",
-                      style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-                    ),
-                    Text(
-                      "Sáp nhập",
-                      style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-                    ),
-                    Text(
-                      "Biểu đồ",
-                      style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-                    ),
-                    Text(
-                      "Tra cứu",
-                      style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-                    ),
-                  ],
-                ),
-              ),
+
+              // const Padding(
+              //   padding: EdgeInsets.only(top: 13, right: 15, left: 10),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Text(
+              //         "Công an xã",
+              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
+              //       ),
+              //       Text(
+              //         "Sáp nhập",
+              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
+              //       ),
+              //       Text(
+              //         "Biểu đồ",
+              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
+              //       ),
+              //       Text(
+              //         "Tra cứu",
+              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+
             ],
           ),
         ),
