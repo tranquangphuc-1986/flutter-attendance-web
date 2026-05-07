@@ -129,7 +129,7 @@
 
   // Kiểm tra bản mới định kỳ mỗi 5 phút (tránh spam Firebase)
         setInterval(() => { reg.update(); }, 1000 * 60 * 5);
-        
+
   // Kiểm tra ngay khi người dùng chạm vào màn hình (nhạy bén khi vừa deploy)
           ['mousedown', 'keydown', 'touchstart'].forEach(evt => {
             window.addEventListener(evt, () => {
