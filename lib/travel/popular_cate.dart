@@ -160,32 +160,33 @@ class _PopularCategoriesState extends State<PopularCategories> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    onTap: () async {
-                      bool isValid = await _showPinDialog(context);
-                      if (isValid) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReportListViewScreen(),//StudentsListScreen(),
-                          ),
-                        );
-                      }
-                    },
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundColor: const Color(0xFFF8CDEC),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset("img/word.png", height: 40),
-                          SizedBox(height: 8),
-                          Text("Báo cáo"),
-                        ],
-                    ),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          bool isValid = await _showPinDialog(context);
+                          if (isValid) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ReportListViewScreen(),//StudentsListScreen(),
+                              ),
+                            );
+                          }
+                        },
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: const Color(0xFfcbb8ef),
+                          child: Image.asset("img/word.png", height: 40),
+                        ),
+
+                      ),
+                        Text("Xem báo cáo",
+                              style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
+                            ),
+                    ],
                   ),
-                  ),
+
 
                   GestureDetector(
                     onTap: () {
