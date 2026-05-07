@@ -81,20 +81,18 @@ class _PopularCategoriesState extends State<PopularCategories> {
   /// Hiển thị dialog yêu cầu nhập mã PIN
   Future<bool> _showPinDialog(BuildContext context) async {
     final TextEditingController pinController = TextEditingController();
-
     return await showDialog<bool>(
           context: context,
           barrierDismissible: false, // không cho bấm ra ngoài để tắt
           builder: (context) {
             return AlertDialog(
-              title: Text("Xác thực"),
-
+              title: Text("Xác thực", style: TextStyle(fontSize: 18, color: Colors.blue),),
               content: TextFormField(
                 controller: pinController,
                 keyboardType: TextInputType.number,
                 maxLength: 4,
-                //obscureText: true, // ẩn số
-                obscureText: isPasswordHidden,
+                obscureText: true, // ẩn số
+                //obscureText: isPasswordHidden,
                 obscuringCharacter: '*',
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -103,8 +101,8 @@ class _PopularCategoriesState extends State<PopularCategories> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       isPasswordHidden
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                     ),
                     onPressed: () {
                       setState(() {
@@ -295,31 +293,6 @@ class _PopularCategoriesState extends State<PopularCategories> {
                 ],
               ),
 
-              // const Padding(
-              //   padding: EdgeInsets.only(top: 13, right: 15, left: 10),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       Text(
-              //         "Xem báo cáo",
-              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-              //       ),
-              //       Text(
-              //         "Nhập báo cáo",
-              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-              //       ),
-              //       Text(
-              //         "Thống kê",
-              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-              //       ),
-              //       Text(
-              //         "Tổng hợp",
-              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              //..................Dãy Icon hàng thứ 2 'thông tin CAX'.......
 
               const SizedBox(height: 20),
               Row(
