@@ -2,6 +2,7 @@
   "functions": {
     "source": "functions"
   },
+
   "hosting": {
     "public": "build/web",
     "ignore": [
@@ -15,5 +16,26 @@
         "destination": "/index.html"
       }
     ]
-  }
+  },
+  /* Tự chạy code sau khi git push lên Github */
+  "headers": [
+    {
+      "source": "/**",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "**/*.@(js|css|png|jpg|svg|webp)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "max-age=604800"
+        }
+      ]
+    }
+  ]
 }

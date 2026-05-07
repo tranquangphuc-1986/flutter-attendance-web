@@ -34,5 +34,16 @@
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
+  <!-- Chèn thêm đoạn code này -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('flutter_service_worker.js?v=' + new Date().getTime())
+          .then(function (reg) {
+            reg.update(); // Ép buộc cập nhật Service Worker
+          });
+      });
+    }
+  </script>
 </body>
 </html>
