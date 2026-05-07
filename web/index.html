@@ -119,49 +119,33 @@
   // --PHẦN 2: Kiểm tra cập nhật Service Worker (Bản vá lỗi lặp thông báo)--
 
   if ('serviceWorker' in navigator) {
-    let refreshing = false;
-    let isPrompting = false; // Biến cờ ngăn chặn hiện nhiều confirm cùng lúc
+    window.isUpdatePromptVisible = false; // Biến chặn
 
     window.addEventListener('load', function () {
-      // Đăng ký SW mà không dùng tham số ?v= để tránh trình duyệt hiểu lầm file mới liên tục
-      navigator.serviceWorker.register('flutter_service_worker.js', { scope: '.' })
+      navigator.serviceWorker.register('flutter_service_worker.js')
         .then(reg => {
-
-          // Hàm xử lý logic hiển thị thông báo
-          const handleUpdate = (worker) => {
-            worker.addEventListener('statechange', () => {
+          reg.onupdatefound = () => {
+            const worker = reg.installing;
+            worker.onstatechange = () => {
               if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                if (!isPrompting) {
-                  isPrompting = true;
-                  if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {
-                    worker.postMessage({ type: 'SKIP_WAITING' });
-                  } else {
-                    // Nếu người dùng bấm Hủy, đánh dấu để không hỏi lại trong phiên này
-                    isPrompting = true;
-                  }
+                // CHẶN: Nếu đang hiện thông báo thì không hiện thêm cái thứ 2
+                if (window.isUpdatePromptVisible) return;
+
+                window.isUpdatePromptVisible = true;
+                if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {
+                  worker.postMessage({ type: 'SKIP_WAITING' });
                 }
               }
-            });
+            };
           };
-
-          // 1. Kiểm tra nếu có bản đang chờ (người dùng vừa load lại trang nhưng chưa bấm OK)
-          if (reg.waiting) {
-            handleUpdate(reg.waiting);
-          }
-
-          // 2. Lắng nghe bản cập nhật mới được tìm thấy
-          reg.addEventListener('updatefound', () => {
-            handleUpdate(reg.installing);
-          });
         });
     });
 
-    // Sự kiện reload chỉ chạy 1 lần duy nhất khi Service Worker mới kích hoạt
+    let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (!refreshing) {
-        refreshing = true;
-        window.location.reload();
-      }
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
     });
   }
 

@@ -2,7 +2,6 @@
   "functions": {
     "source": "functions"
   },
-
   "hosting": {
     "public": "build/web",
     "ignore": [
@@ -10,14 +9,12 @@
       "**/.*",
       "**/node_modules/**"
     ],
-
     "rewrites": [
       {
         "source": "**",
         "destination": "/index.html"
       }
     ],
-
     "headers": [
       {
         "source": "/**",
@@ -29,7 +26,16 @@
         ]
       },
       {
-        "source": "**/*.@(js|css|png|jpg|svg|webp)",
+        "source": "/flutter_service_worker.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(png|jpg|svg|webp)",
         "headers": [
           {
             "key": "Cache-Control",
