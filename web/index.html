@@ -118,39 +118,28 @@
 
   // --PHẦN 2: Kiểm tra cập nhật Service Worker--
 
-  let newServiceWorker;
   if ('serviceWorker' in navigator) {
-
     window.addEventListener('load', function () {
-      // Đăng ký Service Worker
       navigator.serviceWorker.register('flutter_service_worker.js?v=' + new Date().getTime())
         .then(reg => {
-          reg.addEventListener('updatefound', () => {
-            newServiceWorker = reg.installing;
-            newServiceWorker.addEventListener('statechange', () => {
-              if (newServiceWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                // Khi đã tải xong bản mới, thông báo cho người dùng
-                showUpdatePrompt(reg);
-                // showUpdateAlert(reg);
+          // Kiểm tra nếu có bản update mới
+          reg.onupdatefound = () => {
+            const installingWorker = reg.installing;
+            installingWorker.onstatechange = () => {
+              if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                // Chỉ hiện thông báo một lần duy nhất
+                if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {
+                  if (reg.waiting) {
+                    reg.waiting.postMessage({type: 'SKIP_WAITING'});
+                  }
+                }
               }
-            });
-          });
+            };
+          };
         });
     });
 
-// Hàm xử lý thông báo để tránh hiện liên tục
-    function showUpdatePrompt(reg) {
-      if (confirm("Hệ thống đã sẵn sàng bản cập nhật mới. Cập nhật ngay để tối ưu nghiệp vụ?")) {
-        if (reg.waiting) {
-          // Ra lệnh cho Service Worker mới kích hoạt ngay
-          reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-        }
-        // Chỉ tải lại trang 1 lần duy nhất sau khi kích hoạt
-        window.location.reload();
-      }
-    }
-
-    // Lắng nghe sự kiện controllerchange để reload đúng lúc
+    // Lắng nghe sự kiện thay đổi controller để reload trang
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       if (!refreshing) {
@@ -160,6 +149,7 @@
     });
 
   }
+
 </script>
 </body>
 
