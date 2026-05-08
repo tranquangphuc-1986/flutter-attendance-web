@@ -68,14 +68,14 @@
     .loading-text {
       margin-top: 20px;
       font-family: Arial, sans-serif;
-      font-size: 30px;
+      font-size: 35px;
       font-weight: bold;
       color: #b30000; /* Màu đỏ thẫm */
       letter-spacing: 1px;
     }
     .sub-text {
       font-family: Arial, sans-serif;
-      font-size: 24px;
+      font-size: 30px;
       color: #666;
     }
     @keyframes spin {
@@ -131,16 +131,22 @@
  <script src="flutter_bootstrap.js" async></script>
 
  <script>
+
   // 1. Xử lý ẩn màn hình Loading
+
   window.addEventListener('load', function() {
-    setTimeout(function() {
       var loading = document.getElementById('loading-indicator');
-      if (loading) {
-        loading.style.transition = "opacity 1.5s ease";
+
+      const hideLoading = () => {
+        if(!loading) return;
+        loading.style.transition = "opacity 1s ease";
         loading.style.opacity = "0";
-        setTimeout(() => loading.remove(), 500);
-      }
-    }, 1500);
+        setTimeout(() => loading.remove(), 1000);
+      };
+
+      window.addEventListener('flutter-first-frame', hideLoading);
+
+      setTimeout(hideLoading, 5000);
   });
 
   // 2. Cơ chế ép kiểm tra cập nhật (reg.update)
@@ -168,8 +174,19 @@
     refreshing = true;
     window.location.reload();
   });
- </script>
 
+ </script>
  </body>
  </html>
 
+<!--
+window.addEventListener('load', function() {
+    setTimeout(function() {
+      var loading = document.getElementById('loading-indicator');
+      if (loading) {
+        loading.style.transition = "opacity 1.5s ease";
+        loading.style.opacity = "0";
+        setTimeout(() => loading.remove(), 500);
+      }
+    }, 1500);
+  }); -->
