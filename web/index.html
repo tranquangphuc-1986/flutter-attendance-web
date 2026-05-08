@@ -150,7 +150,7 @@
         if (!isLoaded) {
           const subText = document.querySelector('.sub-text');
           if (!navigator.onLine) {
-            if (subText) subText.innerHTML = "<b style='color:red'>Lỗi: Không có kết nối mạng.</b><br>Vui lòng kiểm tra và khởi động lại ứng dụng.";
+            if (subText) subText.innerHTML = "<b style='color:red'>Lỗi: Không có kết nối mạng hoặc cập nhật thất bại.</b><br>Vui lòng kiểm tra mạng và thoát, khởi động lại ứng dụng.";
           } else {
             // Nếu có mạng mà vẫn chậm, thử ép hiển thị App (có thể dùng cache cũ)
             console.log("Timeout - Forcing hide loading");
