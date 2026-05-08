@@ -104,8 +104,12 @@ class _EditReportState extends State<EditReport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
           backgroundColor: Colors.blue,
-          title: const Text("Sửa báo cáo")),
+          title: const Text("Sửa báo cáo", style: TextStyle(color: Colors.white),)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
