@@ -1,211 +1,185 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-  If you are serving your web app in a path other than the root, change the
-  href value below to reflect the base path you are serving from.
+    <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
 
-  The path provided below has to start and end with a slash "/" in order for
-  it to work correctly.
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
 
-  For more details:
-  * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
 
-  This is a placeholder for base href that will be replaced by the value of
-  the `--base-href` argument provided to `flutter build`. -->
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`. -->
 
- <base href="$FLUTTER_BASE_HREF">
+    <base href="$FLUTTER_BASE_HREF">
 
- <meta charset="UTF-8">
- <meta content="IE=Edge" http-equiv="X-UA-Compatible">
- <meta name="description" content="A new Flutter project.">
+    <meta charset="UTF-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="description" content="A new Flutter project.">
 
- <!-- iOS meta tags & icons -->
- <meta name="mobile-web-app-capable" content="yes">
- <meta name="apple-mobile-web-app-status-bar-style" content="black">
- <meta name="apple-mobile-web-app-title" content="app_02">
- <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    <!-- iOS meta tags & icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="app_02">
+    <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>app_02</title>
-  <link rel="manifest" href="manifest.json">
+    <title>app_02</title>
+    <link rel="manifest" href="manifest.json">
 
-  <style>
-    #loading-indicator {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      background-color: #ffffff; /* Màu nền trắng hoặc đỏ thẫm tùy ý bạn */
-    }
-    .container {
-      text-align: center;
-    }
-    .logo {
-      width: 180px;
-      height: auto;
-      margin-bottom: 20px;
-      /* Hiệu ứng hiện dần cho logo */
-      animation: fadeIn 1.2s ease-in-out;
-    }
-    .spinner {
-      margin: 0 auto;
-      width: 45px;
-      height: 45px;
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #e60000; /* Màu đỏ cờ đặc trưng */
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    .loading-text {
-      margin-top: 20px;
-      font-family: Arial, sans-serif;
-      font-size: 24px;
-      font-weight: bold;
-      color: #b30000; /* Màu đỏ thẫm */
-      letter-spacing: 1px;
-    }
-    .sub-text {
-      font-family: Arial, sans-serif;
-      font-size: 18px;
-      color: #666;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
- </head>
+    <style>
+        #loading-indicator {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+          background-color: #ffffff; /* Màu nền trắng hoặc đỏ thẫm tùy ý bạn */
+        }
+        .container {
+          text-align: center;
+        }
+        .logo {
+          width: 180px;
+          height: auto;
+          margin-bottom: 20px;
+          /* Hiệu ứng hiện dần cho logo */
+          animation: fadeIn 1.2s ease-in-out;
+        }
+        .spinner {
+          margin: 0 auto;
+          width: 45px;
+          height: 45px;
+          border: 4px solid #f3f3f3;
+          border-top: 4px solid #e60000; /* Màu đỏ cờ đặc trưng */
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+        .loading-text {
+          margin-top: 20px;
+          font-family: Arial, sans-serif;
+          font-size: 24px;
+          font-weight: bold;
+          color: #b30000; /* Màu đỏ thẫm */
+          letter-spacing: 1px;
+        }
+        .sub-text {
+          font-family: Arial, sans-serif;
+          font-size: 18px;
+          color: #666;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
 
- <body style="margin: 0; padding: 0; background-color: #f5f5f5;">
- <div id="loading-indicator">
-  <div class="container">
-    <img class="logo" src="icons/logocand.png" alt="Logo Công an" />
-    <div class="spinner"></div>
-    <p class="loading-text">HỆ THỐNG THAM MƯU</p>
-    <p class="sub-text">Đang tải dữ liệu, vui lòng đợi...</p>
-  </div>
- </div>
+<body style="margin: 0; padding: 0; background-color: #f5f5f5;">
+<div id="loading-indicator">
+    <div class="container">
+        <img class="logo" src="icons/logocand.png" alt="Logo Công an"/>
+        <div class="spinner"></div>
+        <p class="loading-text">HỆ THỐNG THAM MƯU</p>
+        <p class="sub-text">Đang tải dữ liệu, vui lòng đợi...</p>
+    </div>
+</div>
 
- <script>
-  window.isUpdatePromptVisible = false;
-  // Cấu hình khởi tạo Flutter
-  window.flutterConfiguration = {
-    setUserSettings: (userSettings) => {
+<script>
+    window.isUpdatePromptVisible = false;
+    // Cấu hình khởi tạo Flutter
+    window.flutterConfiguration = {
+      setUserSettings: (userSettings) => {
 
-      // Cấu hình Service Worker thông qua bộ khởi tạo chính thức
-      userSettings.serviceWorker = {
-        serviceWorkerVersion: '{{flutter_service_worker_version}}',
+        // Cấu hình Service Worker thông qua bộ khởi tạo chính thức
+        userSettings.serviceWorker = {
+          serviceWorkerVersion: '{{flutter_service_worker_version}}',
 
-        onUpdateFound: (reg) => {
-          const worker = reg.installing;
-          if (!worker) return;
+          onUpdateFound: (reg) => {
+            const worker = reg.installing;
+            if (!worker) return;
 
-          worker.addEventListener('statechange', () => {
-            if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-
-<!--                  worker.postMessage({ type: 'SKIP_WAITING' });-->
-<!--                  const subText = document.querySelector('.sub-text');-->
-<!--                  if(subText) subText.innerHTML = "<b style='color:green'>Đã có bản cập nhật mới. Đang tải lại...</b>";-->
-
-              if (window.isUpdatePromptVisible) return;
-              window.isUpdatePromptVisible = true;
-
-              if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {
-                worker.postMessage({ type: 'SKIP_WAITING' });
+            worker.addEventListener('statechange', () => {
+              if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                if (window.isUpdatePromptVisible) return;
+                window.isUpdatePromptVisible = true;
+                if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {
+                  worker.postMessage({ type: 'SKIP_WAITING' });
+                }
               }
-
-            }
-          });
-        }
-
-      };
-    }
-  };
+            });
+          }
+        };
+      }
+    };
 
 
- </script>
+</script>
 
- <script src="flutter_bootstrap.js" async></script>
+<script src="flutter_bootstrap.js" async></script>
 
- <script>
+<script>
 
-  // 1. Xử lý ẩn màn hình Loading
+    // 1. Xử lý ẩn màn hình Loading
 
-  window.addEventListener('load', function() {
-      var loading = document.getElementById('loading-indicator');
-      var isLoaded = false;
+    window.addEventListener('load', function() {
+        var loading = document.getElementById('loading-indicator');
 
-      const hideLoading = () => {
-        if(!loading || isLoaded) return;
-        isLoaded = true;
+          const hideLoading = () => {
+          if(!loading) return;
+          loading.style.transition = "opacity 0.8s ease";
+          loading.style.opacity = "0";
+          setTimeout(() => loading.remove(), 800);
+        };
 
-        loading.style.transition = "opacity 0.8s ease";
-        loading.style.opacity = "0";
-        setTimeout(() => loading.remove(), 800);
-      };
+        window.addEventListener('flutter-first-frame', () => {
+        setTimeout(hideLoading, 1000);
+        });
 
-      window.addEventListener('flutter-first-frame', () => {
-      setTimeout(hideLoading, 1000);
-      });
-
-<!--      //xử lý khi không có kết nối mạng-->
-<!--      //setTimeout(hideLoading, 5000);-->
-
-      setTimeout(() => {
-         if(!isLoaded) {
-         if(!navigator.onLine) {
-           const subText = document.querySelector('.sub-text');
-
-           if(subText) subText.innerHTML = "<b
-           style='color:red'>Lỗi: Không có kết nối mạng.</b><br>Vui lòng kiểm tra kết nối và tải lại ứng dụng.";
-           } else {
-                hideLoading();
-           }
-         }
-      }, 10000);
-  });
-
-  // 2. Cơ chế ép kiểm tra cập nhật (reg.update)
-
-  navigator.serviceWorker.ready.then((reg) => {
-
-    // Kiểm tra mỗi 5 phút
-    setInterval(() => { reg.update(); }, 1000 * 60 * 5);
-
-    // Kiểm tra khi người dùng tương tác
-    ['mousedown', 'keydown', 'touchstart'].forEach(evt => {
-      window.addEventListener(evt, () => {
-        const now = Date.now();
-        if (!window.lastCheck || (now - window.lastCheck > 30000)) {
-          reg.update();
-          window.lastCheck = now;
-        }
-      }, { once: false });
+        setTimeout(hideLoading, 5000);
     });
-  });
 
-  // 3. Reload khi có controller mới
-  let refreshing = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (refreshing) return;
-    refreshing = true;
-    window.location.reload();
-  });
+    // 2. Cơ chế ép kiểm tra cập nhật (reg.update)
 
- </script>
- </body>
- </html>
+    navigator.serviceWorker.ready.then((reg) => {
+
+      // Kiểm tra mỗi 5 phút
+      setInterval(() => { reg.update(); }, 1000 * 60 * 5);
+
+      // Kiểm tra khi người dùng tương tác
+      ['mousedown', 'keydown', 'touchstart'].forEach(evt => {
+        window.addEventListener(evt, () => {
+          const now = Date.now();
+          if (!window.lastCheck || (now - window.lastCheck > 30000)) {
+            reg.update();
+            window.lastCheck = now;
+          }
+        }, { once: false });
+      });
+    });
+
+    // 3. Reload khi có controller mới
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+
+</script>
+</body>
+</html>
 
