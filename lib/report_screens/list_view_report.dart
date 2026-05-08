@@ -60,7 +60,6 @@ class _ReportListViewScreenState extends State<ReportListViewScreen> {
         ),
         backgroundColor: Colors.blue,
         title: const Text("Danh sách báo cáo", style: TextStyle(color: Colors.white)),
-        automaticallyImplyLeading: true,
       ),
       body: Column(
         children: [

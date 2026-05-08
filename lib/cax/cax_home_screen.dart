@@ -33,9 +33,14 @@ class _HomeScreenCAXState extends State<HomeScreenCAX> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
+        elevation: 20,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text('Công an xã, phường, đặc khu', style: TextStyle(color: Colors.white),),
-          backgroundColor: Colors.blue,),
+        backgroundColor: Colors.blue,
+      ),
       backgroundColor: Colors.white,
       body: Column(
         children: [
