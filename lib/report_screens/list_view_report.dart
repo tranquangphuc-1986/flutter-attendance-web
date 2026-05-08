@@ -54,8 +54,12 @@ class _ReportListViewScreenState extends State<ReportListViewScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
         backgroundColor: Colors.blue,
-        title: const Text("Danh sách báo cáo"),
+        title: const Text("Danh sách báo cáo", style: TextStyle(color: Colors.white)),
         automaticallyImplyLeading: true,
       ),
       body: Column(

@@ -50,7 +50,7 @@
       text-align: center;
     }
     .logo {
-      width: 120px;
+      width: 150px;
       height: auto;
       margin-bottom: 20px;
       /* Hiệu ứng hiện dần cho logo */
@@ -68,13 +68,14 @@
     .loading-text {
       margin-top: 20px;
       font-family: Arial, sans-serif;
+      font-size: 24px;
       font-weight: bold;
       color: #b30000; /* Màu đỏ thẫm */
       letter-spacing: 1px;
     }
     .sub-text {
       font-family: Arial, sans-serif;
-      font-size: 12px;
+      font-size: 18px;
       color: #666;
     }
     @keyframes spin {
@@ -135,6 +136,7 @@
     setTimeout(function() {
       var loading = document.getElementById('loading-indicator');
       if (loading) {
+        loading.style.transition = "opacity 0.5s ease";
         loading.style.opacity = "0";
         setTimeout(() => loading.remove(), 500);
       }
@@ -171,73 +173,3 @@
  </body>
  </html>
 
-<!--
- <script src="flutter_bootstrap.js" async></script>
-
- <script>
-  // --PHẦN 1: Khi Flutter đã khởi tạo xong, đoạn code này sẽ xóa màn hình Loading--
-
-  window.addEventListener('load', function() {
-    // Đợi một chút sau khi engine sẵn sàng để chuyển cảnh mượt mà
-    setTimeout(function() {
-      var loading = document.getElementById('loading-indicator');
-      if (loading) {
-        loading.style.transition = "opacity 0.5s ease";
-        loading.style.opacity = "0";
-        setTimeout(function() {
-          loading.remove();
-        }, 500);
-      }
-    }, 1500);
-  });
-
-  // --PHẦN 2: Kiểm tra cập nhật Service Worker (Bản vá lỗi lặp thông báo)--
-
-  if ('serviceWorker' in navigator) {
-    window.isUpdatePromptVisible = false; // Biến chặn
-
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('flutter_service_worker.js')
-        .then(reg => {
-
-  // Kiểm tra bản mới định kỳ mỗi 5 phút (tránh spam Firebase)
-        setInterval(() => { reg.update(); }, 1000 * 60 * 5);
-
-  // Kiểm tra ngay khi người dùng chạm vào màn hình (nhạy bén khi vừa deploy)
-          ['mousedown', 'keydown', 'touchstart'].forEach(evt => {
-            window.addEventListener(evt, () => {
-              const now = Date.now();
-              if (!window.lastCheck || (now - window.lastCheck > 30000)) {
-                reg.update();
-                window.lastCheck = now;
-              }
-            }, { once: false });
-          });
-
-          reg.onupdatefound = () => {
-            const worker = reg.installing;
-            worker.onstatechange = () => {
-              if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                // CHẶN: Nếu đang hiện thông báo thì không hiện thêm cái thứ 2
-                if (window.isUpdatePromptVisible) return;
-
-                window.isUpdatePromptVisible = true;
-                if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {
-                  worker.postMessage({ type: 'SKIP_WAITING' });
-                }
-              }
-            };
-          };
-        });
-    });
-
-    let refreshing = false;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (refreshing) return;
-      refreshing = true;
-      window.location.reload();
-    });
-  }
- </script>
-
- -->

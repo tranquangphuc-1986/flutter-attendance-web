@@ -113,8 +113,12 @@ class _AddnewReportState extends State<AddnewReport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
         backgroundColor: Colors.blue,
-        title: const Text("Thêm mới báo cáo"),
+        title: const Text("Thêm mới báo cáo", style: TextStyle(color: Colors.white),),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
