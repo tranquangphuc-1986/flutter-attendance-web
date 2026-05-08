@@ -100,32 +100,41 @@
  </div>
 
  <script>
-  window.isUpdatePromptVisible = false;
-
+<!--  window.isUpdatePromptVisible = false;-->
   // Cấu hình khởi tạo Flutter
   window.flutterConfiguration = {
     setUserSettings: (userSettings) => {
+
       // Cấu hình Service Worker thông qua bộ khởi tạo chính thức
       userSettings.serviceWorker = {
         serviceWorkerVersion: '{{flutter_service_worker_version}}',
+
         onUpdateFound: (reg) => {
           const worker = reg.installing;
           if (!worker) return;
 
           worker.addEventListener('statechange', () => {
             if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-              if (window.isUpdatePromptVisible) return;
+                  worker.postMessage({ type: 'SKIP_WAITING' });
+                  const subText = document.querySelector('.sub-text');
+                  if(subText) subText.innerHTML = "<b style='color:green'>Đã có bản cập nhật mới. Đang tải lại...</b>";
 
-              window.isUpdatePromptVisible = true;
-              if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {
-                worker.postMessage({ type: 'SKIP_WAITING' });
-              }
+<!--              if (window.isUpdatePromptVisible) return;-->
+<!--              window.isUpdatePromptVisible = true;-->
+<!--              -->
+<!--              if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {-->
+<!--                worker.postMessage({ type: 'SKIP_WAITING' });-->
+<!--              }-->
+<!--              -->
             }
           });
+
         }
       };
     }
   };
+
+
  </script>
 
  <script src="flutter_bootstrap.js" async></script>
@@ -136,9 +145,12 @@
 
   window.addEventListener('load', function() {
       var loading = document.getElementById('loading-indicator');
+      var isLoaded = false;
 
       const hideLoading = () => {
-        if(!loading) return;
+        if(!loading || isLoaded) return;
+        isLoaded = true;
+
         loading.style.transition = "opacity 0.8s ease";
         loading.style.opacity = "0";
         setTimeout(() => loading.remove(), 800);
@@ -148,12 +160,26 @@
       setTimeout(hideLoading, 1000);
       });
 
+      //xử lý khi không có kết nối mạng
       setTimeout(hideLoading, 5000);
+      setTimeout(() => {
+         if(!isLoaded) {
+         if(!navigator.onLine) {
+           const subText = document.querySelector('.sub-text');
+
+           if(subText) subText.innerHTML = "<b
+           style='color:red'>Lỗi: Không có kết nối mạng.</b><br>Vui lòng kiểm tra kết nối và tải lại ứng dụng.";
+           } else {
+                hideLoading();
+           }
+         }
+      }, 10000);
   });
 
   // 2. Cơ chế ép kiểm tra cập nhật (reg.update)
-  // Để gọi được reg.update() theo cách mới, chúng ta vẫn cần lấy registration
+
   navigator.serviceWorker.ready.then((reg) => {
+
     // Kiểm tra mỗi 5 phút
     setInterval(() => { reg.update(); }, 1000 * 60 * 5);
 
