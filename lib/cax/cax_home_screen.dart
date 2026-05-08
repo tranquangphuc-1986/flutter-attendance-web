@@ -33,7 +33,8 @@ class _HomeScreenCAXState extends State<HomeScreenCAX> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Công an xã, phường, đặc khu'),
+        elevation: 0,
+        title: const Text('Công an xã, phường, đặc khu', style: TextStyle(color: Colors.white),),
           backgroundColor: Colors.blue,),
       backgroundColor: Colors.white,
       body: Column(
