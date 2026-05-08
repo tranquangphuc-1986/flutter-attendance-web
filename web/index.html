@@ -100,7 +100,7 @@
  </div>
 
  <script>
-<!--  window.isUpdatePromptVisible = false;-->
+  window.isUpdatePromptVisible = false;
   // Cấu hình khởi tạo Flutter
   window.flutterConfiguration = {
     setUserSettings: (userSettings) => {
@@ -115,21 +115,22 @@
 
           worker.addEventListener('statechange', () => {
             if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                  worker.postMessage({ type: 'SKIP_WAITING' });
-                  const subText = document.querySelector('.sub-text');
-                  if(subText) subText.innerHTML = "<b style='color:green'>Đã có bản cập nhật mới. Đang tải lại...</b>";
 
-<!--              if (window.isUpdatePromptVisible) return;-->
-<!--              window.isUpdatePromptVisible = true;-->
-<!--              -->
-<!--              if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {-->
-<!--                worker.postMessage({ type: 'SKIP_WAITING' });-->
-<!--              }-->
-<!--              -->
+<!--                  worker.postMessage({ type: 'SKIP_WAITING' });-->
+<!--                  const subText = document.querySelector('.sub-text');-->
+<!--                  if(subText) subText.innerHTML = "<b style='color:green'>Đã có bản cập nhật mới. Đang tải lại...</b>";-->
+
+              if (window.isUpdatePromptVisible) return;
+              window.isUpdatePromptVisible = true;
+
+              if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {
+                worker.postMessage({ type: 'SKIP_WAITING' });
+              }
+
             }
           });
-
         }
+
       };
     }
   };
@@ -207,14 +208,3 @@
  </body>
  </html>
 
-<!--
-window.addEventListener('load', function() {
-    setTimeout(function() {
-      var loading = document.getElementById('loading-indicator');
-      if (loading) {
-        loading.style.transition = "opacity 1.5s ease";
-        loading.style.opacity = "0";
-        setTimeout(() => loading.remove(), 500);
-      }
-    }, 1500);
-  }); -->
