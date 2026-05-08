@@ -24,7 +24,7 @@ class _ChartScreenState extends State<ChartScreen> {
               Navigator.of(context).pop();
             },
           ),
-          title: const Text('Biểu đồ'),
+          title: const Text('Biểu đồ', style: TextStyle(color: Colors.white)),
           backgroundColor: Colors.blue,),
         backgroundColor: Colors.white,
     body:  Padding(
