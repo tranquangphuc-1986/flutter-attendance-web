@@ -50,32 +50,32 @@
       text-align: center;
     }
     .logo {
-      width: 200px;
+      width: 180px;
       height: auto;
       margin-bottom: 20px;
       /* Hiệu ứng hiện dần cho logo */
-      animation: fadeIn 1s ease-in-out;
+      animation: fadeIn 1.2s ease-in-out;
     }
     .spinner {
       margin: 0 auto;
-      width: 50px;
-      height: 50px;
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid #e60000; /* Màu đỏ cờ đặc trưng */
+      width: 45px;
+      height: 45px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #e60000; /* Màu đỏ cờ đặc trưng */
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
     .loading-text {
       margin-top: 20px;
       font-family: Arial, sans-serif;
-      font-size: 35px;
+      font-size: 24px;
       font-weight: bold;
       color: #b30000; /* Màu đỏ thẫm */
       letter-spacing: 1px;
     }
     .sub-text {
       font-family: Arial, sans-serif;
-      font-size: 30px;
+      font-size: 18px;
       color: #666;
     }
     @keyframes spin {
@@ -107,7 +107,7 @@
     setUserSettings: (userSettings) => {
       // Cấu hình Service Worker thông qua bộ khởi tạo chính thức
       userSettings.serviceWorker = {
-        serviceWorkerVersion: {{flutter_service_worker_version}},
+        serviceWorkerVersion: '{{flutter_service_worker_version}}',
         onUpdateFound: (reg) => {
           const worker = reg.installing;
           if (!worker) return;
@@ -139,14 +139,16 @@
 
       const hideLoading = () => {
         if(!loading) return;
-        loading.style.transition = "opacity 1s ease";
+        loading.style.transition = "opacity 0.8s ease";
         loading.style.opacity = "0";
-        setTimeout(() => loading.remove(), 1000);
+        setTimeout(() => loading.remove(), 800);
       };
 
-      window.addEventListener('flutter-first-frame', hideLoading);
+      window.addEventListener('flutter-first-frame', () => {
+      setTimeout(hideLoading, 1000);
+      });
 
-      setTimeout(hideLoading, 4000);
+      setTimeout(hideLoading, 5000);
   });
 
   // 2. Cơ chế ép kiểm tra cập nhật (reg.update)
