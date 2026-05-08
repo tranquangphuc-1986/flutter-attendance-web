@@ -99,6 +99,99 @@
 </div>
 
 <script>
+
+      window.isUpdatePromptVisible = false;
+
+      // Cấu hình khởi tạo Flutter
+      window.flutterConfiguration = {
+        setUserSettings: (userSettings) => {
+          userSettings.serviceWorker = {
+            serviceWorkerVersion: '{{flutter_service_worker_version}}',
+            onUpdateFound: (reg) => {
+              const worker = reg.installing;
+              if (!worker) return;
+              worker.addEventListener('statechange', () => {
+                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                  const subText = document.querySelector('.sub-text');
+                  if(subText) subText.innerHTML = "<b style='color:green'>Đã có bản cập nhật mới. Đang tải lại...</b>";
+                  worker.postMessage({ type: 'SKIP_WAITING' });
+                }
+              });
+            }
+          };
+        }
+      };
+</script>
+
+<script src="flutter_bootstrap.js" async></script>
+
+<script>
+    // 1. Xử lý ẩn màn hình Loading thông minh
+    (function() {
+      var loading = document.getElementById('loading-indicator');
+      var isLoaded = false;
+
+      const hideLoading = () => {
+        if (!loading || isLoaded) return;
+        isLoaded = true;
+        loading.style.transition = "opacity 0.8s ease";
+        loading.style.opacity = "0";
+        setTimeout(() => { if(loading.parentNode) loading.remove(); }, 800);
+      };
+
+      // Lắng nghe tín hiệu từ Flutter
+      window.addEventListener('flutter-first-frame', () => {
+        console.log("Flutter Ready");
+        setTimeout(hideLoading, 800); // Đợi 0.8s để đảm bảo mượt
+      });
+
+      // Xử lý Timeout (10 giây)
+      setTimeout(() => {
+        if (!isLoaded) {
+          const subText = document.querySelector('.sub-text');
+          if (!navigator.onLine) {
+            if (subText) subText.innerHTML = "<b style='color:red'>Lỗi: Không có kết nối mạng.</b><br>Vui lòng kiểm tra và khởi động lại ứng dụng.";
+          } else {
+            // Nếu có mạng mà vẫn chậm, thử ép hiển thị App (có thể dùng cache cũ)
+            console.log("Timeout - Forcing hide loading");
+            hideLoading();
+          }
+        }
+      }, 10000);
+    })();
+
+    // 2. Ép kiểm tra cập nhật (reg.update)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then((reg) => {
+        setInterval(() => { reg.update(); }, 1000 * 60 * 5);
+
+        ['mousedown', 'keydown', 'touchstart'].forEach(evt => {
+          window.addEventListener(evt, () => {
+            const now = Date.now();
+            if (!window.lastCheck || (now - window.lastCheck > 30000)) {
+              reg.update().catch(() => {});
+              window.lastCheck = now;
+            }
+          }, { once: false });
+        });
+      });
+
+      // 3. Reload khi có bản mới
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        refreshing = true;
+        window.location.reload();
+      });
+    }
+
+
+</script>
+</body>
+</html>
+
+
+<!--
     window.isUpdatePromptVisible = false;
     // Cấu hình khởi tạo Flutter
     window.flutterConfiguration = {
@@ -179,7 +272,5 @@
       window.location.reload();
     });
 
-</script>
-</body>
-</html>
+-->
 
