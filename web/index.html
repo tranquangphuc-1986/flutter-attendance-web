@@ -33,6 +33,7 @@
     <link rel="manifest" href="manifest.json">
 
     <style>
+        // 1. Thiết kế màn hình Loading ĐỢI CẬP NHẬT đẹp mắt và chuyên nghiệp
         #loading-indicator {
           position: fixed;
           top: 0;
@@ -85,10 +86,29 @@
           from { opacity: 0; transform: translateY(-10px); }
           to { opacity: 1; transform: translateY(0); }
         }
+        // 2. Thiết kế giao diện bảng hỏi cài đặt App
+
+    #install-prompt {
+      position: fixed; bottom: 20px; left: 20px; right: 20px;
+      background: white; padding: 15px; border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      display: none; align-items: center; justify-content: space-between;
+      z-index: 10000; border-left: 5px solid #e60000;
+      animation: slideUp 0.5s ease-out;
+    }
+    #install-prompt p { margin: 0; font-family: sans-serif; font-size: 14px; color: #333; }
+    #install-btn {
+      background: #e60000; color: white; border: none;
+      padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;
+    }
+    @keyframes slideUp { from { transform: translateY(100px); } to { transform: translateY(0); } }
+
     </style>
+
 </head>
 
 <body style="margin: 0; padding: 0; background-color: #f5f5f5;">
+
 <div id="loading-indicator">
     <div class="container">
         <img class="logo" src="icons/logocand.png" alt="Logo Công an"/>
@@ -98,10 +118,15 @@
     </div>
 </div>
 
+<div id="install-prompt">
+    <p>Thêm <b>Hệ thống Tham mưu</b> vào màn hình chính để sử dụng như App?</p>
+    <button id="install-btn">CÀI ĐẶT</button>
+</div>
+
 <script>
 
+    // 1. Cấu hình khởi tạo Flutter với cơ chế cập nhật thông minh
       window.isUpdatePromptVisible = false;
-
       // Cấu hình khởi tạo Flutter
       window.flutterConfiguration = {
         setUserSettings: (userSettings) => {
@@ -163,7 +188,7 @@
     // 2. Ép kiểm tra cập nhật (reg.update)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.ready.then((reg) => {
-        setInterval(() => { reg.update(); }, 1000 * 60 * 5);
+        setInterval(() => { reg.update(); }, 1000 * 60 * 30);
 
         ['mousedown', 'keydown', 'touchstart'].forEach(evt => {
           window.addEventListener(evt, () => {
@@ -184,93 +209,50 @@
         window.location.reload();
       });
     }
-
-
 </script>
+
+<script>
+    // --- Logic xử lý Install Prompt (Thêm vào màn hình chính) ---
+      let deferredPrompt;
+      const installPrompt = document.getElementById('install-prompt');
+      const installBtn = document.getElementById('install-btn');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Ngăn chặn trình duyệt tự động hiện bảng hỏi mặc định
+        e.preventDefault();
+        // Lưu sự kiện lại để dùng sau
+        deferredPrompt = e;
+
+        // Hiển thị bảng hỏi tùy chỉnh sau 5 giây để người dùng làm quen App trước
+        setTimeout(() => {
+          // Chỉ hiện nếu chưa cài đặt (tránh hiện lại khi đã là App)
+          if (window.matchMedia('(display-mode: standalone)').matches) return;
+          installPrompt.style.display = 'flex';
+        }, 5000);
+      });
+
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          // Hiện bảng hỏi cài đặt gốc của trình duyệt
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          console.log(`User choice: ${outcome}`);
+          // Xóa bảng hỏi sau khi người dùng tương tác
+          deferredPrompt = null;
+          installPrompt.style.display = 'none';
+        }
+      });
+
+      // Ẩn bảng hỏi nếu người dùng đã cài đặt thành công
+      window.addEventListener('appinstalled', () => {
+        installPrompt.style.display = 'none';
+        deferredPrompt = null;
+        console.log('PWA đã được cài đặt');
+      });
+</script>
+
+
 </body>
 </html>
 
-
-<!--
-    window.isUpdatePromptVisible = false;
-    // Cấu hình khởi tạo Flutter
-    window.flutterConfiguration = {
-      setUserSettings: (userSettings) => {
-
-        // Cấu hình Service Worker thông qua bộ khởi tạo chính thức
-        userSettings.serviceWorker = {
-          serviceWorkerVersion: '{{flutter_service_worker_version}}',
-
-          onUpdateFound: (reg) => {
-            const worker = reg.installing;
-            if (!worker) return;
-
-            worker.addEventListener('statechange', () => {
-              if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                if (window.isUpdatePromptVisible) return;
-                window.isUpdatePromptVisible = true;
-                if (confirm("Hệ thống có bản cập nhật mới. Cập nhật ngay?")) {
-                  worker.postMessage({ type: 'SKIP_WAITING' });
-                }
-              }
-            });
-          }
-        };
-      }
-    };
-
-
-</script>
-
-<script src="flutter_bootstrap.js" async></script>
-
-<script>
-
-    // 1. Xử lý ẩn màn hình Loading
-
-    window.addEventListener('load', function() {
-        var loading = document.getElementById('loading-indicator');
-
-          const hideLoading = () => {
-          if(!loading) return;
-          loading.style.transition = "opacity 0.8s ease";
-          loading.style.opacity = "0";
-          setTimeout(() => loading.remove(), 800);
-        };
-
-        window.addEventListener('flutter-first-frame', () => {
-        setTimeout(hideLoading, 1000);
-        });
-
-        setTimeout(hideLoading, 5000);
-    });
-
-    // 2. Cơ chế ép kiểm tra cập nhật (reg.update)
-
-    navigator.serviceWorker.ready.then((reg) => {
-
-      // Kiểm tra mỗi 5 phút
-      setInterval(() => { reg.update(); }, 1000 * 60 * 5);
-
-      // Kiểm tra khi người dùng tương tác
-      ['mousedown', 'keydown', 'touchstart'].forEach(evt => {
-        window.addEventListener(evt, () => {
-          const now = Date.now();
-          if (!window.lastCheck || (now - window.lastCheck > 30000)) {
-            reg.update();
-            window.lastCheck = now;
-          }
-        }, { once: false });
-      });
-    });
-
-    // 3. Reload khi có controller mới
-    let refreshing = false;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (refreshing) return;
-      refreshing = true;
-      window.location.reload();
-    });
-
--->
 
