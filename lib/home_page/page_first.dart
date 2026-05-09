@@ -102,21 +102,23 @@ class _MyPageFirstState extends State<PageFirst> {
     // }
 
     /// 1. Kiểm tra chế độ Standalone (Đã cài đặt và đang mở từ màn hình chính)
-    final isStandalone =
+    final bool isStandalone =
         html.window.matchMedia('(display-mode: standalone)').matches ||
         (html.window.navigator.vendor.contains('Apple') &&
             (html.window.navigator as dynamic).standalone == true);
 
     // 2. Kiểm tra xem người dùng đã từng tắt bảng hỏi này chưa (Lưu ở LocalStorage)
-    final hasDismissed = html.window.localStorage.containsKey(
+    final bool hasDismissed = html.window.localStorage.containsKey(
       'install_prompt_dismissed',
     );
 
     if (isStandalone || hasDismissed) return;
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    if (defaultTargetPlatform == TargetPlatform.iOS
+    || defaultTargetPlatform == TargetPlatform.macOS) {
       showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         isDismissible: false, // Bắt buộc tương tác để đảm bảo họ đã đọc
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
