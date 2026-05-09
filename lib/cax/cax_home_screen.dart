@@ -75,7 +75,7 @@ class _HomeScreenCAXState extends State<HomeScreenCAX> {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text('Công an xã, phường, đặc khu', style: TextStyle(color: Colors.white),),
-        backgroundColor: Colors.yellow,
+        backgroundColor: Colors.blue,
       ),
       backgroundColor: Colors.white,
       body: Column(
