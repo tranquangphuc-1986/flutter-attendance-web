@@ -44,9 +44,9 @@ class _MyPageFirstState extends State<PageFirst> {
   void initState() {
     super.initState();
     // Hiển thị banner cài đặt ứng dụng nếu cần
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+   // WidgetsBinding.instance.addPostFrameCallback((_) {
       showInstallBanner(context);
-   });
+  // });
     fetchUserInfo();
   }
 
