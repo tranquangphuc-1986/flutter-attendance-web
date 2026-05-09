@@ -105,11 +105,13 @@ class _MyPageFirstState extends State<PageFirst> {
 
       // 1. Kiểm tra môi trường (Debug: Tạm thời comment dòng check dismissed)
       // if (html.window.localStorage.containsKey('install_prompt_dismissed')) return;
-
-      final bool isStandalone = html.window.matchMedia('(display-mode: standalone)').matches ||
-          (html.window.navigator as dynamic).standalone == true;
-      if (isStandalone) return;
-
+if (kIsWeb) {
+  final bool isStandalone = html.window
+      .matchMedia('(display-mode: standalone)')
+      .matches ||
+      (html.window.navigator as dynamic).standalone == true;
+  if (isStandalone) return;
+}
       // 2. Ép hiển thị nếu là iOS hoặc trong môi trường Web để test
       if (defaultTargetPlatform == TargetPlatform.iOS || kIsWeb) {
         showModalBottomSheet(
