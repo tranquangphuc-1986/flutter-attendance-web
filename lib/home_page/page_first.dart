@@ -143,10 +143,10 @@ class _MyPageFirstState extends State<PageFirst> {
     }
 
     //3. xử lý cho Android (nếu muốn, thường Android sẽ tự động hiển thị banner)
-    else if (defaultTargetPlatform == TargetPlatform.android) {
-      js.context.callMethod('presentInstallPrompt');
-      // Android thường tự động hiển thị banner, nhưng nếu muốn có thể tạo custom banner ở đây
-    }
+    // else if (defaultTargetPlatform == TargetPlatform.android) {
+    //   js.context.callMethod('presentInstallPrompt');
+    //   // Android thường tự động hiển thị banner, nhưng nếu muốn có thể tạo custom banner ở đây
+    // }
   }
 
   Future<void> fetchUserInfo() async {
