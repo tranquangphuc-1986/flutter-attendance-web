@@ -102,6 +102,7 @@ class _MyPageFirstState extends State<PageFirst> {
     // }
 
     /// 1. Kiểm tra chế độ Standalone (Đã cài đặt và đang mở từ màn hình chính)
+    html.window.localStorage.clear(); // Xóa LocalStorage để test lại banner nhiều lần
     final bool isStandalone =
         html.window.matchMedia('(display-mode: standalone)').matches ||
         (html.window.navigator.vendor.contains('Apple') &&
@@ -430,6 +431,7 @@ class _MyPageFirstState extends State<PageFirst> {
               //3. Tạo các icon
               SizedBox(height: 4),
               Container(child: const PopularCategories()),
+              SizedBox(height: 50),
             ],
           ),
         ),
