@@ -9,14 +9,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class PageFirst extends StatefulWidget {
   const PageFirst({super.key});
   @override
   State<PageFirst> createState() => _MyPageFirstState();
 }
 
-  int selectedIndex = 0;
+int selectedIndex = 0;
 // List<String> categoryList = ["Lời dặn", "Lịch sử", "Di tích","Kiến thức","Hoạt động",];
 Future<void> _launchURL() async {
   final url = Uri.parse('https://congan.quangngai.gov.vn');
@@ -24,14 +23,18 @@ Future<void> _launchURL() async {
     throw 'Không thể mở URL: $url';
   }
 }
+
 Future<void> _launchFb() async {
   final url = Uri.parse('https://facebook.com/thongtinXanh.QNg');
   if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
     throw 'Không thể mở URL: $url';
   }
 }
+
 Future<void> _map() async {
-  final url = Uri.parse('https://sapnhap.bando.com.vn/?zarsrc=31&utm_source=zalo&utm_medium=zalo&utm_campaign=zalo');
+  final url = Uri.parse(
+    'https://sapnhap.bando.com.vn/?zarsrc=31&utm_source=zalo&utm_medium=zalo&utm_campaign=zalo',
+  );
   if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
     throw 'Không thể mở URL: $url';
   }
@@ -44,15 +47,19 @@ class _MyPageFirstState extends State<PageFirst> {
   void initState() {
     super.initState();
     // Hiển thị banner cài đặt ứng dụng nếu cần
-   // WidgetsBinding.instance.addPostFrameCallback((_) {
-      showInstallBanner(context);
-  // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(seconds: 5), () {
+        if (mounted) {
+          showInstallBanner(context);
+        }
+      });
+    });
+
     fetchUserInfo();
   }
 
-//Tạo 1 hàm để hiển thị banner cài đặt ứng dụng trên iOS
+  //Tạo 1 hàm để hiển thị banner cài đặt ứng dụng trên iOS
   void showInstallBanner(BuildContext context) {
-
     // // 1. Kiểm tra nếu đã là App (Standalone) thì không hiện nữa
     // if(kIsWeb) {
     //   bool isStandalone = html.window
@@ -94,13 +101,16 @@ class _MyPageFirstState extends State<PageFirst> {
     //   );
     // }
 
-/// 1. Kiểm tra chế độ Standalone (Đã cài đặt và đang mở từ màn hình chính)
-    final isStandalone = html.window.matchMedia('(display-mode: standalone)').matches ||
+    /// 1. Kiểm tra chế độ Standalone (Đã cài đặt và đang mở từ màn hình chính)
+    final isStandalone =
+        html.window.matchMedia('(display-mode: standalone)').matches ||
         (html.window.navigator.vendor.contains('Apple') &&
             (html.window.navigator as dynamic).standalone == true);
 
     // 2. Kiểm tra xem người dùng đã từng tắt bảng hỏi này chưa (Lưu ở LocalStorage)
-    final hasDismissed = html.window.localStorage.containsKey('install_prompt_dismissed');
+    final hasDismissed = html.window.localStorage.containsKey(
+      'install_prompt_dismissed',
+    );
 
     if (isStandalone || hasDismissed) return;
 
@@ -109,36 +119,42 @@ class _MyPageFirstState extends State<PageFirst> {
         context: context,
         isDismissible: false, // Bắt buộc tương tác để đảm bảo họ đã đọc
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        builder: (context) => Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Cài đặt ứng dụng Tham mưu",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              const SizedBox(height: 15),
-              const ListTile(
-                leading: Icon(Icons.ios_share, color: Colors.blue),
-                title: Text("Bấm vào nút Chia sẻ trên thanh công cụ Safari"),
+        builder:
+            (context) => Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Cài đặt ứng dụng Tham mưu",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  const SizedBox(height: 15),
+                  const ListTile(
+                    leading: Icon(Icons.ios_share, color: Colors.blue),
+                    title: Text(
+                      "Bấm vào nút Chia sẻ trên thanh công cụ Safari",
+                    ),
+                  ),
+                  const ListTile(
+                    leading: Icon(Icons.add_box_outlined),
+                    title: Text("Chọn 'Thêm vào màn hình chính'"),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Lưu trạng thái đã đóng vào LocalStorage để không hiện lại ở phiên làm việc sau
+                      html.window.localStorage['install_prompt_dismissed'] =
+                          'true';
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Tôi đã hiểu hoặc đã cài đặt"),
+                  ),
+                ],
               ),
-              const ListTile(
-                leading: Icon(Icons.add_box_outlined),
-                title: Text("Chọn 'Thêm vào màn hình chính'"),
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                  onPressed: () {
-                    // Lưu trạng thái đã đóng vào LocalStorage để không hiện lại ở phiên làm việc sau
-                    html.window.localStorage['install_prompt_dismissed'] = 'true';
-                    Navigator.pop(context);
-                  },
-                  child: const Text("Tôi đã hiểu hoặc đã cài đặt")
-              )
-            ],
-          ),
-        ),
+            ),
       );
     }
 
@@ -153,10 +169,10 @@ class _MyPageFirstState extends State<PageFirst> {
     try {
       final uid = FirebaseAuth.instance.currentUser!.uid;
       final doc =
-      await FirebaseFirestore.instance
-          .collection('userLogin')
-          .doc(uid)
-          .get();
+          await FirebaseFirestore.instance
+              .collection('userLogin')
+              .doc(uid)
+              .get();
       setState(() {
         currentName = doc['name'];
         isLoading = false;
@@ -210,11 +226,15 @@ class _MyPageFirstState extends State<PageFirst> {
                       child: Stack(
                         children: [
                           Container(
-                            height: MediaQuery.of(context).size.height * 0.2, //260,
+                            height:
+                                MediaQuery.of(context).size.height * 0.2, //260,
                             width: double.infinity,
                             child: SafeArea(
                               child: Padding(
-                                padding: const EdgeInsets.only(top:10, left: 20),
+                                padding: const EdgeInsets.only(
+                                  top: 10,
+                                  left: 20,
+                                ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -224,17 +244,18 @@ class _MyPageFirstState extends State<PageFirst> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                            const Icon(
+                                          const Icon(
                                             Icons.person,
                                             color: Colors.yellowAccent,
                                             size: 30,
                                           ),
                                           Text(
-                                            "Xin chào! ${currentName.isNotEmpty ? currentName: "..."}",
+                                            "Xin chào! ${currentName.isNotEmpty ? currentName : "..."}",
                                             style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.yellowAccent),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.yellowAccent,
+                                            ),
                                           ),
                                           const Icon(
                                             Icons.add_alert_outlined,
@@ -257,7 +278,9 @@ class _MyPageFirstState extends State<PageFirst> {
                             top: MediaQuery.of(context).size.height * 0.11,
                             //150, //khoảng cách giữa dòng các ảnh và với dòng Lời dặn, di tích
                             child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.25, //220, //chiều cao của sizedBox chứa các ảnh
+                              height:
+                                  MediaQuery.of(context).size.height *
+                                  0.25, //220, //chiều cao của sizedBox chứa các ảnh
                               width: MediaQuery.of(context).size.width,
                               child: ListView.builder(
                                 itemCount: locationItems.length,
@@ -291,9 +314,10 @@ class _MyPageFirstState extends State<PageFirst> {
                                             tag: location.image,
                                             child: Container(
                                               height: //170,
-                                              MediaQuery.of(
-                                                context,
-                                              ).size.height * 0.24, //chiều cao của ảnh, không được cao hơn SizedBox 0.25
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.height *
+                                                  0.24, //chiều cao của ảnh, không được cao hơn SizedBox 0.25
                                               width: 120,
                                               // MediaQuery.of(
                                               //   context,
@@ -353,7 +377,7 @@ class _MyPageFirstState extends State<PageFirst> {
                 onTap: _launchFb,
                 child: Container(
                   height: 70,
-                 // height: MediaQuery.of(context).size.height* 0.08,
+                  // height: MediaQuery.of(context).size.height* 0.08,
                   margin: EdgeInsets.all(12),
                   padding: EdgeInsets.symmetric(vertical: 14, horizontal: 14),
                   decoration: BoxDecoration(
@@ -487,4 +511,3 @@ class _MyPageFirstState extends State<PageFirst> {
   //   );
   // }
 }
-
