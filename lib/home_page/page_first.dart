@@ -14,16 +14,46 @@ class PageFirst extends StatefulWidget {
   const PageFirst({super.key});
   @override
   State<PageFirst> createState() => _MyPageFirstState();
+}
 
-  static void show(BuildContext context) {
-    showInstallBanner(context);
+  int selectedIndex = 0;
+// List<String> categoryList = ["Lời dặn", "Lịch sử", "Di tích","Kiến thức","Hoạt động",];
+Future<void> _launchURL() async {
+  final url = Uri.parse('https://congan.quangngai.gov.vn');
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    throw 'Không thể mở URL: $url';
+  }
+}
+Future<void> _launchFb() async {
+  final url = Uri.parse('https://facebook.com/thongtinXanh.QNg');
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    throw 'Không thể mở URL: $url';
+  }
+}
+Future<void> _map() async {
+  final url = Uri.parse('https://sapnhap.bando.com.vn/?zarsrc=31&utm_source=zalo&utm_medium=zalo&utm_campaign=zalo');
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    throw 'Không thể mở URL: $url';
   }
 }
 
+class _MyPageFirstState extends State<PageFirst> {
+  String currentName = '';
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    // Hiển thị banner cài đặt ứng dụng nếu cần
+    //WidgetsBinding.instance.addPostFrameCallback((_) {
+      showInstallBanner(context);
+    //});
+    fetchUserInfo();
+  }
+
 
 //Tạo 1 hàm để hiển thị banner cài đặt ứng dụng trên iOS
-void showInstallBanner(BuildContext context) {
-  // 1. Kiểm tra nếu đã là App (Standalone) thì không hiện nữa
+  void showInstallBanner(BuildContext context) {
+    // 1. Kiểm tra nếu đã là App (Standalone) thì không hiện nữa
     bool isStandalone = html.window
         .matchMedia('(display-mode: standalone)')
         .matches;
@@ -63,35 +93,6 @@ void showInstallBanner(BuildContext context) {
   }
 
 
-  int selectedIndex = 0;
-// List<String> categoryList = ["Lời dặn", "Lịch sử", "Di tích","Kiến thức","Hoạt động",];
-Future<void> _launchURL() async {
-  final url = Uri.parse('https://congan.quangngai.gov.vn');
-  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-    throw 'Không thể mở URL: $url';
-  }
-}
-Future<void> _launchFb() async {
-  final url = Uri.parse('https://facebook.com/thongtinXanh.QNg');
-  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-    throw 'Không thể mở URL: $url';
-  }
-}
-Future<void> _map() async {
-  final url = Uri.parse('https://sapnhap.bando.com.vn/?zarsrc=31&utm_source=zalo&utm_medium=zalo&utm_campaign=zalo');
-  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-    throw 'Không thể mở URL: $url';
-  }
-}
-
-class _MyPageFirstState extends State<PageFirst> {
-  String currentName = '';
-  bool isLoading = true;
-  @override
-  void initState() {
-    super.initState();
-    fetchUserInfo();
-  }
   Future<void> fetchUserInfo() async {
     try {
       final uid = FirebaseAuth.instance.currentUser!.uid;
