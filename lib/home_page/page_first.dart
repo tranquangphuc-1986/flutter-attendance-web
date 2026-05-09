@@ -60,50 +60,110 @@ class _MyPageFirstState extends State<PageFirst> {
 
   //Tạo 1 hàm để hiển thị banner cài đặt ứng dụng trên iOS
   void showInstallBanner(BuildContext context) {
-    html.window.localStorage.clear(); // Xóa LocalStorage để test lại banner nhiều lần
-
-    // 1. Kiểm tra nếu đã là App (Standalone) thì không hiện nữa
-    if(kIsWeb) {
-      bool isStandalone = html.window
-          .matchMedia('(display-mode: standalone)')
-          .matches;
-      if (isStandalone) return;
-    }
-
-    // 2. Xử lý cho iOS
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-        builder: (context) =>
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("Thêm vào màn hình chính để thuận tiện sử dụng", style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18)),
-                  SizedBox(height: 15),
-                  ListTile(
-                    leading: Icon(Icons.ios_share, color: Colors.blue),
-                    title: Text(
-                        "Bấm vào nút Chia sẻ trên thanh công cụ Safari"),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.add_box_outlined),
-                    title: Text(
-                        "Chọn 'Thêm vào màn hình chính' (Add to Home Screen)"),
-                  ),
-                  ElevatedButton(onPressed: () => Navigator.pop(context),
-                      child: Text("Đã hiểu"))
-                ],
-              ),
-            ),
-      );
-    }
+       // 1. Kiểm tra nếu đã là App (Standalone) thì không hiện nữa
+    // if(kIsWeb) {
+    //   bool isStandalone = html.window
+    //       .matchMedia('(display-mode: standalone)')
+    //       .matches;
+    //   if (isStandalone) return;
+    // }
+    //
+    // // 2. Xử lý cho iOS
+    // if (defaultTargetPlatform == TargetPlatform.iOS) {
+    //   showModalBottomSheet(
+    //     context: context,
+    //     shape: RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+    //     builder: (context) =>
+    //         Container(
+    //           padding: EdgeInsets.all(20),
+    //           child: Column(
+    //             mainAxisSize: MainAxisSize.min,
+    //             children: [
+    //               Text("Thêm vào màn hình chính để thuận tiện sử dụng", style: TextStyle(
+    //                   fontWeight: FontWeight.bold, fontSize: 18)),
+    //               SizedBox(height: 15),
+    //               ListTile(
+    //                 leading: Icon(Icons.ios_share, color: Colors.blue),
+    //                 title: Text(
+    //                     "Bấm vào nút Chia sẻ trên thanh công cụ Safari"),
+    //               ),
+    //               ListTile(
+    //                 leading: Icon(Icons.add_box_outlined),
+    //                 title: Text(
+    //                     "Chọn 'Thêm vào màn hình chính' (Add to Home Screen)"),
+    //               ),
+    //               ElevatedButton(onPressed: () => Navigator.pop(context),
+    //                   child: Text("Đã hiểu"))
+    //             ],
+    //           ),
+    //         ),
+    //   );
+    // }
 
     /// 1. Kiểm tra chế độ Standalone (Đã cài đặt và đang mở từ màn hình chính)
+
+      // 1. Kiểm tra môi trường (Debug: Tạm thời comment dòng check dismissed)
+      // if (html.window.localStorage.containsKey('install_prompt_dismissed')) return;
+
+      final bool isStandalone = html.window.matchMedia('(display-mode: standalone)').matches ||
+          (html.window.navigator as dynamic).standalone == true;
+      if (isStandalone) return;
+
+      // 2. Ép hiển thị nếu là iOS hoặc trong môi trường Web để test
+      if (defaultTargetPlatform == TargetPlatform.iOS || kIsWeb) {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          useRootNavigator: true, // Quan trọng: Đảm bảo dùng Navigator cao nhất
+          backgroundColor: Colors.transparent,
+          builder: (context) => Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40, height: 4,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(2)),
+                ),
+                const Text("Cài đặt ứng dụng Tham mưu",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                const SizedBox(height: 20),
+                const ListTile(
+                  leading: Icon(Icons.ios_share, color: Colors.blue, size: 28),
+                  title: Text("1. Chạm vào biểu tượng 'Chia sẻ' trên thanh công cụ."),
+                ),
+                const ListTile(
+                  leading: Icon(Icons.add_box_outlined, size: 28),
+                  title: Text("2. Kéo lên và chọn 'Thêm vào màn hình chính'."),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFB30000),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    onPressed: () {
+                      html.window.localStorage['install_prompt_dismissed'] = 'true';
+                      Navigator.pop(context);
+                    },
+                    child: const Text("ĐÃ HIỂU", style: TextStyle(color: Colors.white, fontSize: 16)),
+                  ),
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
+        );
+      }
 
     //3. xử lý cho Android (nếu muốn, thường Android sẽ tự động hiển thị banner)
     // else if (defaultTargetPlatform == TargetPlatform.android) {
