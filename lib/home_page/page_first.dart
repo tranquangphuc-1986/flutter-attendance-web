@@ -59,61 +59,65 @@ class _MyPageFirstState extends State<PageFirst> {
   }
 
   void showInstallBanner(BuildContext context) {
-
-    bool checkIsStandalone() {
-      if (!kIsWeb) return false;
-
-      // Kiểm tra tiêu chuẩn chung
-      final bool isPwa = html.window.matchMedia('(display-mode: standalone)').matches;
-
-      // Kiểm tra đặc thù của Safari trên iOS
-      final bool isIosStandalone = (html.window.navigator as dynamic).standalone == true;
-
-      return isPwa || isIosStandalone;
-    }
-    
     if (!kIsWeb) return;
 
-    // 1. Kiểm tra nếu đã là App (Standalone)
-    if (checkIsStandalone()) return;
+    // 1. Kiểm tra chính xác trạng thái Standalone (Dành riêng cho iOS)
+    // Ép kiểu dynamic để truy cập thuộc tính standalone của Apple
+    final bool isIosStandalone = (html.window.navigator as dynamic).standalone == true;
+    final bool isGenericStandalone = html.window.matchMedia('(display-mode: standalone)').matches;
 
-    // 2. Kiểm tra nếu người dùng đã từng xác nhận "Đã hiểu" trên trình duyệt này
-    if (html.window.localStorage.containsKey('ios_prompt_dismissed')) return;
+    // Nếu thực sự đã là App thì dừng lại ngay
+    if (isIosStandalone || isGenericStandalone) {
+      return;
+    }
 
-    // 3. Xử lý hiển thị cho iOS
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    // 2. Kiểm tra LocalStorage (Xóa bỏ để test nếu cần)
+    // html.window.localStorage.remove('ios_prompt_dismissed'); // Dòng này dùng để reset khi debug
+    if (html.window.localStorage.containsKey('ios_prompt_dismissed')) {
+      return;
+    }
+
+    // 3. Nhận diện thiết bị Apple bao phủ hơn
+    final userAgent = html.window.navigator.userAgent.toLowerCase();
+    final isApple = userAgent.contains('iphone') ||
+        userAgent.contains('ipad') ||
+        html.window.navigator.vendor.contains('Apple');
+
+    if (isApple && defaultTargetPlatform == TargetPlatform.iOS) {
       showModalBottomSheet(
         context: context,
-        isDismissible: false, // Ép người dùng tương tác với nút "Đã hiểu"
+        isDismissible: false,
+        useRootNavigator: true, // Ép sử dụng Navigator cao nhất để tránh kẹt context
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20))
         ),
         builder: (context) => Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(25),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                  "Cài đặt Hệ thống Tham mưu",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)
-              ),
-              const SizedBox(height: 15),
+              const Text("Cài đặt Hệ thống Tham mưu",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFFB30000))),
+              const SizedBox(height: 20),
               const ListTile(
                 leading: Icon(Icons.ios_share, color: Colors.blue),
-                title: Text("Bấm vào nút Chia sẻ trên thanh công cụ Safari"),
+                title: Text("Bấm vào biểu tượng Chia sẻ trên thanh công cụ Safari"),
               ),
               const ListTile(
                 leading: Icon(Icons.add_box_outlined),
                 title: Text("Chọn 'Thêm vào màn hình chính' (Add to Home Screen)"),
               ),
-              const SizedBox(height: 10),
-              ElevatedButton(
+              const SizedBox(height: 15),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFB30000)),
                   onPressed: () {
-                    // Lưu vào bộ nhớ trình duyệt để không hiện lại
                     html.window.localStorage['ios_prompt_dismissed'] = 'true';
                     Navigator.pop(context);
                   },
-                  child: const Text("Đã hiểu")
+                  child: const Text("ĐÃ HIỂU", style: TextStyle(color: Colors.white)),
+                ),
               )
             ],
           ),
