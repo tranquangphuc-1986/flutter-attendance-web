@@ -53,10 +53,13 @@ class _MyPageFirstState extends State<PageFirst> {
 //Tạo 1 hàm để hiển thị banner cài đặt ứng dụng trên iOS
   void showInstallBanner(BuildContext context) {
     // 1. Kiểm tra nếu đã là App (Standalone) thì không hiện nữa
-    bool isStandalone = html.window
-        .matchMedia('(display-mode: standalone)')
-        .matches;
-    if (isStandalone) return;
+    if(kIsWeb) {
+      bool isStandalone = html.window
+          .matchMedia('(display-mode: standalone)')
+          .matches;
+      if (isStandalone) return;
+    }
+    
     // 2. Xử lý cho iOS
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       showModalBottomSheet(
@@ -95,7 +98,6 @@ class _MyPageFirstState extends State<PageFirst> {
       // Android thường tự động hiển thị banner, nhưng nếu muốn có thể tạo custom banner ở đây
     }
   }
-
 
   Future<void> fetchUserInfo() async {
     try {
