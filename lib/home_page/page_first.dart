@@ -60,106 +60,50 @@ class _MyPageFirstState extends State<PageFirst> {
 
   //Tạo 1 hàm để hiển thị banner cài đặt ứng dụng trên iOS
   void showInstallBanner(BuildContext context) {
-    // // 1. Kiểm tra nếu đã là App (Standalone) thì không hiện nữa
-    // if(kIsWeb) {
-    //   bool isStandalone = html.window
-    //       .matchMedia('(display-mode: standalone)')
-    //       .matches;
-    //   if (isStandalone) return;
-    // }
-    //
-    // // 2. Xử lý cho iOS
-    // if (defaultTargetPlatform == TargetPlatform.iOS) {
-    //   showModalBottomSheet(
-    //     context: context,
-    //     shape: RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-    //     builder: (context) =>
-    //         Container(
-    //           padding: EdgeInsets.all(20),
-    //           child: Column(
-    //             mainAxisSize: MainAxisSize.min,
-    //             children: [
-    //               Text("Thêm vào màn hình chính để thuận tiện sử dụng", style: TextStyle(
-    //                   fontWeight: FontWeight.bold, fontSize: 18)),
-    //               SizedBox(height: 15),
-    //               ListTile(
-    //                 leading: Icon(Icons.ios_share, color: Colors.blue),
-    //                 title: Text(
-    //                     "Bấm vào nút Chia sẻ trên thanh công cụ Safari"),
-    //               ),
-    //               ListTile(
-    //                 leading: Icon(Icons.add_box_outlined),
-    //                 title: Text(
-    //                     "Chọn 'Thêm vào màn hình chính' (Add to Home Screen)"),
-    //               ),
-    //               ElevatedButton(onPressed: () => Navigator.pop(context),
-    //                   child: Text("Đã hiểu"))
-    //             ],
-    //           ),
-    //         ),
-    //   );
-    // }
-
-    /// 1. Kiểm tra chế độ Standalone (Đã cài đặt và đang mở từ màn hình chính)
     html.window.localStorage.clear(); // Xóa LocalStorage để test lại banner nhiều lần
-    final bool isStandalone =
-        html.window.matchMedia('(display-mode: standalone)').matches ||
-        (html.window.navigator.vendor.contains('Apple') &&
-            (html.window.navigator as dynamic).standalone == true);
 
-    // 2. Kiểm tra xem người dùng đã từng tắt bảng hỏi này chưa (Lưu ở LocalStorage)
-    final bool hasDismissed = html.window.localStorage.containsKey(
-      'install_prompt_dismissed',
-    );
+    // 1. Kiểm tra nếu đã là App (Standalone) thì không hiện nữa
+    if(kIsWeb) {
+      bool isStandalone = html.window
+          .matchMedia('(display-mode: standalone)')
+          .matches;
+      if (isStandalone) return;
+    }
 
-    if (isStandalone || hasDismissed) return;
-
-    if (defaultTargetPlatform == TargetPlatform.iOS
-    || defaultTargetPlatform == TargetPlatform.macOS) {
+    // 2. Xử lý cho iOS
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
       showModalBottomSheet(
         context: context,
-        isScrollControlled: true,
-        isDismissible: false, // Bắt buộc tương tác để đảm bảo họ đã đọc
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        builder:
-            (context) => Container(
-              padding: const EdgeInsets.all(20),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        builder: (context) =>
+            Container(
+              padding: EdgeInsets.all(20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    "Cài đặt ứng dụng Tham mưu",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  const SizedBox(height: 15),
-                  const ListTile(
+                  Text("Thêm vào màn hình chính để thuận tiện sử dụng", style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18)),
+                  SizedBox(height: 15),
+                  ListTile(
                     leading: Icon(Icons.ios_share, color: Colors.blue),
                     title: Text(
-                      "Bấm vào nút Chia sẻ trên thanh công cụ Safari",
-                    ),
+                        "Bấm vào nút Chia sẻ trên thanh công cụ Safari"),
                   ),
-                  const ListTile(
+                  ListTile(
                     leading: Icon(Icons.add_box_outlined),
-                    title: Text("Chọn 'Thêm vào màn hình chính'"),
+                    title: Text(
+                        "Chọn 'Thêm vào màn hình chính' (Add to Home Screen)"),
                   ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Lưu trạng thái đã đóng vào LocalStorage để không hiện lại ở phiên làm việc sau
-                      html.window.localStorage['install_prompt_dismissed'] =
-                          'true';
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Tôi đã hiểu hoặc đã cài đặt"),
-                  ),
+                  ElevatedButton(onPressed: () => Navigator.pop(context),
+                      child: Text("Đã hiểu"))
                 ],
               ),
             ),
       );
     }
+
+    /// 1. Kiểm tra chế độ Standalone (Đã cài đặt và đang mở từ màn hình chính)
 
     //3. xử lý cho Android (nếu muốn, thường Android sẽ tự động hiển thị banner)
     // else if (defaultTargetPlatform == TargetPlatform.android) {
