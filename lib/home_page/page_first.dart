@@ -1,5 +1,5 @@
 import 'dart:html' as html;
-
+import 'dart:js' as js;
 import 'package:app_02/models/model.dart';
 import 'package:app_02/travel/more_detail.dart';
 import 'package:app_02/travel/popular_cate.dart';
@@ -44,9 +44,9 @@ class _MyPageFirstState extends State<PageFirst> {
   void initState() {
     super.initState();
     // Hiển thị banner cài đặt ứng dụng nếu cần
-    //WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       showInstallBanner(context);
-   // });
+   });
     fetchUserInfo();
   }
 
@@ -88,6 +88,11 @@ class _MyPageFirstState extends State<PageFirst> {
               ),
             ),
       );
+    }
+    //3. xử lý cho Android (nếu muốn, thường Android sẽ tự động hiển thị banner)
+    else if (defaultTargetPlatform == TargetPlatform.android) {
+      js.context.callMethod('presentInstallPrompt');
+      // Android thường tự động hiển thị banner, nhưng nếu muốn có thể tạo custom banner ở đây
     }
   }
 

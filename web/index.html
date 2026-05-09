@@ -251,6 +251,24 @@
       });
 </script>
 
+<script>
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      window.deferredPrompt = e; // Lưu lại để Dart gọi
+    });
+
+    // Hàm này để Dart gọi từ code Flutter
+    window.presentInstallPrompt = async () => {
+      if (window.deferredPrompt) {
+        window.deferredPrompt.prompt();
+        const { outcome } = await window.deferredPrompt.userChoice;
+        window.deferredPrompt = null;
+        return outcome;
+      }
+      return 'none';
+    };
+</script>
+
 
 </body>
 </html>
