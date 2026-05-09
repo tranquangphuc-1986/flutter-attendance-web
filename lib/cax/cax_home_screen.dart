@@ -1,4 +1,4 @@
-
+import 'dart:js' as js;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:app_02/cax/cax_model.dart';
@@ -18,6 +18,7 @@ class _HomeScreenCAXState extends State<HomeScreenCAX> {
   @override
   void initState() {
     super.initState();
+    checkAndShowAndroidInstall(context);
   }
 
   List<DonVi> filteredList = donViList;
@@ -29,6 +30,33 @@ class _HomeScreenCAXState extends State<HomeScreenCAX> {
           .where((dv) => dv.ten.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
+  }
+
+  void checkAndShowAndroidInstall(BuildContext context) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      // Đợi 5-10 giây sau khi vào App mới hiện Snackbar để tránh phiền
+      Future.delayed(Duration(seconds: 10), () {
+        // Kiểm tra biến canInstallApp từ JS
+        final canInstall = js.context.hasProperty('canInstallApp') &&
+            js.context['canInstallApp'] == true;
+
+        if (canInstall) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Cài đặt App Tham mưu để sử dụng thuận tiện hơn'),
+              duration: Duration(seconds: 10),
+              action: SnackBarAction(
+                label: 'CÀI ĐẶT',
+                onPressed: () {
+                  // Gọi hàm JS để hiện bảng hỏi cài đặt gốc
+                  js.context.callMethod('triggerAndroidInstall');
+                },
+              ),
+            ),
+          );
+        }
+      });
+    }
   }
 
   @override
