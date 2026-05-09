@@ -69,7 +69,7 @@ class _MyPageFirstState extends State<PageFirst> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("Cài đặt ứng dụng Tham mưu", style: TextStyle(
+                  Text("Thêm vào màn hình chính để thuận tiện sử dụng", style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 18)),
                   SizedBox(height: 15),
                   ListTile(
