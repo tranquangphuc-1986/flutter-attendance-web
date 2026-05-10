@@ -41,7 +41,6 @@ class _PasscodeWidgetState extends State<PasscodeWidget> {
                               duration: const Duration(seconds: 2),
           ),
           );
-
           // Hiển thị thông báo lỗi hoặc reset lại currentPin
           setState(() {
             currentPin = "";
@@ -110,20 +109,26 @@ class _PasscodeWidgetState extends State<PasscodeWidget> {
                   color:
                       isFilled
                           ? Colors.grey[400]
-                          : Colors.grey[200], // Màu xám khi đã nhập
+                          : Colors.yellowAccent[200], // Màu vàng khi đã nhập
                   border: Border.all(color: Colors.grey[300]!, width: 2),
                 ),
               );
             }),
           ),
           const SizedBox(height: 30),
-          TextButton(
-            onPressed: () {}, // Logic quên mật khẩu
-            child: const Text(
-              "Quên passcode",
-              style: TextStyle(color: Colors.black54),
+          if (currentPin!="797979")
+            Text(
+              "Mã PIN sai! Thử lại.",
+              style: const TextStyle(color: Colors.red),
             ),
-          ),
+
+          // TextButton(
+          //   onPressed: () {}, // Logic quên mật khẩu
+          //   child: const Text(
+          //     "Quên passcode",
+          //     style: TextStyle(color: Colors.black54),
+          //   ),
+          // ),
 
           const Spacer(),
 
