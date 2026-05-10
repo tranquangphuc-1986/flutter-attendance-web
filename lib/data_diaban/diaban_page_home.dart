@@ -1,5 +1,6 @@
 import 'package:app_02/data_diaban/diaban_card.dart';
 import 'package:app_02/data_diaban/diaban_dulieu.dart';
+import 'package:app_02/home_page/installBannerHelper.dart';
 import 'package:flutter/material.dart';
 
 class CAXScreen extends StatefulWidget {
@@ -13,6 +14,28 @@ class _CAXScreenState extends State<CAXScreen> {
   String searchQuery = '';
   int currentPage = 0;
   final int itemsPerPage = 9; //số card (đơn vị) tối đa mỗi màn hình
+  @override
+  void initState() {
+    super.initState();
+    /// Hiển thị banner cài đặt ứng dụng nếu cần
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   Future.delayed(const Duration(seconds: 10), () {
+    //     if (mounted) {
+    //       showInstallBanner(context);
+    //     }
+    //   });
+    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(seconds: 3), () {
+        if (mounted) {
+          InstallBannerHelper.showInstallBanner(context);
+        }
+      });
+    });
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
