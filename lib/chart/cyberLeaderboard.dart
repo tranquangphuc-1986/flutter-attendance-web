@@ -1,55 +1,17 @@
-import 'package:app_02/chart/ExcelService.dart';
-import 'package:app_02/chart/TeamModel.dart';
-import 'package:app_02/chart/parseExcelToLeaderboard.dart';
 import 'package:flutter/material.dart';
 
-class CyberLeaderboard extends StatefulWidget {
-  const CyberLeaderboard({super.key});
-
-  @override
-  State<CyberLeaderboard> createState() => _CyberLeaderboardState();
-}
-
-class _CyberLeaderboardState extends State<CyberLeaderboard> {
-  
+class CyberLeaderboard extends StatelessWidget {
   // Dữ liệu mẫu (Bạn có thể parse từ file Excel trên vào đây)
-  // final List<Map<String, dynamic>> teams = [
-  //   {"rank": "01", "name": "Cyb3r_Gu4rdians", "unit": "T07", "score": 986},
-  //   {"rank": "02", "name": "The Wings of Seagulls", "unit": "PA05 Hải Phòng", "score": 885},
-  //   {"rank": "03", "name": "Aegis IV", "unit": "PA05 Tuyên Quang", "score": 879},
-  //   {"rank": "04", "name": "r00t_m4st3r", "unit": "T07", "score": 819},
-  //   {"rank": "05", "name": "C500_TDĐQ", "unit": "T01", "score": 806},
-  //   {"rank": "06", "name": "PSA_sudo", "unit": "T01", "score": 806},
-  //   {"rank": "07", "name": "Bắc Ninh", "unit": "PA05 Bắc Ninh", "score": 786},
-  //   // ... thêm các đội khác
-  // ];
-
-  // List<Map<String, dynamic>> teams = [];
-  //
-  // void _importData() async {
-  //   var data = await parseExcelToLeaderboard();
-  //   if (data.isNotEmpty) {
-  //     setState(() {
-  //       teams = data;
-  //     });
-  //   }
-  // }
-
-  List<TeamModel> teams = [];
-  bool isLoading = false;
-
-  void _handleImport() async {
-    setState(() => isLoading = true);
-
-    List<TeamModel> data = await ExcelService.pickAndParseExcel();
-
-    setState(() {
-      teams = data;
-      // Sắp xếp lại theo điểm số nếu cần
-      teams.sort((a, b) => b.score.compareTo(a.score));
-      isLoading = false;
-    });
-  }
+  final List<Map<String, dynamic>> teams = [
+    {"rank": "01", "name": "Cyb3r_Gu4rdians", "unit": "T07", "score": 986},
+    {"rank": "02", "name": "The Wings of Seagulls", "unit": "PA05 Hải Phòng", "score": 885},
+    {"rank": "03", "name": "Aegis IV", "unit": "PA05 Tuyên Quang", "score": 879},
+    {"rank": "04", "name": "r00t_m4st3r", "unit": "T07", "score": 819},
+    {"rank": "05", "name": "C500_TDĐQ", "unit": "T01", "score": 806},
+    {"rank": "06", "name": "PSA_sudo", "unit": "T01", "score": 806},
+    {"rank": "07", "name": "Bắc Ninh", "unit": "PA05 Bắc Ninh", "score": 786},
+    // ... thêm các đội khác
+  ];
 
   final double maxScore = 1000; // Giả định điểm tối đa để tính tỷ lệ thanh progress
 
@@ -61,7 +23,7 @@ class _CyberLeaderboardState extends State<CyberLeaderboard> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text("HÀNH TRÌNH TRUY VẾT TỘI PHẠM",
-            style: TextStyle(color: Colors.orangeAccent, fontSize:15, fontWeight: FontWeight.bold)),
+            style: TextStyle(color: Colors.orangeAccent, fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: Column(
@@ -95,8 +57,8 @@ class _CyberLeaderboardState extends State<CyberLeaderboard> {
     );
   }
 
-  Widget _buildLeaderboardItem(TeamModel team) {
-    double progressWidth = team.score / maxScore; // Tính % thanh xanh
+  Widget _buildLeaderboardItem(Map<String, dynamic> team) {
+    double progressWidth = team['score'] / maxScore; // Tính % thanh xanh
 
     return Container(
         margin: const EdgeInsets.only(bottom: 8),
@@ -124,9 +86,9 @@ class _CyberLeaderboardState extends State<CyberLeaderboard> {
                 child: Row(
                   children: [
                     Text(
-                      team.rank,
+                      team['rank'],
                       style: TextStyle(
-                        color: _getRankColor(team.rank),
+                        color: _getRankColor(team['rank']),
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
@@ -137,11 +99,11 @@ class _CyberLeaderboardState extends State<CyberLeaderboard> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: "${team.name} ",
+                              text: "${team['name']} ",
                               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15),
                             ),
                             TextSpan(
-                              text: "(${team.unit})",
+                              text: "(${team['unit']})",
                               style: const TextStyle(color: Colors.blueAccent, fontSize: 12),
                             ),
                           ],
@@ -149,7 +111,7 @@ class _CyberLeaderboardState extends State<CyberLeaderboard> {
                       ),
                     ),
                     Text(
-                      "${team.score}",
+                      "${team['score']}",
                       style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ],
