@@ -119,17 +119,17 @@
     </div>
 </div>
 
-<!--<div id="install-prompt">-->
-<!--    <p>Thêm <b>Hệ thống Tham mưu</b> vào màn hình chính để sử dụng như App?</p>-->
-<!--    <button id="install-btn">CÀI ĐẶT</button>-->
-<!--</div>-->
+<div id="install-prompt">
+    <p>Thêm <b>Hệ thống Tham mưu</b> vào màn hình chính để sử dụng như App?</p>
+    <button id="install-btn">CÀI ĐẶT</button>
+</div>
 
 <script>
 
     // 1. Cấu hình khởi tạo Flutter với cơ chế cập nhật thông minh
       window.isUpdatePromptVisible = false;
+
       // Cấu hình khởi tạo Flutter
-      //window.flutterConfiguration: đã cũ, giờ dùng engineInitializer
       await engineInitializer.initializeEngine = {
         setUserSettings: (userSettings) => {
           userSettings.serviceWorker = {
@@ -253,50 +253,51 @@
 <!--      });-->
 <!--</script>-->
 
-<!--<script>-->
-<!--    // CÁCH 1-&#45;&#45; Logic xử lý Install Prompt kết hợp với DART (Thêm vào màn hình chính Android) -&#45;&#45;-->
-<!--   window.addEventListener('beforeinstallprompt', (e) => {-->
-<!--     e.preventDefault();-->
-<!--     window.deferredPrompt = e; // Lưu lại để Dart gọi-->
-<!--   });-->
-<!--   // Hàm này để Dart gọi từ code Flutter-->
-<!--   window.presentInstallPrompt = async () => {-->
-<!--     if (window.deferredPrompt) {-->
-<!--       window.deferredPrompt.prompt();-->
-<!--       const { outcome } = await window.deferredPrompt.userChoice;-->
-<!--       window.deferredPrompt = null;-->
-<!--       return outcome;-->
-<!--     }-->
-<!--     return 'none';-->
-<!--   };-->
-<!--</script>-->
+<script>
+    // CÁCH 1--- Logic xử lý Install Prompt kết hợp với DART (Thêm vào màn hình chính Android) ---
+   window.addEventListener('beforeinstallprompt', (e) => {
+     e.preventDefault();
+     window.deferredPrompt = e; // Lưu lại để Dart gọi
+   });
+   // Hàm này để Dart gọi từ code Flutter
+   window.presentInstallPrompt = async () => {
+     if (window.deferredPrompt) {
+       window.deferredPrompt.prompt();
+       const { outcome } = await window.deferredPrompt.userChoice;
+       window.deferredPrompt = null;
+       return outcome;
+     }
+     return 'none';
+   };
+</script>
 
-<!--<script>-->
-<!--    // CÁCH 2-&#45;&#45; Logic xử lý Install Prompt kết hợp với DART (Thêm vào màn hình chính Android) -&#45;&#45; Dùng Custom Prompt-->
+<script>
 
-<!--    let deferredPrompt;-->
+    // CÁCH 2--- Logic xử lý Install Prompt kết hợp với DART (Thêm vào màn hình chính Android) --- Dùng Custom Prompt
 
-<!--  window.addEventListener('beforeinstallprompt', (e) => {-->
-<!--    // Ngăn chặn bảng hỏi mặc định hiện ra ngay lập tức-->
-<!--    e.preventDefault();-->
-<!--    deferredPrompt = e;-->
+    let deferredPrompt;
 
-<!--    // Lưu sự kiện vào một biến toàn cục để Dart có thể kiểm tra-->
-<!--    window.canInstallApp = true;-->
-<!--  });-->
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Ngăn chặn bảng hỏi mặc định hiện ra ngay lập tức
+    e.preventDefault();
+    deferredPrompt = e;
 
-<!--  // Hàm để Dart gọi khi muốn hiện Snackbar cài đặt-->
-<!--  window.triggerAndroidInstall = async () => {-->
-<!--    if (deferredPrompt) {-->
-<!--      deferredPrompt.prompt();-->
-<!--      const { outcome } = await deferredPrompt.userChoice;-->
-<!--      deferredPrompt = null;-->
-<!--      window.canInstallApp = false;-->
-<!--      return outcome;-->
-<!--    }-->
-<!--  };-->
+    // Lưu sự kiện vào một biến toàn cục để Dart có thể kiểm tra
+    window.canInstallApp = true;
+  });
 
-<!--</script>-->
+  // Hàm để Dart gọi khi muốn hiện Snackbar cài đặt
+  window.triggerAndroidInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      window.canInstallApp = false;
+      return outcome;
+    }
+  };
+
+</script>
 
 </body>
 </html>
