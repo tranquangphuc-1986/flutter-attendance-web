@@ -79,148 +79,6 @@ class _PopularCategoriesState extends State<PopularCategories> {
     }
   }
 
-  /// Hiển thị dialog yêu cầu nhập mã PIN
-  Future<bool> _showPinDialog(BuildContext context) async {
-    final TextEditingController pinController = TextEditingController();
-    bool isPasswordHidden = true; // Khai báo biến cục bộ bên trong hàm
-
-    return await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        // Sử dụng StatefulBuilder để cập nhật UI bên trong Dialog
-        return StatefulBuilder(
-          builder: (context, setDialogState) {
-            return AlertDialog(
-              title: const Text(
-                "Xác thực",
-                style: TextStyle(fontSize: 18, color: Colors.blue),
-              ),
-              content: TextFormField(
-                controller: pinController,
-                keyboardType: TextInputType.number,
-                maxLength: 4,
-                obscureText: isPasswordHidden, // Sử dụng biến trạng thái
-                obscuringCharacter: '*',
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  hintText: "Nhập 4 số",
-                  counterText: "",
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      isPasswordHidden
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () {
-                      // Thay vì setState của widget cha, ta dùng setDialogState
-                      setDialogState(() {
-                        isPasswordHidden = !isPasswordHidden;
-                      });
-                    },
-                  ),
-                ),
-                validator: (v) {
-                  if (v == null || v.trim().isEmpty || v.length < 4) {
-                    return "Mật khẩu phải đủ 4 số";
-                  }
-                  return null;
-                },
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: const Text("Thoát"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (pinController.text == "7979") {
-                      Navigator.pop(context, true);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Sai mã xác thực"),
-                        backgroundColor: Colors.redAccent,
-                            duration: Duration(seconds: 2),
-                        ),
-                      );
-                    }
-                  },
-                  child: const Text("Xác nhận"),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    ) ??
-        false;
-  }
-
-  // Future<bool> _showPinDialog(BuildContext context) async {
-  //   final TextEditingController pinController = TextEditingController();
-  //   return await showDialog<bool>(
-  //         context: context,
-  //         barrierDismissible: false, // không cho bấm ra ngoài để tắt
-  //         builder: (context) {
-  //           return AlertDialog(
-  //             title: Text("Xác thực", style: TextStyle(fontSize: 18, color: Colors.blue),),
-  //             content: TextFormField(
-  //               controller: pinController,
-  //               keyboardType: TextInputType.number,
-  //               maxLength: 4,
-  //               obscureText: true, // ẩn số
-  //               //obscureText: isPasswordHidden,
-  //               obscuringCharacter: '*',
-  //               decoration: InputDecoration(
-  //                 border: OutlineInputBorder(),
-  //                 hintText: "Nhập 4 số",
-  //                 counterText: "",
-  //                 suffixIcon: IconButton(
-  //                   icon: Icon(
-  //                     isPasswordHidden
-  //                         ? Icons.visibility_off
-  //                         : Icons.visibility,
-  //                   ),
-  //                   onPressed: () {
-  //                     setState(() {
-  //                       isPasswordHidden = !isPasswordHidden;
-  //                     });
-  //                   },
-  //                 ),
-  //               ),
-  //               validator: (v) {
-  //                 if (v == null || v.trim().isEmpty || v.length < 4) {
-  //                   return "Mật khẩu phải đủ 4 số";
-  //                 }
-  //                 return null;
-  //               },
-  //             ),
-  //
-  //             actions: [
-  //               TextButton(
-  //                 onPressed: () {
-  //                   Navigator.pop(context, false); // thoát
-  //                 },
-  //                 child: Text("Thoát"),
-  //               ),
-  //               ElevatedButton(
-  //                 onPressed: () {
-  //                   if (pinController.text == "7979") {
-  //                     Navigator.pop(context, true); // đúng
-  //                   } else {
-  //                     ScaffoldMessenger.of(context).showSnackBar(
-  //                       SnackBar(content: Text("Sai mã xác thực")),
-  //                     );
-  //                   }
-  //                 },
-  //                 child: Text("Xác nhận"),
-  //               ),
-  //             ],
-  //           );
-  //         },
-  //       ) ??
-  //       false;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -253,8 +111,14 @@ class _PopularCategoriesState extends State<PopularCategories> {
                     children: [
                       GestureDetector(
                         onTap: () async {
-                          bool isValid = await _showPinDialog(context);
-                          if (isValid) {
+                          bool? isSuccess = await showModalBottomSheet<bool>(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => const PasscodeWidget(),
+                          );
+
+                          if (isSuccess == true) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(

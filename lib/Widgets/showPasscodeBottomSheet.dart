@@ -34,7 +34,7 @@ class _PasscodeWidgetState extends State<PasscodeWidget> {
         await Future.delayed(
           const Duration(milliseconds: 100),
         ); // Delay nhỏ để người dùng thấy đủ 6 số
-        if (currentPin == "797979") {
+        if (currentPin == "777999") {
           if (!context.mounted) return;
           // Thực hiện hành động khi mã PIN đúng, ví dụ: đóng bottom sheet và trả về kết quả
           Navigator.pop(context, true);
