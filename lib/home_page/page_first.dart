@@ -59,14 +59,32 @@ class _MyPageFirstState extends State<PageFirst> {
   }
 
 
-  void showInstallBanner(BuildContext context) {
-    if (!kIsWeb) return;
 
-    // 1. Kiểm tra Standalone (Cực kỳ quan trọng)
+  bool checkIsStandalone() {
+    if (!kIsWeb) return false;
+
+    // Lớp 1: Kiểm tra theo chuẩn Media Query (Android và các trình duyệt hiện đại)
+    final bool isPwa = html.window.matchMedia('(display-mode: standalone)').matches;
+
+    // Lớp 2: Kiểm tra theo thuộc tính độc quyền của Apple (Safari)
+    // Đây là chìa khóa cho iPhone
     final bool isIosStandalone = (html.window.navigator as dynamic).standalone == true;
-    final bool isGenericStandalone = html.window.matchMedia('(display-mode: standalone)').matches;
 
-    if (isIosStandalone || isGenericStandalone) return;
+    // Lớp 3: Kiểm tra referrer (Dành cho một số phiên bản iOS cũ hơn)
+    final bool isFromHomeScreen = html.window.location.href.contains('utm_source=homescreen') ||
+        html.document.referrer.contains('android-app://');
+
+    return isPwa || isIosStandalone || isFromHomeScreen;
+  }
+  void showInstallBanner(BuildContext context) {
+    // if (!kIsWeb) return;
+    // // 1. Kiểm tra Standalone (Cực kỳ quan trọng)
+    // final bool isIosStandalone = (html.window.navigator as dynamic).standalone == true;
+    // final bool isGenericStandalone = html.window.matchMedia('(display-mode: standalone)').matches;
+    //
+    // if (isIosStandalone || isGenericStandalone) return;
+    checkIsStandalone();
+
 
     // 2. Nhận diện iOS chuẩn xác hơn
     final userAgent = html.window.navigator.userAgent.toLowerCase();
