@@ -39,7 +39,7 @@ class InstallBannerHelper {
     bool isInstalled =
         isStandalone || isIosStandalone;
 
-    if (isInstalled) return;
+    if (isInstalled==true) return;
 
     // ================  Kiểm tra thời gian hiện ===========
 
@@ -57,8 +57,8 @@ class InstallBannerHelper {
       Duration diff =
       DateTime.now().difference(lastTime);
 
-      // 3 ngày mới hiện lại
-      if (!isInstalled && diff.inMinutes < 2) {
+      // 2 phút mới hiện lại
+      if (diff.inMinutes < 2) {
         shouldShow = false;
       }
     }
