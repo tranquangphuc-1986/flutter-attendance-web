@@ -1,17 +1,37 @@
+import 'package:app_02/chart/parseExcelToLeaderboard.dart';
 import 'package:flutter/material.dart';
 
-class CyberLeaderboard extends StatelessWidget {
+class CyberLeaderboard extends StatefulWidget {
+  const CyberLeaderboard({super.key});
+
+  @override
+  State<CyberLeaderboard> createState() => _CyberLeaderboardState();
+}
+
+class _CyberLeaderboardState extends State<CyberLeaderboard> {
+  
   // Dữ liệu mẫu (Bạn có thể parse từ file Excel trên vào đây)
-  final List<Map<String, dynamic>> teams = [
-    {"rank": "01", "name": "Cyb3r_Gu4rdians", "unit": "T07", "score": 986},
-    {"rank": "02", "name": "The Wings of Seagulls", "unit": "PA05 Hải Phòng", "score": 885},
-    {"rank": "03", "name": "Aegis IV", "unit": "PA05 Tuyên Quang", "score": 879},
-    {"rank": "04", "name": "r00t_m4st3r", "unit": "T07", "score": 819},
-    {"rank": "05", "name": "C500_TDĐQ", "unit": "T01", "score": 806},
-    {"rank": "06", "name": "PSA_sudo", "unit": "T01", "score": 806},
-    {"rank": "07", "name": "Bắc Ninh", "unit": "PA05 Bắc Ninh", "score": 786},
-    // ... thêm các đội khác
-  ];
+  // final List<Map<String, dynamic>> teams = [
+  //   {"rank": "01", "name": "Cyb3r_Gu4rdians", "unit": "T07", "score": 986},
+  //   {"rank": "02", "name": "The Wings of Seagulls", "unit": "PA05 Hải Phòng", "score": 885},
+  //   {"rank": "03", "name": "Aegis IV", "unit": "PA05 Tuyên Quang", "score": 879},
+  //   {"rank": "04", "name": "r00t_m4st3r", "unit": "T07", "score": 819},
+  //   {"rank": "05", "name": "C500_TDĐQ", "unit": "T01", "score": 806},
+  //   {"rank": "06", "name": "PSA_sudo", "unit": "T01", "score": 806},
+  //   {"rank": "07", "name": "Bắc Ninh", "unit": "PA05 Bắc Ninh", "score": 786},
+  //   // ... thêm các đội khác
+  // ];
+
+  List<Map<String, dynamic>> teams = [];
+
+  void _importData() async {
+    var data = await parseExcelToLeaderboard();
+    if (data.isNotEmpty) {
+      setState(() {
+        teams = data;
+      });
+    }
+  }
 
   final double maxScore = 1000; // Giả định điểm tối đa để tính tỷ lệ thanh progress
 
@@ -23,7 +43,7 @@ class CyberLeaderboard extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text("HÀNH TRÌNH TRUY VẾT TỘI PHẠM",
-            style: TextStyle(color: Colors.orangeAccent, fontWeight: FontWeight.bold)),
+            style: TextStyle(color: Colors.orangeAccent, fontSize:15, fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: Column(
