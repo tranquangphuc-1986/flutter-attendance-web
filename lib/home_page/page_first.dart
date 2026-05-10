@@ -48,7 +48,7 @@ class _MyPageFirstState extends State<PageFirst> {
     super.initState();
     // Hiển thị banner cài đặt ứng dụng nếu cần
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(seconds: 5), () {
+      Future.delayed(const Duration(seconds: 10), () {
         if (mounted) {
           showInstallBanner(context);
         }
