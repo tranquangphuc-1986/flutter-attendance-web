@@ -58,26 +58,12 @@ class _MyPageFirstState extends State<PageFirst> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(seconds: 3), () {
         if (mounted) {
-          //InstallBannerHelper.showInstallBanner(context);
-          testBanner(context);
+          InstallBannerHelper.showInstallBanner(context);
         }
       });
     });
 
     fetchUserInfo();
-  }
-
-  void testBanner(BuildContext context) {
-
-    showModalBottomSheet(
-      context: context,
-      builder: (_) => Container(
-        height: 200,
-        child: Center(
-          child: Text("TEST BANNER"),
-        ),
-      ),
-    );
   }
 
   /// Tạo 1 hàm để hiển thị banner cài đặt ứng dụng trên iOS

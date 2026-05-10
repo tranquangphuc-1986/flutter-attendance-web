@@ -129,7 +129,8 @@
     // 1. Cấu hình khởi tạo Flutter với cơ chế cập nhật thông minh
       window.isUpdatePromptVisible = false;
       // Cấu hình khởi tạo Flutter
-      window.flutterConfiguration = {
+      //window.flutterConfiguration
+      await engineInitializer.initializeEngine = {
         setUserSettings: (userSettings) => {
           userSettings.serviceWorker = {
             serviceWorkerVersion: '{{flutter_service_worker_version}}',
