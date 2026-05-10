@@ -25,44 +25,9 @@ class InstallBannerHelper {
 
     // =========== Kiểm tra đã cài PWA chưa =============
 
-    // bool isStandalone = html.window
-    //     .matchMedia('(display-mode: standalone)')
-    //     .matches;
-    //
-    // bool isIosStandalone = false;
-    //
-    // try {
-    //   isIosStandalone =
-    //   ((html.window.navigator as dynamic).standalone ?? false);
-    // } catch (_) {}
-    //
-    // bool isInstalled =
-    //     isStandalone || isIosStandalone;
-    //
-    // if (isInstalled) return;
-
-    bool isInstalled = false;
-
-    try {
-
-      // Android + Chrome
-      bool standalone = html.window
-          .matchMedia('(display-mode: standalone)')
-          .matches;
-
-      // iOS Safari
-      dynamic nav = html.window.navigator;
-
-      bool iosStandalone = false;
-
-      try {
-        iosStandalone = nav.standalone == true;
-      } catch (_) {}
-
-      isInstalled = standalone || iosStandalone;
-
-    } catch (_) {}
-
+    bool isInstalled = html.window
+        .matchMedia('(display-mode: standalone)')
+        .matches;
     if (isInstalled) return;
 
     // ================  Kiểm tra thời gian hiện ===========
