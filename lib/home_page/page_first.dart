@@ -58,72 +58,88 @@ class _MyPageFirstState extends State<PageFirst> {
     fetchUserInfo();
   }
 
+
   void showInstallBanner(BuildContext context) {
     if (!kIsWeb) return;
 
-    // 1. Kiểm tra chính xác trạng thái Standalone (Dành riêng cho iOS)
-    // Ép kiểu dynamic để truy cập thuộc tính standalone của Apple
+    // 1. Kiểm tra Standalone (Cực kỳ quan trọng)
     final bool isIosStandalone = (html.window.navigator as dynamic).standalone == true;
     final bool isGenericStandalone = html.window.matchMedia('(display-mode: standalone)').matches;
 
-    // Nếu thực sự đã là App thì dừng lại ngay
-    if (isIosStandalone || isGenericStandalone) {
-      return;
-    }
+    if (isIosStandalone || isGenericStandalone) return;
 
-    // 2. Kiểm tra LocalStorage (Xóa bỏ để test nếu cần)
-    // html.window.localStorage.remove('ios_prompt_dismissed'); // Dòng này dùng để reset khi debug
-    if (html.window.localStorage.containsKey('ios_prompt_dismissed')) {
-      return;
-    }
-
-    // 3. Nhận diện thiết bị Apple bao phủ hơn
+    // 2. Nhận diện iOS chuẩn xác hơn
     final userAgent = html.window.navigator.userAgent.toLowerCase();
     final isApple = userAgent.contains('iphone') ||
         userAgent.contains('ipad') ||
         html.window.navigator.vendor.contains('Apple');
 
+    // Thông báo trạng thái để bạn nhìn thấy trên điện thoại (Thay cho print)
+    /* ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text("Kiểm tra: Apple=$isApple, Platform=$defaultTargetPlatform"))
+  ); */
+
     if (isApple && defaultTargetPlatform == TargetPlatform.iOS) {
+      // Xóa bỏ kiểm tra LocalStorage tạm thời để đảm bảo nó PHẢI hiện khi test
+      // if (html.window.localStorage.containsKey('ios_prompt_dismissed')) return;
+
       showModalBottomSheet(
-        context: context,
-        isDismissible: false,
-        useRootNavigator: true, // Ép sử dụng Navigator cao nhất để tránh kẹt context
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20))
-        ),
-        builder: (context) => Container(
-          padding: const EdgeInsets.all(25),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Cài đặt Hệ thống Tham mưu",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFFB30000))),
-              const SizedBox(height: 20),
-              const ListTile(
-                leading: Icon(Icons.ios_share, color: Colors.blue),
-                title: Text("Bấm vào biểu tượng Chia sẻ trên thanh công cụ Safari"),
+          context: context,
+          isDismissible: false,
+          useRootNavigator: true, // Ép hiển thị lên trên cùng của App
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) => WillPopScope(
+              onWillPop: () async => false, // Ngăn vuốt xuống để đóng
+              child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+                  ),
+                  padding: const EdgeInsets.fromLTRB(20, 15, 20, 40),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                      Container(width: 40, height: 5, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10))),
+                  const SizedBox(height: 25),
+                  const Text("CÀI ĐẶT ỨNG DỤNG",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color(0xFFB30000))),
+                  const SizedBox(height: 25),
+                  _buildGuideStep(Icons.ios_share, "Bấm vào biểu tượng 'Chia sẻ' trên Safari (phía dưới màn hình).", Colors.blue),
+                  const SizedBox(height: 15),
+                  _buildGuideStep(Icons.add_box_outlined, "Chọn 'Thêm vào màn hình chính' (Add to Home Screen).", Colors.black87),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                      width: double.infinity,
+                      height: 55,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFB30000),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                          ),
+                        onPressed: () {
+                          html.window.localStorage['ios_prompt_dismissed'] = 'true';
+                          Navigator.of(context, rootNavigator: true).pop();
+                        },
+                        child: const Text("TÔI ĐÃ HIỂU", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                      ),
+                  ),
+                      ],
+                  ),
               ),
-              const ListTile(
-                leading: Icon(Icons.add_box_outlined),
-                title: Text("Chọn 'Thêm vào màn hình chính' (Add to Home Screen)"),
-              ),
-              const SizedBox(height: 15),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFB30000)),
-                  onPressed: () {
-                    html.window.localStorage['ios_prompt_dismissed'] = 'true';
-                    Navigator.pop(context);
-                  },
-                  child: const Text("ĐÃ HIỂU", style: TextStyle(color: Colors.white)),
-                ),
-              )
-            ],
           ),
-        ),
       );
     }
+  }
+
+  Widget _buildGuideStep(IconData icon, String text, Color iconColor) {
+    return Row(
+      children: [
+        Icon(icon, color: iconColor, size: 30),
+        const SizedBox(width: 15),
+        Expanded(child: Text(text, style: const TextStyle(fontSize: 16))),
+      ],
+    );
   }
 
   //Tạo 1 hàm để hiển thị banner cài đặt ứng dụng trên iOS
