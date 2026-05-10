@@ -25,21 +25,45 @@ class InstallBannerHelper {
 
     // =========== Kiểm tra đã cài PWA chưa =============
 
-    bool isStandalone = html.window
-        .matchMedia('(display-mode: standalone)')
-        .matches;
+    // bool isStandalone = html.window
+    //     .matchMedia('(display-mode: standalone)')
+    //     .matches;
+    //
+    // bool isIosStandalone = false;
+    //
+    // try {
+    //   isIosStandalone =
+    //   ((html.window.navigator as dynamic).standalone ?? false);
+    // } catch (_) {}
+    //
+    // bool isInstalled =
+    //     isStandalone || isIosStandalone;
+    //
+    // if (isInstalled) return;
 
-    bool isIosStandalone = false;
+    bool isInstalled = false;
 
     try {
-      isIosStandalone =
-      ((html.window.navigator as dynamic).standalone ?? false);
+
+      // Android + Chrome
+      bool standalone = html.window
+          .matchMedia('(display-mode: standalone)')
+          .matches;
+
+      // iOS Safari
+      dynamic nav = html.window.navigator;
+
+      bool iosStandalone = false;
+
+      try {
+        iosStandalone = nav.standalone == true;
+      } catch (_) {}
+
+      isInstalled = standalone || iosStandalone;
+
     } catch (_) {}
 
-    bool isInstalled =
-        isStandalone || isIosStandalone;
-
-    if (isInstalled==true) return;
+    if (isInstalled) return;
 
     // ================  Kiểm tra thời gian hiện ===========
 
@@ -101,7 +125,16 @@ class InstallBannerHelper {
               ),
 
               const SizedBox(height: 15),
-              Text("Bước 1: Nhấn nút Chia sẻ ${Icon(Icons.ios_share, color: Colors.blue,)} trên Safari"),
+              Row(
+                children: const [
+                  Text("Bước 1: Nhấn nút Chia sẻ "),
+                  Icon(
+                    Icons.ios_share,
+                    color: Colors.blue,
+                  ),
+                  Text(" trên Safari"),
+                ],
+              ),
               const SizedBox(height: 15),
               const ListTile(
                 leading: Icon(
