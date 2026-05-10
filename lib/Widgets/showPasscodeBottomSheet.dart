@@ -21,33 +21,29 @@ class PasscodeWidget extends StatefulWidget {
 class _PasscodeWidgetState extends State<PasscodeWidget> {
   String currentPin = "";
   final int pinLength = 6; // Số lượng ô passcode trong ảnh của bạn là 6
+  String errorMessage = "";
 
-  void onNumberPressed(int number) {
+  void onNumberPressed(int number) async {
     if (currentPin.length < pinLength) {
       setState(() {
         currentPin += number.toString();
+        errorMessage = ""; // Reset lỗi khi nhập số mới
       });
       // Nếu đủ 6 số thì xử lý logic xác thực ở đây
       if (currentPin.length == pinLength) {
+        await Future.delayed(
+          const Duration(milliseconds: 100),
+        ); // Delay nhỏ để người dùng thấy đủ 6 số
         if (currentPin == "797979") {
-          debugPrint("Mã PIN đúng!");
+          if (!context.mounted) return;
           // Thực hiện hành động khi mã PIN đúng, ví dụ: đóng bottom sheet và trả về kết quả
           Navigator.pop(context, true);
         } else {
-          debugPrint("Mã PIN sai!");
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Sai mã PIN, vui lòng thử lại!"),
-                              backgroundColor: Colors.redAccent,
-                              duration: const Duration(seconds: 2),
-          ),
-          );
-          // Hiển thị thông báo lỗi hoặc reset lại currentPin
+          errorMessage = "Mã PIN sai! Vui lòng thử lại.";
           setState(() {
             currentPin = "";
           });
         }
-        debugPrint("Mã PIN đã nhập: $currentPin");
-        // Navigator.pop(context, currentPin);
       }
     }
   }
@@ -116,19 +112,14 @@ class _PasscodeWidgetState extends State<PasscodeWidget> {
             }),
           ),
           const SizedBox(height: 30),
-          if (currentPin.isNotEmpty && currentPin.length == pinLength && currentPin != "797979")
-            Text(
-              "Mã PIN sai! Thử lại.",
-              style: const TextStyle(color: Colors.red),
-            ),
-          // TextButton(
-          //   onPressed: () {}, // Logic quên mật khẩu
-          //   child: const Text(
-          //     "Quên passcode",
-          //     style: TextStyle(color: Colors.black54),
-          //   ),
-          // ),
-
+          if (errorMessage.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                errorMessage,
+                style: const TextStyle(color: Colors.red, fontSize: 14),
+                textAlign: TextAlign.center),
+              ),
           const Spacer(),
 
           // 3. Bàn phím số (Custom Numeric Keypad)
