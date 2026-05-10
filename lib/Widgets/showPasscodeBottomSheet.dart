@@ -108,20 +108,19 @@ class _PasscodeWidgetState extends State<PasscodeWidget> {
                   shape: BoxShape.circle,
                   color:
                       isFilled
-                          ? Colors.grey[400]
-                          : Colors.yellowAccent[200], // Màu vàng khi đã nhập
+                          ? Colors.yellowAccent[400]
+                          : Colors.grey[200], // Màu vàng khi đã nhập
                   border: Border.all(color: Colors.grey[300]!, width: 2),
                 ),
               );
             }),
           ),
           const SizedBox(height: 30),
-          if (currentPin!="797979")
+          if (currentPin.isNotEmpty && currentPin.length == pinLength && currentPin != "797979")
             Text(
               "Mã PIN sai! Thử lại.",
               style: const TextStyle(color: Colors.red),
             ),
-
           // TextButton(
           //   onPressed: () {}, // Logic quên mật khẩu
           //   child: const Text(
