@@ -2,6 +2,7 @@ import 'package:app_02/Widgets/showPasscodeBottomSheet.dart';
 import 'package:app_02/cax/cax_home_screen.dart';
 import 'package:app_02/chart/area_chart.dart';
 import 'package:app_02/chart/chart_screen.dart';
+import 'package:app_02/chart/cyberLeaderboard.dart';
 import 'package:app_02/data_diaban/diaban_page_home.dart';
 import 'package:app_02/phone/signup_phone.dart';
 import 'package:app_02/report_screens/addNew_report.dart';
@@ -346,8 +347,8 @@ class _PopularCategoriesState extends State<PopularCategories> {
                             context,
                             MaterialPageRoute(
                               builder:
-                                  (context) =>
-                                      QrSummaryTodayScreenResult(), //SummaryScreenResult(),
+                                  (context) => CyberLeaderboard(),
+                                      //QrSummaryTodayScreenResult(), //SummaryScreenResult(),
                             ),
                           );
                         },
