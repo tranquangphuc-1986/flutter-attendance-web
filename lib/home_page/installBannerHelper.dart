@@ -8,30 +8,40 @@ class InstallBannerHelper {
   static Future<void> showInstallBanner(
       BuildContext context) async {
 
-    // Chỉ dùng cho Web
     if (!kIsWeb) return;
 
     // =========================
-    // 1. Kiểm tra đã cài PWA chưa
+    // Detect iOS
+    // =========================
+
+    final userAgent =
+    html.window.navigator.userAgent.toLowerCase();
+
+    final isIOS =
+        userAgent.contains('iphone') ||
+            userAgent.contains('ipad');
+
+    // Chỉ hiện trên iOS
+    if (!isIOS) return;
+
+    // =========================
+    // Kiểm tra đã cài PWA chưa
     // =========================
 
     bool isStandalone = html.window
         .matchMedia('(display-mode: standalone)')
         .matches;
 
-    // iOS Safari
-    final navigator = html.window.navigator;
     bool isIosStandalone =
-        (navigator as dynamic).standalone == true;
+        (html.window.navigator as dynamic).standalone == true;
 
     bool isInstalled =
         isStandalone || isIosStandalone;
 
-    // Nếu đã cài -> không hiện nữa
     if (isInstalled) return;
 
     // =========================
-    // 2. Kiểm tra thời gian hiện gần nhất
+    // Kiểm tra thời gian hiện
     // =========================
 
     final prefs = await SharedPreferences.getInstance();
@@ -39,18 +49,17 @@ class InstallBannerHelper {
     String? lastShown =
     prefs.getString('install_banner_last_shown');
 
-    // Nếu chưa từng hiện -> hiện luôn
     bool shouldShow = true;
 
     if (lastShown != null) {
 
-      DateTime lastShownTime =
+      DateTime lastTime =
       DateTime.parse(lastShown);
 
       Duration diff =
-      DateTime.now().difference(lastShownTime);
+      DateTime.now().difference(lastTime);
 
-      // Chỉ hiện lại sau 3 ngày
+      // 3 ngày mới hiện lại
       if (diff.inDays < 3) {
         shouldShow = false;
       }
@@ -65,19 +74,21 @@ class InstallBannerHelper {
     );
 
     // =========================
-    // 3. Hiển thị banner iOS
+    // HIỆN BOTTOM SHEET
     // =========================
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    if (!context.mounted) return;
 
-      showModalBottomSheet(
-        context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
-          ),
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
         ),
-        builder: (context) => Container(
+      ),
+      builder: (context) {
+
+        return Container(
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -86,8 +97,8 @@ class InstallBannerHelper {
               const Text(
                 "Cài ứng dụng vào màn hình chính",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
                   fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
 
@@ -99,14 +110,14 @@ class InstallBannerHelper {
                   color: Colors.blue,
                 ),
                 title: Text(
-                  "Nhấn nút Chia sẻ trên Safari",
+                  "Nhấn nút Share trên Safari",
                 ),
               ),
 
               const ListTile(
                 leading: Icon(Icons.add_box_outlined),
                 title: Text(
-                  "Chọn 'Add to Home Screen'",
+                  "Chọn Add to Home Screen",
                 ),
               ),
 
@@ -120,8 +131,8 @@ class InstallBannerHelper {
               ),
             ],
           ),
-        ),
-      );
-    }
+        );
+      },
+    );
   }
 }
