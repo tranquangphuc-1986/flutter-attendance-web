@@ -7,10 +7,8 @@ class InstallBannerHelper {
 
   static Future<void> showInstallBanner(
       BuildContext context) async {
-    print("===== INSTALL BANNER DEBUG =====");
 
     if (!kIsWeb) return;
-
 
     // ============ Detect iOS ==============
 
@@ -27,19 +25,6 @@ class InstallBannerHelper {
 
     // =========== Kiểm tra đã cài PWA chưa =============
 
-    // bool isStandalone = html.window
-    //     .matchMedia('(display-mode: standalone)')
-    //     .matches;
-    //
-    // bool isIosStandalone =
-    //     (html.window.navigator as dynamic).standalone == true;
-    //
-    // bool isInstalled =
-    //     isStandalone || isIosStandalone;
-    //
-    // if (isInstalled) return;
-
-    ///
     bool isStandalone = html.window
         .matchMedia('(display-mode: standalone)')
         .matches;
@@ -62,33 +47,6 @@ class InstallBannerHelper {
     String? lastShown =
     prefs.getString('install_banner_last_shown');
 
-    // final prefs = await SharedPreferences.getInstance();
-    // await prefs.remove('install_banner_last_shown');
-    // String? lastShown =
-    // prefs.getString('install_banner_last_shown');
-    // print("lastShown = $lastShown");
-
-    ///
-    // bool shouldShow = true;
-    //
-    // if (lastShown != null) {
-    //
-    //   DateTime lastTime =
-    //   DateTime.parse(lastShown);
-    //
-    //   Duration diff =
-    //   DateTime.now().difference(lastTime);
-    //
-    //   print("diff days = ${diff.inDays}");
-    //
-    //   if (diff.inDays < 3) {
-    //     shouldShow = false;
-    //   }
-    // }
-    //
-    // print("shouldShow = $shouldShow");
-
-
     bool shouldShow = true;
 
     if (lastShown != null) {
@@ -100,7 +58,7 @@ class InstallBannerHelper {
       DateTime.now().difference(lastTime);
 
       // 3 ngày mới hiện lại
-      if (diff.inDays < 3) {
+      if (diff.inMinutes < 2) {
         shouldShow = false;
       }
     }

@@ -17,38 +17,7 @@ class _CAXScreenState extends State<CAXScreen> {
   @override
   void initState() {
     super.initState();
-    /// Hiển thị banner cài đặt ứng dụng nếu cần
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   Future.delayed(const Duration(seconds: 10), () {
-    //     if (mounted) {
-    //       showInstallBanner(context);
-    //     }
-    //   });
-    // });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(seconds: 3), () {
-        if (mounted) {
-          InstallBannerHelper.showInstallBanner(context);
-          // testBanner(context);
-        }
-      });
-    });
-
   }
-
-  void testBanner(BuildContext context) {
-
-    showModalBottomSheet(
-      context: context,
-      builder: (_) => Container(
-        height: 200,
-        child: Center(
-          child: Text("TEST BANNER"),
-        ),
-      ),
-    );
-  }
-
 
   @override
   Widget build(BuildContext context) {
