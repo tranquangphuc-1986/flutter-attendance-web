@@ -32,8 +32,8 @@ class InstallBannerHelper {
       Duration diff =
       DateTime.now().difference(lastTime);
 
-      // 2 phút mới hiện lại
-      if (diff.inMinutes < 2) {
+      // 6h mới hiện lại
+      if (diff.inHours < 6) {
         shouldShow = false;
       }
     }
@@ -107,7 +107,6 @@ class InstallBannerHelper {
                     child: const Text(
                       "Đã hiểu", style: TextStyle(color: Colors.white),),
                   ),
-
                 ],
               ),
             );

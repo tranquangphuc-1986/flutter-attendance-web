@@ -90,19 +90,34 @@
     // 2. Thiết kế giao diện bảng hỏi cài đặt App
 
     #install-prompt {
-      position: fixed; bottom: 20px; left: 20px; right: 20px;
-      background: white; padding: 15px; border-radius: 12px;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      display: none; align-items: center; justify-content: space-between;
-      z-index: 10000; border-left: 5px solid #e60000;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10000;
+      border-left: 5px solid #e60000;
       animation: slideUp 0.5s ease-out;
     }
     #install-prompt p { margin: 0; font-family: sans-serif; font-size: 14px; color: #333; }
     #install-btn {
-      background: #e60000; color: white; border: none;
-      padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;
+      background: #e60000;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
     }
-    @keyframes slideUp { from { transform: translateY(100px); } to { transform: translateY(0); } }
+    @keyframes slideUp {
+     from { transform: translateY(100px); }
+     to { transform: translateY(0); } }
 
     </style>
 
@@ -119,10 +134,10 @@
     </div>
 </div>
 
-<div id="install-prompt">
-    <p>Thêm <b>Hệ thống Tham mưu</b> vào màn hình chính để sử dụng như App?</p>
-    <button id="install-btn">CÀI ĐẶT</button>
-</div>
+<!--<div id="install-prompt">-->
+<!--    <p>Thêm <b>Hệ thống Tham mưu</b> vào màn hình chính để sử dụng như App?</p>-->
+<!--    <button id="install-btn">CÀI ĐẶT</button>-->
+<!--</div>-->
 
 <script>
 
@@ -275,7 +290,7 @@
 
     // CÁCH 2--- Logic xử lý Install Prompt kết hợp với DART (Thêm vào màn hình chính Android) --- Dùng Custom Prompt
 
-    let deferredPrompt;
+  let deferredPrompt;
 
   window.addEventListener('beforeinstallprompt', (e) => {
     // Ngăn chặn bảng hỏi mặc định hiện ra ngay lập tức

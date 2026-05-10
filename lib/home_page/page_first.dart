@@ -6,7 +6,6 @@ import 'package:app_02/travel/more_detail.dart';
 import 'package:app_02/travel/popular_cate.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -58,56 +57,6 @@ class _MyPageFirstState extends State<PageFirst> {
 
     fetchUserInfo();
   }
-
-  /// Tạo 1 hàm để hiển thị banner cài đặt ứng dụng trên iOS
-  // void showInstallBanner(BuildContext context) {
-  //   // 1. Kiểm tra nếu đã là App (Standalone) thì không hiện nữa
-  //   if(kIsWeb) {
-  //     bool isStandalone = html.window
-  //         .matchMedia('(display-mode: standalone)')
-  //         .matches;
-  //     if (isStandalone) return;
-  //   }
-  //
-  //   // 2. Xử lý cho iOS
-  //   if (defaultTargetPlatform == TargetPlatform.iOS) {
-  //     showModalBottomSheet(
-  //       context: context,
-  //       shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-  //       builder: (context) =>
-  //           Container(
-  //             padding: EdgeInsets.all(20),
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 Text("Thêm vào màn hình chính để thuận tiện sử dụng", style: TextStyle(
-  //                     fontWeight: FontWeight.bold, fontSize: 18)),
-  //                 SizedBox(height: 15),
-  //                 ListTile(
-  //                   leading: Icon(Icons.ios_share, color: Colors.blue),
-  //                   title: Text(
-  //                       "Bấm vào nút Chia sẻ trên thanh công cụ Safari"),
-  //                 ),
-  //                 ListTile(
-  //                   leading: Icon(Icons.add_box_outlined),
-  //                   title: Text(
-  //                       "Chọn 'Thêm vào màn hình chính' (Add to Home Screen)"),
-  //                 ),
-  //                 ElevatedButton(onPressed: () => Navigator.pop(context),
-  //                     child: Text("Đã hiểu"))
-  //               ],
-  //             ),
-  //           ),
-  //     );
-  //   }
-  //
-  //   //3. xử lý cho Android (nếu muốn, thường Android sẽ tự động hiển thị banner)
-  //   // else if (defaultTargetPlatform == TargetPlatform.android) {
-  //   //   js.context.callMethod('presentInstallPrompt');
-  //   //   // Android thường tự động hiển thị banner, nhưng nếu muốn có thể tạo custom banner ở đây
-  //   // }
-  //}
 
   Future<void> fetchUserInfo() async {
     try {
