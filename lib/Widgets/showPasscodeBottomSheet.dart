@@ -98,8 +98,8 @@ class _PasscodeWidgetState extends State<PasscodeWidget> {
               bool isFilled = index < currentPin.length;
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 8),
-                width: 35,
-                height: 35,
+                width: 30,
+                height: 30,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color:
@@ -111,10 +111,10 @@ class _PasscodeWidgetState extends State<PasscodeWidget> {
               );
             }),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
           if (errorMessage.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
                 errorMessage,
                 style: const TextStyle(color: Colors.red, fontSize: 14),

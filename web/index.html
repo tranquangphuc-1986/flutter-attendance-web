@@ -205,7 +205,7 @@
     // 2. Ép kiểm tra cập nhật (reg.update)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.ready.then((reg) => {
-        setInterval(() => { reg.update(); }, 1000 * 60 * 30);
+        setInterval(() => { reg.update(); }, 1000 * 60 * 60);
 
         ['mousedown', 'keydown', 'touchstart'].forEach(evt => {
           window.addEventListener(evt, () => {

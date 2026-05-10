@@ -79,7 +79,6 @@ class _PopularCategoriesState extends State<PopularCategories> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -106,7 +105,6 @@ class _PopularCategoriesState extends State<PopularCategories> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
                   Column(
                     children: [
                       GestureDetector(
@@ -157,14 +155,14 @@ class _PopularCategoriesState extends State<PopularCategories> {
                           );
 
                           if (isSuccess == true) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) =>
-                                      ReportListScreen(), //AttendanceQRScreen (phone: phone),
-                            ),
-                          );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        ReportListScreen(), //AttendanceQRScreen (phone: phone),
+                              ),
+                            );
                           }
                         },
 
@@ -174,10 +172,164 @@ class _PopularCategoriesState extends State<PopularCategories> {
                           child: Image.asset("img/folder.png", height: 40),
                         ),
                       ),
-
-
                       Text(
                         "Nhập báo cáo",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      StudentsListScreen(), //ImportExcelScreen(),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: const Color(0xFF9ED2F7),
+                          child: Image.asset("img/person.png", height: 40),
+                        ),
+                      ),
+                      const Text(
+                        "Danh bạ",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      HomeScreenCAX(), //QrSummaryScreenResult(),//QrSummaryTodayScreenResult(),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: const Color(0xFFF8CDEC),
+                          child: Image.asset("img/logocand.png", height: 40),
+                        ),
+                      ),
+                      const Text(
+                        "Công an xã",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChartScreen(),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: const Color(0xFfcbb8ef),
+                          child: Image.asset("img/statistical.png", height: 40),
+                        ),
+                      ),
+
+                      const Text(
+                        "Biểu đồ",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: _map,
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: const Color(0xFFFacdcc),
+                          child: Image.asset("img/search.png", height: 40),
+                        ),
+                      ),
+                      const Text(
+                        "Tra cứu",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFFB07C97),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          bool? isSuccess = await showModalBottomSheet<bool>(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => const PasscodeWidget(),
+                          );
+
+                          if (isSuccess == true) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        ReportListViewScreen(), //StudentsListScreen(),
+                              ),
+                            );
+                          }
+                        },
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: const Color(0xFfcbb8ef),
+                          child: Image.asset("img/word.png", height: 40),
+                        ),
+                      ),
+                      Text(
+                        "Xem báo cáo",
                         style: TextStyle(
                           fontSize: 14,
                           color: Color(0xFFB07C97),
@@ -245,148 +397,6 @@ class _PopularCategoriesState extends State<PopularCategories> {
                   ),
                 ],
               ),
-
-
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-
-                  Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) =>
-                                      HomeScreenCAX(), //QrSummaryScreenResult(),//QrSummaryTodayScreenResult(),
-                            ),
-                          );
-                        },
-                        child: CircleAvatar(
-                          radius: 35,
-                          backgroundColor: const Color(0xFFF8CDEC),
-                          child: Image.asset("img/logocand.png", height: 40),
-                        ),
-                      ),
-                      const Text(
-                        "Công an xã",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFFB07C97),
-                        ),
-                      ),
-                    ],
-                  ),
-
-
-                  Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) =>
-                                      CAXScreen(), //ImportExcelScreen(),
-                            ),
-                          );
-                        },
-                        child: CircleAvatar(
-                          radius: 35,
-                          backgroundColor: const Color(0xFF9ED2F7),
-                          child: Image.asset("img/person.png", height: 40),
-                        ),
-                      ),
-                      const Text(
-                        "Danh bạ",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFFB07C97),
-                        ),
-                      ),
-                      ],
-                  ),
-
-
-                    Column(
-                      children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChartScreen(),
-                            ),
-                          );
-                        },
-                        child: CircleAvatar(
-                          radius: 35,
-                          backgroundColor: const Color(0xFfcbb8ef),
-                          child: Image.asset("img/statistical.png", height: 40),
-                        ),
-                      ),
-
-                      const Text(
-                        "Sáp nhập",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFFB07C97),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  Column(
-                    children: [
-                  GestureDetector(
-                    onTap: _map,
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundColor: const Color(0xFFFacdcc),
-                      child: Image.asset("img/search.png", height: 40),
-                    ),
-                  ),
-                      const Text(
-                        "Tra cứu",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFFB07C97),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-
-              // const Padding(
-              //   padding: EdgeInsets.only(top: 13, right: 15, left: 10),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       Text(
-              //         "Công an xã",
-              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-              //       ),
-              //       Text(
-              //         "Sáp nhập",
-              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-              //       ),
-              //       Text(
-              //         "Biểu đồ",
-              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-              //       ),
-              //       Text(
-              //         "Tra cứu",
-              //         style: TextStyle(fontSize: 16, color: Color(0xFFB07C97)),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-
             ],
           ),
         ),
