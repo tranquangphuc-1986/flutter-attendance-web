@@ -1,3 +1,5 @@
+import 'package:app_02/chart/ExcelService.dart';
+import 'package:app_02/chart/TeamModel.dart';
 import 'package:app_02/chart/parseExcelToLeaderboard.dart';
 import 'package:flutter/material.dart';
 
@@ -22,15 +24,31 @@ class _CyberLeaderboardState extends State<CyberLeaderboard> {
   //   // ... thêm các đội khác
   // ];
 
-  List<Map<String, dynamic>> teams = [];
+  // List<Map<String, dynamic>> teams = [];
+  //
+  // void _importData() async {
+  //   var data = await parseExcelToLeaderboard();
+  //   if (data.isNotEmpty) {
+  //     setState(() {
+  //       teams = data;
+  //     });
+  //   }
+  // }
 
-  void _importData() async {
-    var data = await parseExcelToLeaderboard();
-    if (data.isNotEmpty) {
-      setState(() {
-        teams = data;
-      });
-    }
+  List<TeamModel> teams = [];
+  bool isLoading = false;
+
+  void _handleImport() async {
+    setState(() => isLoading = true);
+
+    List<TeamModel> data = await ExcelService.pickAndParseExcel();
+
+    setState(() {
+      teams = data;
+      // Sắp xếp lại theo điểm số nếu cần
+      teams.sort((a, b) => b.score.compareTo(a.score));
+      isLoading = false;
+    });
   }
 
   final double maxScore = 1000; // Giả định điểm tối đa để tính tỷ lệ thanh progress
@@ -77,8 +95,8 @@ class _CyberLeaderboardState extends State<CyberLeaderboard> {
     );
   }
 
-  Widget _buildLeaderboardItem(Map<String, dynamic> team) {
-    double progressWidth = team['score'] / maxScore; // Tính % thanh xanh
+  Widget _buildLeaderboardItem(TeamModel team) {
+    double progressWidth = team.score / maxScore; // Tính % thanh xanh
 
     return Container(
         margin: const EdgeInsets.only(bottom: 8),
@@ -106,9 +124,9 @@ class _CyberLeaderboardState extends State<CyberLeaderboard> {
                 child: Row(
                   children: [
                     Text(
-                      team['rank'],
+                      team.rank,
                       style: TextStyle(
-                        color: _getRankColor(team['rank']),
+                        color: _getRankColor(team.rank),
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
@@ -119,11 +137,11 @@ class _CyberLeaderboardState extends State<CyberLeaderboard> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: "${team['name']} ",
+                              text: "${team.name} ",
                               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15),
                             ),
                             TextSpan(
-                              text: "(${team['unit']})",
+                              text: "(${team.unit})",
                               style: const TextStyle(color: Colors.blueAccent, fontSize: 12),
                             ),
                           ],
@@ -131,7 +149,7 @@ class _CyberLeaderboardState extends State<CyberLeaderboard> {
                       ),
                     ),
                     Text(
-                      "${team['score']}",
+                      "${team.score}",
                       style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ],
