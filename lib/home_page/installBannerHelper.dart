@@ -58,7 +58,7 @@ class InstallBannerHelper {
       DateTime.now().difference(lastTime);
 
       // 3 ngày mới hiện lại
-      if (diff.inMinutes < 2) {
+      if (!isInstalled && diff.inMinutes < 2) {
         shouldShow = false;
       }
     }
@@ -101,7 +101,8 @@ class InstallBannerHelper {
               ),
 
               const SizedBox(height: 15),
-
+              Text("Bước 1: Nhấn nút Chia sẻ ${Icon(Icons.ios_share, color: Colors.blue,)} trên Safari"),
+              const SizedBox(height: 15),
               const ListTile(
                 leading: Icon(
                   Icons.ios_share,
@@ -115,7 +116,7 @@ class InstallBannerHelper {
               const ListTile(
                 leading: Icon(Icons.add_box_outlined),
                 title: Text(
-                  "Chọn Add to Home Screen",
+                  "Chọn Thêm vào Màn hình chính",
                 ),
               ),
 
