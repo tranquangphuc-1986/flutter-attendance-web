@@ -101,31 +101,29 @@ class InstallBannerHelper {
                 ],
               ),
               const SizedBox(height: 15),
-              const ListTile(
-                leading: Icon(
-                  Icons.ios_share,
-                  color: Colors.blue,
-                ),
-                title: Text(
-                  "Nhấn nút Share trên Safari",
-                ),
-              ),
-
-              const ListTile(
-                leading: Icon(Icons.add_box_outlined),
-                title: Text(
-                  "Chọn Thêm vào Màn hình chính",
-                ),
+              Row(
+                children: const [
+                  Text("Bước 2: Chọn "),
+                  Icon(
+                    Icons.add_box_outlined,
+                    color: Colors.blue,
+                  ),
+                  Text(" Thêm vào Màn hình chính"),
+                ],
               ),
 
               const SizedBox(height: 10),
 
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text("Đã hiểu"),
+                child: const Text("Đã hiểu", style: TextStyle(color: Colors.white),),
               ),
+
             ],
           ),
         );
