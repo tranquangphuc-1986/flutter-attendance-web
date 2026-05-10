@@ -9,41 +9,23 @@ class InstallBannerHelper {
       BuildContext context) async {
     print("===== INSTALL BANNER DEBUG =====");
 
-    if (!kIsWeb) {
-      print("STOP 1");
-      return;
-    }
+    if (!kIsWeb) return;
 
-    // =========================
-    // Detect iOS
-    // =========================
+
+    // ============ Detect iOS ==============
+
     final userAgent =
     html.window.navigator.userAgent.toLowerCase();
-
-    print("userAgent = $userAgent");
 
     final isIOS =
         userAgent.contains('iphone') ||
             userAgent.contains('ipad');
 
-    print("isIOS = $isIOS");
-
-    // final userAgent =
-    // html.window.navigator.userAgent.toLowerCase();
-
-    // final isIOS =
-    //     userAgent.contains('iphone') ||
-    //         userAgent.contains('ipad');
-
     // Chỉ hiện trên iOS
-    if (!isIOS) {
-      print("STOP 2");
-      return;
-    }
+    if (!isIOS) return;
 
-    // =========================
-    // Kiểm tra đã cài PWA chưa
-    // =========================
+
+    // =========== Kiểm tra đã cài PWA chưa =============
 
     // bool isStandalone = html.window
     //     .matchMedia('(display-mode: standalone)')
@@ -54,63 +36,39 @@ class InstallBannerHelper {
     //
     // bool isInstalled =
     //     isStandalone || isIosStandalone;
+    //
+    // if (isInstalled) return;
+
+    ///
     bool isStandalone = html.window
         .matchMedia('(display-mode: standalone)')
         .matches;
 
-    print("isStandalone = $isStandalone");
+    bool isIosStandalone = false;
 
-    bool isIosStandalone =
-        (html.window.navigator as dynamic).standalone == true;
-
-    print("isIosStandalone = $isIosStandalone");
+    try {
+      isIosStandalone =
+      ((html.window.navigator as dynamic).standalone ?? false);
+    } catch (_) {}
 
     bool isInstalled =
         isStandalone || isIosStandalone;
 
-    print("isInstalled = $isInstalled");
+    if (isInstalled) return;
 
-    if (isInstalled) {
-      print("STOP 3");
-      return;
-    }
+    // ================  Kiểm tra thời gian hiện ===========
 
-    // =========================
-    // Kiểm tra thời gian hiện
-    // =========================
-
-    // final prefs = await SharedPreferences.getInstance();
-    //
-    // String? lastShown =
-    // prefs.getString('install_banner_last_shown');
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('install_banner_last_shown');
     String? lastShown =
     prefs.getString('install_banner_last_shown');
 
-    print("lastShown = $lastShown");
+    // final prefs = await SharedPreferences.getInstance();
+    // await prefs.remove('install_banner_last_shown');
+    // String? lastShown =
+    // prefs.getString('install_banner_last_shown');
+    // print("lastShown = $lastShown");
 
     ///
-    bool shouldShow = true;
-
-    if (lastShown != null) {
-
-      DateTime lastTime =
-      DateTime.parse(lastShown);
-
-      Duration diff =
-      DateTime.now().difference(lastTime);
-
-      print("diff days = ${diff.inDays}");
-
-      if (diff.inDays < 3) {
-        shouldShow = false;
-      }
-    }
-
-    print("shouldShow = $shouldShow");
-
-
     // bool shouldShow = true;
     //
     // if (lastShown != null) {
@@ -121,11 +79,31 @@ class InstallBannerHelper {
     //   Duration diff =
     //   DateTime.now().difference(lastTime);
     //
-    //   // 3 ngày mới hiện lại
+    //   print("diff days = ${diff.inDays}");
+    //
     //   if (diff.inDays < 3) {
     //     shouldShow = false;
     //   }
     // }
+    //
+    // print("shouldShow = $shouldShow");
+
+
+    bool shouldShow = true;
+
+    if (lastShown != null) {
+
+      DateTime lastTime =
+      DateTime.parse(lastShown);
+
+      Duration diff =
+      DateTime.now().difference(lastTime);
+
+      // 3 ngày mới hiện lại
+      if (diff.inDays < 3) {
+        shouldShow = false;
+      }
+    }
 
     if (!shouldShow) return;
 
@@ -140,8 +118,6 @@ class InstallBannerHelper {
     // =========================
 
     if (!context.mounted) return;
-
-    print("SHOWING BOTTOM SHEET");
 
     showModalBottomSheet(
       context: context,

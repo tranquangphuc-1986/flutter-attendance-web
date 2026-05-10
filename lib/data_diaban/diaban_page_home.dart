@@ -29,12 +29,25 @@ class _CAXScreenState extends State<CAXScreen> {
       Future.delayed(const Duration(seconds: 3), () {
         if (mounted) {
           InstallBannerHelper.showInstallBanner(context);
+          // testBanner(context);
         }
       });
     });
 
   }
 
+  void testBanner(BuildContext context) {
+
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => Container(
+        height: 200,
+        child: Center(
+          child: Text("TEST BANNER"),
+        ),
+      ),
+    );
+  }
 
 
   @override
