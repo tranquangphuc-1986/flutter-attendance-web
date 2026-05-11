@@ -118,6 +118,10 @@ class CyberLeaderboard extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF1A1D21), // Màu nền tối giống trong ảnh
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text("DIỆN TÍCH TỰ NHIÊN",

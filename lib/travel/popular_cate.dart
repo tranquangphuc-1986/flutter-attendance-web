@@ -3,6 +3,7 @@ import 'package:app_02/cax/cax_home_screen.dart';
 import 'package:app_02/chart/area_chart.dart';
 import 'package:app_02/chart/chart_screen.dart';
 import 'package:app_02/chart/cyberLeaderboard.dart';
+import 'package:app_02/chart/population_Leaderboard.dart';
 import 'package:app_02/data_diaban/diaban_page_home.dart';
 import 'package:app_02/phone/signup_phone.dart';
 import 'package:app_02/report_screens/addNew_report.dart';
@@ -359,7 +360,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                         ),
                       ),
                       const Text(
-                        "Thống kê",
+                        "Diện tích",
                         style: TextStyle(
                           fontSize: 14,
                           color: Color(0xFFB07C97),
@@ -377,7 +378,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                             MaterialPageRoute(
                               builder:
                                   (context) =>
-                                      AddnewReport(), //AdminCloseAttendanceScreen(),//StudentsStatisticsPage(),
+                                      PopulationLeaderboard(), //AdminCloseAttendanceScreen(),//StudentsStatisticsPage(),
                             ),
                           );
                         },
@@ -388,7 +389,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                         ),
                       ),
                       const Text(
-                        "Tổng hợp",
+                        "Dân số",
                         style: TextStyle(
                           fontSize: 14,
                           color: Color(0xFFB07C97),
