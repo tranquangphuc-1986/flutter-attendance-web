@@ -23,7 +23,7 @@ class CyberLeaderboard extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text("HÀNH TRÌNH TRUY VẾT TỘI PHẠM",
-            style: TextStyle(color: Colors.orangeAccent, fontWeight: FontWeight.bold)),
+            style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: Column(
