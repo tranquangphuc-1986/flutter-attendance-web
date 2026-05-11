@@ -149,7 +149,7 @@ class CyberLeaderboard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
           Text("THỨ TỰ / ĐƠN VỊ", style: TextStyle(color: Colors.white, fontSize: 12)),
-          Text("DIỆN TÍCH", style: TextStyle(color: Colors.white, fontSize: 12)),
+          Text("DIỆN TÍCH (Km2)", style: TextStyle(color: Colors.white, fontSize: 12)),
         ],
       ),
     );
@@ -202,7 +202,7 @@ class CyberLeaderboard extends StatelessWidget {
                             // ),
                             TextSpan(
                               text: "(${team['unit']})",
-                              style: const TextStyle(color: Colors.blueAccent, fontSize: 12),
+                              style: const TextStyle(color: Colors.white, fontSize: 12),
                             ),
                           ],
                         ),
