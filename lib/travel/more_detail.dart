@@ -114,8 +114,8 @@ class MoreDetail extends StatelessWidget {
                     child: Image.asset(
                       location.image,
                       //fit: BoxFit.fill,
-                      fit: BoxFit.cover,
-                        // fit: BoxFit.contain
+                      // fit: BoxFit.cover,
+                      fit: BoxFit.contain
                     )),
               ),
             ),
@@ -142,7 +142,7 @@ class MoreDetail extends StatelessWidget {
                         height: 10,
                       ),
                       const Text(
-                        "Mô tả",
+                        "MÔ TẢ",
                         style: TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold),
                       ),
