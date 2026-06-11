@@ -107,15 +107,14 @@ class MoreDetail extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(
-                height: MediaQuery.of(context).size.height /2,
+                height: MediaQuery.of(context).size.height /3,
                 width: MediaQuery.of(context).size.width,
                 child: RotatedBox(
-                    quarterTurns: 2,
+                    quarterTurns: 2, //Quay 180 độ
                     child: Image.asset(
                       location.image,
-                      //fit: BoxFit.fill,
-                      // fit: BoxFit.cover,
-                      fit: BoxFit.contain
+                      // fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                     )),
               ),
             ),
@@ -142,7 +141,7 @@ class MoreDetail extends StatelessWidget {
                         height: 10,
                       ),
                       const Text(
-                        "MÔ TẢ",
+                        "Mô TẢ",
                         style: TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold),
                       ),
