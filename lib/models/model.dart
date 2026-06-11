@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class LocationDetail {
   String image;
   String name;

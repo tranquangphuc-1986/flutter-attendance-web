@@ -113,10 +113,13 @@ class MoreDetail extends StatelessWidget {
                     quarterTurns: 2,
                     child: Image.asset(
                       location.image,
-                      fit: BoxFit.fill,
+                      //fit: BoxFit.fill,
+                      fit: BoxFit.cover,
+                        // fit: BoxFit.contain
                     )),
               ),
             ),
+
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
